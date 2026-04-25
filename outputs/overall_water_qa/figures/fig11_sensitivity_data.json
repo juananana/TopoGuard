@@ -1,0 +1,104 @@
+{
+  "Baseline\n(0.6/0.2/0.2)": {
+    "alpha": 0.6,
+    "beta": 0.2,
+    "gamma": 0.2,
+    "avg_S": 0.659,
+    "avg_C": 0.181689,
+    "avg_L": 55.27,
+    "avg_Q": 0.3546,
+    "n": 14,
+    "topo_pct": {
+      "direct": 0.714,
+      "executor_plus_verifier": 0.214,
+      "executor_verifier_agg": 0.071
+    }
+  },
+  "Quality-dominant\n(0.8/0.1/0.1)": {
+    "alpha": 0.8,
+    "beta": 0.1,
+    "gamma": 0.1,
+    "avg_S": 0.6944,
+    "avg_C": 0.301654,
+    "avg_L": 80.34,
+    "avg_Q": 0.5421,
+    "n": 14,
+    "topo_pct": {
+      "executor_verifier_agg": 0.286,
+      "direct": 0.429,
+      "executor_plus_verifier": 0.286
+    }
+  },
+  "Balanced\n(0.33/0.33/0.34)": {
+    "alpha": 0.33,
+    "beta": 0.33,
+    "gamma": 0.34,
+    "avg_S": 0.6403,
+    "avg_C": 0.123741,
+    "avg_L": 39.56,
+    "avg_Q": 0.1368,
+    "n": 14,
+    "topo_pct": {
+      "direct": 0.929,
+      "executor_plus_verifier": 0.071
+    }
+  },
+  "Cost-preferring\n(0.1/0.8/0.1)": {
+    "alpha": 0.1,
+    "beta": 0.8,
+    "gamma": 0.1,
+    "avg_S": 0.6487,
+    "avg_C": 0.162926,
+    "avg_L": 48.42,
+    "avg_Q": -0.0312,
+    "n": 14,
+    "topo_pct": {
+      "direct": 0.786,
+      "executor_plus_verifier": 0.214
+    }
+  },
+  "Latency-pref\n(0.1/0.1/0.8)": {
+    "alpha": 0.1,
+    "beta": 0.1,
+    "gamma": 0.8,
+    "avg_S": 0.6125,
+    "avg_C": 0.105335,
+    "avg_L": 37.92,
+    "avg_Q": -0.0093,
+    "n": 14,
+    "topo_pct": {
+      "direct": 0.786,
+      "bad_direct": 0.143,
+      "executor_plus_verifier": 0.071
+    }
+  },
+  "Q+Lat only\n(0.6/0.0/0.4)": {
+    "alpha": 0.6,
+    "beta": 0.0,
+    "gamma": 0.4,
+    "avg_S": 0.6403,
+    "avg_C": 0.123741,
+    "avg_L": 39.56,
+    "avg_Q": 0.3616,
+    "n": 14,
+    "topo_pct": {
+      "direct": 0.929,
+      "executor_plus_verifier": 0.071
+    }
+  },
+  "Q+Cost only\n(0.6/0.4/0.0)": {
+    "alpha": 0.6,
+    "beta": 0.4,
+    "gamma": 0.0,
+    "avg_S": 0.6991,
+    "avg_C": 0.324651,
+    "avg_L": 83.54,
+    "avg_Q": 0.3932,
+    "n": 14,
+    "topo_pct": {
+      "executor_verifier_agg": 0.357,
+      "direct": 0.429,
+      "executor_plus_verifier": 0.214
+    }
+  }
+}

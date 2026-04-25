@@ -1,0 +1,2689 @@
+{
+  "task_type": "overall_water_qa",
+  "domain": "water_qa",
+  "n_train": 1467,
+  "n_test": 834,
+  "n_profiles": 163,
+  "q_alpha": 0.65,
+  "q_beta": 0.25,
+  "q_gamma": 0.1,
+  "pass_threshold": 0.5339,
+  "node_types": [
+    "retrieval",
+    "reasoning",
+    "computation",
+    "verification",
+    "aggregation"
+  ],
+  "overall_frontier_size": 43,
+  "exp1_strategy_comparison": {
+    "Pareto+Q(G;X)": {
+      "avg_S": 0.7461,
+      "avg_C_total": 0.539205,
+      "avg_L": 134.605,
+      "viol_rate": 0.0,
+      "n": 255
+    },
+    "Random": {
+      "avg_S": 0.6786,
+      "avg_C_total": 0.364318,
+      "avg_L": 89.946,
+      "viol_rate": 0.0,
+      "n": 246
+    },
+    "Best-Quality": {
+      "avg_S": 0.7498,
+      "avg_C_total": 0.560453,
+      "avg_L": 138.375,
+      "viol_rate": 0.0,
+      "n": 255
+    },
+    "Cheapest": {
+      "avg_S": 0.6731,
+      "avg_C_total": 0.273251,
+      "avg_L": 79.647,
+      "viol_rate": 0.0,
+      "n": 230
+    },
+    "Static Workflow": {
+      "avg_S": 0.6519,
+      "avg_C_total": 0.000671,
+      "avg_L": 29.245,
+      "viol_rate": 0.0,
+      "n": 255
+    },
+    "FrugalGPT Cascade": {
+      "avg_S": 0.7251,
+      "avg_C_total": 0.43677,
+      "avg_L": 109.754,
+      "viol_rate": 0.0,
+      "n": 255
+    },
+    "LLM Router": {
+      "avg_S": 0.6854,
+      "avg_C_total": 0.368373,
+      "avg_L": 95.294,
+      "viol_rate": 0.0,
+      "n": 255
+    },
+    "w/o Pareto Pruning": {
+      "avg_S": 0.7461,
+      "avg_C_total": 0.539205,
+      "avg_L": 134.605,
+      "viol_rate": 0.0,
+      "n": 255
+    },
+    "w/o Adaptive Template": {
+      "avg_S": 0.6854,
+      "avg_C_total": 0.368373,
+      "avg_L": 95.294,
+      "viol_rate": 0.0,
+      "n": 255
+    },
+    "w/o Adaptive Executor": {
+      "avg_S": 0.7155,
+      "avg_C_total": 0.592397,
+      "avg_L": 140.761,
+      "viol_rate": 0.0,
+      "n": 51
+    }
+  },
+  "exp1_difficulty_breakdown": {
+    "easy": {
+      "avg_S": 0.8925,
+      "n": 85
+    },
+    "hard": {
+      "avg_S": 0.5891,
+      "n": 85
+    },
+    "medium": {
+      "avg_S": 0.7568,
+      "n": 85
+    }
+  },
+  "exp2_topo_stability": {
+    "Pareto+Q(G;X)": {
+      "executor_verifier_agg": 0.741,
+      "direct": 0.133,
+      "executor_plus_verifier": 0.126
+    },
+    "Random": {
+      "executor_plus_verifier": 0.348,
+      "direct": 0.393,
+      "executor_verifier_agg": 0.17,
+      "bad_direct": 0.089
+    },
+    "Best-Quality": {
+      "executor_verifier_agg": 0.867,
+      "executor_plus_verifier": 0.067,
+      "direct": 0.067
+    },
+    "Cheapest": {
+      "direct": 0.511,
+      "executor_plus_verifier": 0.156,
+      "executor_verifier_agg": 0.222,
+      "bad_direct": 0.111
+    },
+    "Static Workflow": {
+      "direct": 1.0
+    }
+  },
+  "exp3_repair": {
+    "total_triggers": 13,
+    "total_contexts": 675,
+    "repair_rate": 0.0193,
+    "avg_delta_S": 0.0682,
+    "strategy_distribution": {
+      "A(executor_ver/qwen_3)": 8,
+      "A(executor_ver/deepse)": 5
+    },
+    "repair_sources": {
+      "topo_upgrade": 13
+    },
+    "per_round": [
+      {
+        "round": 1,
+        "triggers": 0,
+        "delta": 0.0,
+        "strategies": {},
+        "sources": {}
+      },
+      {
+        "round": 2,
+        "triggers": 1,
+        "delta": 0.0458,
+        "strategies": {
+          "A(executor_ver/qwen_3)": 1
+        },
+        "sources": {
+          "topo_upgrade": 1
+        }
+      },
+      {
+        "round": 3,
+        "triggers": 2,
+        "delta": 0.0781,
+        "strategies": {
+          "A(executor_ver/qwen_3)": 1,
+          "A(executor_ver/deepse)": 1
+        },
+        "sources": {
+          "topo_upgrade": 2
+        }
+      },
+      {
+        "round": 4,
+        "triggers": 2,
+        "delta": 0.0832,
+        "strategies": {
+          "A(executor_ver/qwen_3)": 1,
+          "A(executor_ver/deepse)": 1
+        },
+        "sources": {
+          "topo_upgrade": 2
+        }
+      },
+      {
+        "round": 5,
+        "triggers": 2,
+        "delta": 0.0846,
+        "strategies": {
+          "A(executor_ver/qwen_3)": 1,
+          "A(executor_ver/deepse)": 1
+        },
+        "sources": {
+          "topo_upgrade": 2
+        }
+      },
+      {
+        "round": 6,
+        "triggers": 2,
+        "delta": 0.085,
+        "strategies": {
+          "A(executor_ver/qwen_3)": 1,
+          "A(executor_ver/deepse)": 1
+        },
+        "sources": {
+          "topo_upgrade": 2
+        }
+      },
+      {
+        "round": 7,
+        "triggers": 1,
+        "delta": 0.0439,
+        "strategies": {
+          "A(executor_ver/qwen_3)": 1
+        },
+        "sources": {
+          "topo_upgrade": 1
+        }
+      },
+      {
+        "round": 8,
+        "triggers": 1,
+        "delta": 0.043,
+        "strategies": {
+          "A(executor_ver/qwen_3)": 1
+        },
+        "sources": {
+          "topo_upgrade": 1
+        }
+      },
+      {
+        "round": 9,
+        "triggers": 2,
+        "delta": 0.0823,
+        "strategies": {
+          "A(executor_ver/qwen_3)": 1,
+          "A(executor_ver/deepse)": 1
+        },
+        "sources": {
+          "topo_upgrade": 2
+        }
+      }
+    ]
+  },
+  "round_metrics": [
+    {
+      "round": 1,
+      "n_profiles": 163,
+      "n_frontier": 125,
+      "q_init_mean": 0.2953,
+      "repair_triggered": 0,
+      "repair_delta_mean": 0.0,
+      "repair_strategies": {},
+      "repair_sources": {},
+      "topo_selection": {
+        "aggregation|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "aggregation|hard": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_plus_verifier"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "aggregation|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "computation|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_verifier_agg"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_verifier_agg"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "computation|hard": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "computation|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "reasoning|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_verifier_agg"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_verifier_agg"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "reasoning|hard": {
+          "Pareto+Q(G;X)": [
+            "direct"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_plus_verifier"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "reasoning|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_plus_verifier"
+          ],
+          "Random": [
+            "bad_direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_plus_verifier"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "retrieval|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "retrieval|hard": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_plus_verifier"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "retrieval|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "bad_direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_verifier_agg"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "verification|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "verification|hard": {
+          "Pareto+Q(G;X)": [
+            "direct"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "direct"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "verification|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_verifier_agg"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "bad_direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        }
+      }
+    },
+    {
+      "round": 2,
+      "n_profiles": 163,
+      "n_frontier": 125,
+      "q_init_mean": 0.294,
+      "repair_triggered": 1,
+      "repair_delta_mean": 0.0458,
+      "repair_strategies": {
+        "A(executor_ver/qwen_3)": 1
+      },
+      "repair_sources": {
+        "topo_upgrade": 1
+      },
+      "topo_selection": {
+        "aggregation|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_verifier_agg"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_plus_verifier"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "aggregation|hard": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "bad_direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_plus_verifier"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "aggregation|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "computation|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_verifier_agg"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_verifier_agg"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "computation|hard": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "computation|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "bad_direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "reasoning|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_verifier_agg"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_verifier_agg"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "reasoning|hard": {
+          "Pareto+Q(G;X)": [
+            "direct"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_plus_verifier"
+          ],
+          "Cheapest": [
+            "executor_plus_verifier"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "reasoning|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_plus_verifier"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_verifier_agg"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "retrieval|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "retrieval|hard": {
+          "Pareto+Q(G;X)": [
+            "executor_plus_verifier"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "retrieval|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "bad_direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_verifier_agg"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "verification|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "verification|hard": {
+          "Pareto+Q(G;X)": [
+            "direct"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "direct"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "verification|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_verifier_agg"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "bad_direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        }
+      }
+    },
+    {
+      "round": 3,
+      "n_profiles": 163,
+      "n_frontier": 119,
+      "q_init_mean": 0.2942,
+      "repair_triggered": 2,
+      "repair_delta_mean": 0.0781,
+      "repair_strategies": {
+        "A(executor_ver/qwen_3)": 1,
+        "A(executor_ver/deepse)": 1
+      },
+      "repair_sources": {
+        "topo_upgrade": 2
+      },
+      "topo_selection": {
+        "aggregation|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "aggregation|hard": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "aggregation|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_verifier_agg"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_plus_verifier"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "computation|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "bad_direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_verifier_agg"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "computation|hard": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "computation|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_verifier_agg"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "reasoning|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_verifier_agg"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "reasoning|hard": {
+          "Pareto+Q(G;X)": [
+            "direct"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_plus_verifier"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "reasoning|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_plus_verifier"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_verifier_agg"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "retrieval|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "retrieval|hard": {
+          "Pareto+Q(G;X)": [
+            "executor_plus_verifier"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_verifier_agg"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "retrieval|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "bad_direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "bad_direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "verification|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_verifier_agg"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "verification|hard": {
+          "Pareto+Q(G;X)": [
+            "direct"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "direct"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "verification|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_plus_verifier"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        }
+      }
+    },
+    {
+      "round": 4,
+      "n_profiles": 163,
+      "n_frontier": 125,
+      "q_init_mean": 0.2937,
+      "repair_triggered": 2,
+      "repair_delta_mean": 0.0832,
+      "repair_strategies": {
+        "A(executor_ver/qwen_3)": 1,
+        "A(executor_ver/deepse)": 1
+      },
+      "repair_sources": {
+        "topo_upgrade": 2
+      },
+      "topo_selection": {
+        "aggregation|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "aggregation|hard": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "aggregation|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_verifier_agg"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_plus_verifier"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "computation|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_verifier_agg"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "computation|hard": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "computation|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "reasoning|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_verifier_agg"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "bad_direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "reasoning|hard": {
+          "Pareto+Q(G;X)": [
+            "direct"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_plus_verifier"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "reasoning|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_plus_verifier"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_verifier_agg"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "retrieval|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "retrieval|hard": {
+          "Pareto+Q(G;X)": [
+            "executor_plus_verifier"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_verifier_agg"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "retrieval|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "bad_direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "bad_direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "verification|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "verification|hard": {
+          "Pareto+Q(G;X)": [
+            "direct"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "direct"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "verification|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "bad_direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        }
+      }
+    },
+    {
+      "round": 5,
+      "n_profiles": 163,
+      "n_frontier": 123,
+      "q_init_mean": 0.2939,
+      "repair_triggered": 2,
+      "repair_delta_mean": 0.0846,
+      "repair_strategies": {
+        "A(executor_ver/qwen_3)": 1,
+        "A(executor_ver/deepse)": 1
+      },
+      "repair_sources": {
+        "topo_upgrade": 2
+      },
+      "topo_selection": {
+        "aggregation|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_verifier_agg"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "aggregation|hard": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_plus_verifier"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "aggregation|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_plus_verifier"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "computation|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "bad_direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_verifier_agg"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "computation|hard": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "computation|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "reasoning|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_verifier_agg"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "reasoning|hard": {
+          "Pareto+Q(G;X)": [
+            "direct"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_plus_verifier"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "reasoning|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_plus_verifier"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_verifier_agg"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "retrieval|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "retrieval|hard": {
+          "Pareto+Q(G;X)": [
+            "executor_plus_verifier"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_verifier_agg"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "retrieval|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_verifier_agg"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "bad_direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "verification|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "verification|hard": {
+          "Pareto+Q(G;X)": [
+            "direct"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "direct"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "verification|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "bad_direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        }
+      }
+    },
+    {
+      "round": 6,
+      "n_profiles": 163,
+      "n_frontier": 124,
+      "q_init_mean": 0.2935,
+      "repair_triggered": 2,
+      "repair_delta_mean": 0.085,
+      "repair_strategies": {
+        "A(executor_ver/qwen_3)": 1,
+        "A(executor_ver/deepse)": 1
+      },
+      "repair_sources": {
+        "topo_upgrade": 2
+      },
+      "topo_selection": {
+        "aggregation|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "aggregation|hard": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "aggregation|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_verifier_agg"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_plus_verifier"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "computation|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_verifier_agg"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "computation|hard": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "computation|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "bad_direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_plus_verifier"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "reasoning|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_verifier_agg"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "reasoning|hard": {
+          "Pareto+Q(G;X)": [
+            "direct"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_plus_verifier"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "reasoning|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_plus_verifier"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_verifier_agg"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "retrieval|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_verifier_agg"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "retrieval|hard": {
+          "Pareto+Q(G;X)": [
+            "executor_plus_verifier"
+          ],
+          "Random": [
+            "executor_verifier_agg"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_verifier_agg"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "retrieval|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "bad_direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "verification|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "verification|hard": {
+          "Pareto+Q(G;X)": [
+            "direct"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "direct"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "verification|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "bad_direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "bad_direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        }
+      }
+    },
+    {
+      "round": 7,
+      "n_profiles": 163,
+      "n_frontier": 126,
+      "q_init_mean": 0.2938,
+      "repair_triggered": 1,
+      "repair_delta_mean": 0.0439,
+      "repair_strategies": {
+        "A(executor_ver/qwen_3)": 1
+      },
+      "repair_sources": {
+        "topo_upgrade": 1
+      },
+      "topo_selection": {
+        "aggregation|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "aggregation|hard": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "aggregation|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "computation|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_verifier_agg"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_verifier_agg"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "computation|hard": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "computation|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_plus_verifier"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "reasoning|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_verifier_agg"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_plus_verifier"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "reasoning|hard": {
+          "Pareto+Q(G;X)": [
+            "direct"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_plus_verifier"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "reasoning|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_plus_verifier"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_verifier_agg"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "retrieval|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_verifier_agg"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "retrieval|hard": {
+          "Pareto+Q(G;X)": [
+            "executor_plus_verifier"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_plus_verifier"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "retrieval|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "bad_direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "verification|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "verification|hard": {
+          "Pareto+Q(G;X)": [
+            "direct"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "direct"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "verification|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        }
+      }
+    },
+    {
+      "round": 8,
+      "n_profiles": 163,
+      "n_frontier": 123,
+      "q_init_mean": 0.2938,
+      "repair_triggered": 1,
+      "repair_delta_mean": 0.043,
+      "repair_strategies": {
+        "A(executor_ver/qwen_3)": 1
+      },
+      "repair_sources": {
+        "topo_upgrade": 1
+      },
+      "topo_selection": {
+        "aggregation|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "aggregation|hard": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_verifier_agg"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "aggregation|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_verifier_agg"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "computation|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_verifier_agg"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "computation|hard": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "computation|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "bad_direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_plus_verifier"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "reasoning|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_plus_verifier"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "reasoning|hard": {
+          "Pareto+Q(G;X)": [
+            "direct"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_plus_verifier"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "reasoning|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_plus_verifier"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "retrieval|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_verifier_agg"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_verifier_agg"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "retrieval|hard": {
+          "Pareto+Q(G;X)": [
+            "executor_plus_verifier"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_plus_verifier"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "retrieval|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "bad_direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "verification|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "verification|hard": {
+          "Pareto+Q(G;X)": [
+            "direct"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "direct"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "verification|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        }
+      }
+    },
+    {
+      "round": 9,
+      "n_profiles": 163,
+      "n_frontier": 123,
+      "q_init_mean": 0.2938,
+      "repair_triggered": 2,
+      "repair_delta_mean": 0.0823,
+      "repair_strategies": {
+        "A(executor_ver/qwen_3)": 1,
+        "A(executor_ver/deepse)": 1
+      },
+      "repair_sources": {
+        "topo_upgrade": 2
+      },
+      "topo_selection": {
+        "aggregation|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "aggregation|hard": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "aggregation|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "computation|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_verifier_agg"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_verifier_agg"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "computation|hard": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "computation|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "bad_direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "bad_direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "reasoning|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "reasoning|hard": {
+          "Pareto+Q(G;X)": [
+            "direct"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_plus_verifier"
+          ],
+          "Cheapest": [
+            "executor_plus_verifier"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "reasoning|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_plus_verifier"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_verifier_agg"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "retrieval|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_verifier_agg"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "retrieval|hard": {
+          "Pareto+Q(G;X)": [
+            "executor_plus_verifier"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "executor_plus_verifier"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "retrieval|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "executor_plus_verifier"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "bad_direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "verification|easy": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "verification|hard": {
+          "Pareto+Q(G;X)": [
+            "direct"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "direct"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        },
+        "verification|medium": {
+          "Pareto+Q(G;X)": [
+            "executor_verifier_agg"
+          ],
+          "Random": [
+            "direct"
+          ],
+          "Best-Quality": [
+            "executor_verifier_agg"
+          ],
+          "Cheapest": [
+            "direct"
+          ],
+          "Static Workflow": [
+            "direct"
+          ]
+        }
+      }
+    }
+  ]
+}

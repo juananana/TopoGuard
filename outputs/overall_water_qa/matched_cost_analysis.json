@@ -1,0 +1,56 @@
+{
+  "Pareto+Q(G;X)": {
+    "avg_S": 0.759,
+    "avg_C": 0.003197,
+    "avg_L": 70.817,
+    "n": 163
+  },
+  "Random": {
+    "avg_S": 0.6863,
+    "avg_C": 0.00253,
+    "avg_L": 50.82,
+    "n": 183
+  },
+  "Best-Quality": {
+    "avg_S": 0.785,
+    "avg_C": 0.003423,
+    "avg_L": 77.302,
+    "n": 151
+  },
+  "Cheapest": {
+    "avg_S": 0.6809,
+    "avg_C": 0.002509,
+    "avg_L": 56.216,
+    "n": 191
+  },
+  "Static Workflow": {
+    "avg_S": 0.6519,
+    "avg_C": 0.000671,
+    "avg_L": 29.245,
+    "n": 255
+  },
+  "FrugalGPT Cascade": {
+    "avg_S": 0.7125,
+    "avg_C": 0.002943,
+    "avg_L": 62.006,
+    "n": 180
+  },
+  "LLM Router": {
+    "avg_S": 0.6995,
+    "avg_C": 0.002896,
+    "avg_L": 64.699,
+    "n": 193
+  },
+  "w/o Template Selection": {
+    "avg_S": 0.7907,
+    "avg_C": 0.003454,
+    "avg_L": 79.201,
+    "n": 149
+  },
+  "w/o Executor Adaptation": {
+    "avg_S": 0.759,
+    "avg_C": 0.003197,
+    "avg_L": 70.817,
+    "n": 163
+  }
+}
