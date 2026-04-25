@@ -1,0 +1,20 @@
+{
+  "TopoGuard (full)": {
+    "avg_S": 0.7495,
+    "avg_C": 0.560444,
+    "avg_L": 138.389,
+    "n": 255
+  },
+  "w/o Template Selection": {
+    "avg_S": 0.7539,
+    "avg_C": 0.581908,
+    "avg_L": 141.374,
+    "n": 255
+  },
+  "w/o Repair": {
+    "avg_S": 0.7407,
+    "avg_C": 0.560444,
+    "avg_L": 138.389,
+    "n": 255
+  }
+}

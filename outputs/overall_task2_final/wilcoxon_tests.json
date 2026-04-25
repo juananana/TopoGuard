@@ -1,0 +1,34 @@
+{
+  "Best-Quality": {
+    "n": 20,
+    "stat": 72.0,
+    "p_value": 0.83131,
+    "significant": false,
+    "mean_delta_S": 0.0043,
+    "direction": "ref_better"
+  },
+  "Static Workflow": {
+    "n": 20,
+    "stat": 21.0,
+    "p_value": 0.000851,
+    "significant": true,
+    "mean_delta_S": 0.1025,
+    "direction": "ref_better"
+  },
+  "Random": {
+    "n": 16,
+    "stat": 61.0,
+    "p_value": 0.743561,
+    "significant": false,
+    "mean_delta_S": 0.0032,
+    "direction": "ref_better"
+  },
+  "Cheapest": {
+    "n": 18,
+    "stat": 70.0,
+    "p_value": 0.522614,
+    "significant": false,
+    "mean_delta_S": 0.0415,
+    "direction": "ref_better"
+  }
+}

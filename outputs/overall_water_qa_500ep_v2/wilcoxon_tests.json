@@ -1,0 +1,66 @@
+{
+  "Random": {
+    "n": 228,
+    "stat": 8261.0,
+    "p_value": 2.6e-05,
+    "significant": true,
+    "mean_delta_S": 0.0635,
+    "direction": "ref_better"
+  },
+  "Best-Quality": {
+    "n": 238,
+    "stat": 0.0,
+    "p_value": 6e-06,
+    "significant": true,
+    "mean_delta_S": -0.0097,
+    "direction": "comp_better"
+  },
+  "Cheapest": {
+    "n": 225,
+    "stat": 5077.0,
+    "p_value": 0.0,
+    "significant": true,
+    "mean_delta_S": 0.0659,
+    "direction": "ref_better"
+  },
+  "Static Workflow": {
+    "n": 238,
+    "stat": 5664.0,
+    "p_value": 0.0,
+    "significant": true,
+    "mean_delta_S": 0.0799,
+    "direction": "ref_better"
+  },
+  "FrugalGPT Cascade": {
+    "n": 238,
+    "stat": 1839.0,
+    "p_value": 0.0,
+    "significant": true,
+    "mean_delta_S": 0.0304,
+    "direction": "ref_better"
+  },
+  "LLM Router": {
+    "n": 238,
+    "stat": 798.5,
+    "p_value": 0.0,
+    "significant": true,
+    "mean_delta_S": 0.0514,
+    "direction": "ref_better"
+  },
+  "w/o Template Selection": {
+    "n": 238,
+    "stat": 0.0,
+    "p_value": 1e-06,
+    "significant": true,
+    "mean_delta_S": -0.0114,
+    "direction": "comp_better"
+  },
+  "w/o Executor Adaptation": {
+    "n": 238,
+    "stat": 301.0,
+    "p_value": 0.000691,
+    "significant": true,
+    "mean_delta_S": 0.0061,
+    "direction": "ref_better"
+  }
+}

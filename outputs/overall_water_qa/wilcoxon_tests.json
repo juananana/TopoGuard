@@ -1,65 +1,66 @@
 {
   "Random": {
-    "n": 245,
-    "stat": 10686.5,
-    "p_value": 0.000639,
+    "n": 227,
+    "stat": 8206.0,
+    "p_value": 6.3e-05,
     "significant": true,
-    "mean_delta_S": 0.0503,
+    "mean_delta_S": 0.0563,
     "direction": "ref_better"
   },
   "Best-Quality": {
-    "n": 255,
-    "stat": 152.0,
-    "p_value": 8e-06,
+    "n": 238,
+    "stat": 0.0,
+    "p_value": 0.0,
     "significant": true,
     "mean_delta_S": -0.0112,
     "direction": "comp_better"
   },
   "Cheapest": {
-    "n": 241,
-    "stat": 8223.5,
-    "p_value": 0.006059,
+    "n": 225,
+    "stat": 7563.0,
+    "p_value": 0.000299,
     "significant": true,
-    "mean_delta_S": 0.0481,
+    "mean_delta_S": 0.055,
     "direction": "ref_better"
   },
   "Static Workflow": {
-    "n": 255,
-    "stat": 5859.0,
+    "n": 238,
+    "stat": 4683.5,
     "p_value": 0.0,
     "significant": true,
-    "mean_delta_S": 0.0871,
+    "mean_delta_S": 0.09,
     "direction": "ref_better"
   },
   "FrugalGPT Cascade": {
-    "n": 255,
-    "stat": 509.0,
-    "p_value": 0.0,
+    "n": 238,
+    "stat": 2761.0,
+    "p_value": 0.000142,
     "significant": true,
-    "mean_delta_S": 0.0339,
+    "mean_delta_S": 0.0163,
     "direction": "ref_better"
   },
   "LLM Router": {
-    "n": 255,
-    "stat": 806.5,
+    "n": 238,
+    "stat": 826.5,
     "p_value": 0.0,
     "significant": true,
-    "mean_delta_S": 0.0536,
+    "mean_delta_S": 0.0561,
     "direction": "ref_better"
   },
   "w/o Template Selection": {
-    "n": 255,
+    "n": 238,
     "stat": 0.0,
     "p_value": 0.0,
     "significant": true,
-    "mean_delta_S": -0.0149,
+    "mean_delta_S": -0.0112,
     "direction": "comp_better"
   },
   "w/o Executor Adaptation": {
-    "n": 255,
+    "n": 238,
     "stat": 0.0,
-    "p_value": 1.0,
-    "significant": false,
-    "note": "all ties"
+    "p_value": 0.000293,
+    "significant": true,
+    "mean_delta_S": -0.0067,
+    "direction": "comp_better"
   }
 }

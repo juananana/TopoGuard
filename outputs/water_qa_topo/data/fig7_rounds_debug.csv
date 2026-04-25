@@ -1,0 +1,10 @@
+round,samples_per_combo,n_frontier,n_feasible,selection_mode,best_Q,best_Q_with_repair,q_delta_repair,repair_triggered,repair_topo,best_model,best_difficulty,best_node_type,selected_model,selected_node_type,best_S,best_C,best_L
+1,1,16,158,explore,0.3487,0.3721,0.0234,False,executor_plus_verifier,deepseek_v3_2_exp,easy,reasoning,deepseek_v3_2_exp,reasoning,0.956,0.070167,45.058
+2,2,18,158,greedy,0.3645,0.3816,0.0171,False,direct,deepseek_v3_2_exp,easy,reasoning,deepseek_v3_2_exp,reasoning,0.9115,0.02172,15.87
+3,3,24,158,greedy,0.3603,0.3865,0.0262,False,direct,deepseek_v3_2_exp,easy,reasoning,deepseek_v3_2_exp,reasoning,0.8979,0.016084,15.64
+4,4,15,158,greedy,0.3614,0.4024,0.041,False,direct,deepseek_v3_2_exp,easy,reasoning,deepseek_v3_2_exp,reasoning,0.8982,0.012399,15.357
+5,5,17,158,greedy,0.3584,0.3965,0.038,False,direct,deepseek_v3_2_exp,easy,reasoning,deepseek_v3_2_exp,reasoning,0.8946,0.018559,15.137
+6,6,19,158,greedy,0.3602,0.395,0.0348,False,direct,deepseek_v3_2_exp,easy,reasoning,deepseek_v3_2_exp,reasoning,0.8988,0.018798,15.408
+7,7,22,158,greedy,0.3571,0.397,0.0398,False,direct,deepseek_v3_2_exp,easy,reasoning,deepseek_v3_2_exp,reasoning,0.8893,0.014585,15.181
+8,8,25,158,greedy,0.3554,0.3712,0.0158,False,executor_plus_verifier,deepseek_v3_2_exp,easy,reasoning,deepseek_v3_2_exp,reasoning,0.9674,0.062885,45.296
+9,9,22,158,greedy,0.3577,0.3714,0.0137,False,executor_plus_verifier,deepseek_v3_2_exp,easy,reasoning,deepseek_v3_2_exp,reasoning,0.9722,0.061963,45.358

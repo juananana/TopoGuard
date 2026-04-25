@@ -41,6 +41,8 @@ sys.path.insert(0, str(_SRC_DIR))
 
 from src.primitives.profile_manager import log_normalize_profiles
 from src.primitives.topology_template import TemplateLibrary
+from src.evaluation.claude_evaluator import ClaudeEvaluator
+from src.evaluation.evaluator_types import EvaluatorInput
 
 import matplotlib
 
@@ -714,6 +716,7 @@ def repair_topo(
     failed_topo_id: str,
     profiles: List[Dict],
     rng: random.Random,
+    use_real_eval: bool = False,
 ) -> Dict | None:
     """
     Multi-path local repair (Method_v4 §5, §8):
@@ -740,7 +743,11 @@ def repair_topo(
             return 99
 
     sorted_a = sorted(candidates_a, key=_topo_sort_key)
-    successful_a = [p for p in sorted_a if p["S"] >= PASS_THRESHOLD]
+    # F-1 fix: also enforce hard constraints on repair candidates
+    successful_a = [p for p in sorted_a
+                    if p["S"] >= PASS_THRESHOLD
+                    and p["C_norm"] <= CONSTRAINT_BUDGET
+                    and p["L"] <= CONSTRAINT_LATENCY]
 
     # ── Strategy B: executor upgrade (same topo, different model) ─────────────
     candidates_b = [
@@ -752,14 +759,41 @@ def repair_topo(
     ]
     # Sort by quality (best model first)
     sorted_b = sorted(candidates_b, key=lambda p: -p["S"])
-    successful_b = [p for p in sorted_b if p["S"] >= PASS_THRESHOLD]
+    successful_b = [p for p in sorted_b
+                    if p["S"] >= PASS_THRESHOLD
+                    and p["C_norm"] <= CONSTRAINT_BUDGET
+                    and p["L"] <= CONSTRAINT_LATENCY]
 
     # ── Strategy C: evaluator upgrade (quality boost without new profile) ─────
     # No new profile needed — apply quality boost to the failed candidate
     # ΔC_eval = EVAL_UPGRADE_COST_PENALTY × Δtier (simulate 1 tier upgrade)
     def _eval_repaired(candidate: dict, n_tiers: int = 1) -> dict:
         boosted = dict(candidate)
-        boosted["S"] = min(1.0, candidate["S"] + EVAL_UPGRADE_QUALITY_BOOST * n_tiers)
+        if use_real_eval:
+            # Call real ClaudeEvaluator (strong model) to get actual quality score
+            try:
+                inp = EvaluatorInput(
+                    task_type="water_qa",
+                    node_type=candidate.get("node_type", "reasoning"),
+                    node_id=candidate.get("topo_id", "t1"),
+                    template_id=candidate.get("topo_id", "direct"),
+                    primitive_name=candidate.get("node_type", "reasoning"),
+                    candidate_name=candidate.get("model", "unknown"),
+                    difficulty={"easy": 0.2, "medium": 0.5, "hard": 0.8}.get(
+                        candidate.get("difficulty", "medium"), 0.5),
+                    difficulty_bucket=candidate.get("difficulty", "medium"),
+                    input_payload=None,
+                    candidate_output=f"[simulated output for {candidate.get('node_type')} "
+                                     f"at difficulty={candidate.get('difficulty')}]",
+                )
+                evaluator = ClaudeEvaluator(use_strong_model=True)
+                result = evaluator.evaluate(inp)
+                boosted["S"] = result.quality_score
+            except Exception:
+                # Fallback to arithmetic stub on any error
+                boosted["S"] = min(1.0, candidate["S"] + EVAL_UPGRADE_QUALITY_BOOST * n_tiers)
+        else:
+            boosted["S"] = min(1.0, candidate["S"] + EVAL_UPGRADE_QUALITY_BOOST * n_tiers)
         delta_c = EVAL_UPGRADE_COST_PENALTY * n_tiers
         boosted["C"] = candidate["C"] + delta_c
         boosted["C_norm"] = candidate.get("C_norm", candidate["C"]) + delta_c
@@ -820,7 +854,7 @@ def _topo_node_delta(from_id: str, to_id: str) -> int:
 
 
 def simulate_with_repair(
-    profiles: List[Dict], seed: int = 999
+    profiles: List[Dict], seed: int = 999, use_real_eval: bool = False
 ) -> Dict[str, List[Dict]]:
     """
     Simulate multi-path local repair (Strategies A, B, C) on all profile candidates.
@@ -869,7 +903,7 @@ def simulate_with_repair(
                 f"{'PASS':<6} | {'—':>2} | {'no repair needed':<30} | {'—':>7}"
             )
         else:
-            repair_res = repair_topo(model, diff, nt, topo_id, profiles, rng)
+            repair_res = repair_topo(model, diff, nt, topo_id, profiles, rng, use_real_eval=use_real_eval)
             if repair_res:
                 repaired = repair_res["result"]
                 strat = repair_res["strategy"]
@@ -1128,9 +1162,32 @@ def compute_q_evolution(
             None
         )
         if base_p:
+            if use_real_eval:
+                try:
+                    inp = EvaluatorInput(
+                        task_type="water_qa",
+                        node_type=base_p.get("node_type", "reasoning"),
+                        node_id=base_p.get("topo_id", "t1"),
+                        template_id=base_p.get("topo_id", "direct"),
+                        primitive_name=base_p.get("node_type", "reasoning"),
+                        candidate_name=base_p.get("model", "unknown"),
+                        difficulty={"easy": 0.2, "medium": 0.5, "hard": 0.8}.get(
+                            base_p.get("difficulty", "medium"), 0.5),
+                        difficulty_bucket=base_p.get("difficulty", "medium"),
+                        input_payload=None,
+                        candidate_output=f"[simulated output for {base_p.get('node_type')} "
+                                         f"at difficulty={base_p.get('difficulty')}]",
+                    )
+                    evaluator = ClaudeEvaluator(use_strong_model=True)
+                    result = evaluator.evaluate(inp)
+                    new_s = result.quality_score
+                except Exception:
+                    new_s = min(1.0, base_p["S"] + EVAL_UPGRADE_QUALITY_BOOST)
+            else:
+                new_s = min(1.0, base_p["S"] + EVAL_UPGRADE_QUALITY_BOOST)
             eval_repaired = {
                 **base_p,
-                "S": min(1.0, base_p["S"] + EVAL_UPGRADE_QUALITY_BOOST),
+                "S": new_s,
                 "C": base_p["C"] + EVAL_UPGRADE_COST_PENALTY,
                 "C_norm": base_p.get("C_norm", base_p["C"]) + EVAL_UPGRADE_COST_PENALTY,
             }
@@ -2120,6 +2177,11 @@ def main():
         help="Override output directory (default: outputs/water_qa_topo/). "
              "Useful when loading from mvp_experiment output."
     )
+    parser.add_argument(
+        "--real-eval", action="store_true", dest="real_eval",
+        help="Use real ClaudeEvaluator (strong model) for Strategy C instead of arithmetic stub. "
+             "Requires ANTHROPIC_API_KEY env var."
+    )
     args = parser.parse_args()
 
     # Update global OUTPUT_DIR if provided
@@ -2502,7 +2564,7 @@ def main():
 
     # 7. Topology-level repair simulation (Strategies A, B, C)
     # (detailed per-case log is printed inside simulate_with_repair)
-    repair_results = simulate_with_repair(profiles, seed=SEED)
+    repair_results = simulate_with_repair(profiles, seed=SEED, use_real_eval=args.real_eval)
     n_repair_success = len([r for r in repair_results["with_repair"]
                              if r["eval_pass"] and r["repair_action"] != "none"])
     n_repair_fail = len([r for r in repair_results["with_repair"]

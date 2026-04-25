@@ -1,0 +1,51 @@
+[
+  {
+    "tau_pass": 0.4,
+    "avg_S": 0.7261,
+    "repair_rate": 0.0078,
+    "avg_delta_S": 0.0264,
+    "n": 255
+  },
+  {
+    "tau_pass": 0.45,
+    "avg_S": 0.7261,
+    "repair_rate": 0.0627,
+    "avg_delta_S": 0.0327,
+    "n": 255
+  },
+  {
+    "tau_pass": 0.5,
+    "avg_S": 0.7261,
+    "repair_rate": 0.1529,
+    "avg_delta_S": 0.0497,
+    "n": 255
+  },
+  {
+    "tau_pass": 0.5339,
+    "avg_S": 0.7261,
+    "repair_rate": 0.2157,
+    "avg_delta_S": 0.0636,
+    "n": 255
+  },
+  {
+    "tau_pass": 0.6,
+    "avg_S": 0.7261,
+    "repair_rate": 0.3333,
+    "avg_delta_S": 0.0974,
+    "n": 255
+  },
+  {
+    "tau_pass": 0.65,
+    "avg_S": 0.7261,
+    "repair_rate": 0.3961,
+    "avg_delta_S": 0.1273,
+    "n": 255
+  },
+  {
+    "tau_pass": 0.7,
+    "avg_S": 0.7261,
+    "repair_rate": 0.4431,
+    "avg_delta_S": 0.1605,
+    "n": 255
+  }
+]

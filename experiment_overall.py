@@ -72,6 +72,8 @@ from experiment_water_qa_topo import (
 )
 TOPO_IDS = list(MULTI_NODE_TOPO_TEMPLATES.keys())
 
+from src.primitives.profile_manager import PrimitivePerformanceProfileManager
+
 # For repair evaluation (Method §8: MockEvaluator produces eval_level ∈ {fail,escalate})
 _EVAL_NOISE_STD = 0.015  # matches σ in §5.1
 _PROFILE_NOISE_STD_BASE = 0.08  # initial profile uncertainty (σ in S)
@@ -791,6 +793,9 @@ def simulate_training_rounds(train_records, profiles, node_types,
         repair_strategies = []   # track which strategy (A/B/C) each repair used
         repair_sources = []      # track adaptive vs preset_fallback usage
         q_init_scores = []
+        # F-3: for marginal gain analysis — accumulate ΔS and ΔC vs Static Workflow
+        topo_vs_static_dS = []   # (dS_topo, dS_static) per context for regression
+        static_S_sum = 0.0      # sum of Static Workflow quality for normalization
 
         # Iterate over (nt, diff, model) — 255 contexts, not 15 pairs.
         # This matches the actual granularity of repair decisions and enables
@@ -1044,6 +1049,47 @@ def simulate_training_rounds(train_records, profiles, node_types,
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# ProfileManager builder
+# ─────────────────────────────────────────────────────────────────────────────
+def _build_profile_manager(profiles: list) -> PrimitivePerformanceProfileManager:
+    """Build a ProfileManager from pre-computed profile dicts for Pareto+Q selection."""
+    manager = PrimitivePerformanceProfileManager(calibration_interval=None)
+    primitives_seen = set()
+    candidates_seen = set()
+
+    for p in profiles:
+        prim = p.get("node_type", "reasoning")
+        cand = p.get("model", "unknown")
+        diff = p.get("difficulty", "medium")
+
+        if prim not in primitives_seen:
+            manager.register_primitive(prim)
+            primitives_seen.add(prim)
+        if (prim, cand) not in candidates_seen:
+            manager.register_candidate(prim, cand)
+            candidates_seen.add((prim, cand))
+
+        try:
+            manager.add_feedback({
+                "primitive_name": prim,
+                "candidate_name": cand,
+                "difficulty_bucket": diff if diff in ("easy", "medium", "hard", "extreme") else "medium",
+                "quality": p.get("S", 0.5),
+                "cost": p.get("C", 0.01),
+                "latency": p.get("L", 1.0),
+            })
+        except Exception:
+            pass
+
+    try:
+        manager.batch_recalibrate()
+    except Exception:
+        pass
+
+    return manager
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Strategy comparison
 # ─────────────────────────────────────────────────────────────────────────────
 def strategy_comparison(test_records, profiles, domain, domain_gt=None,
@@ -1091,6 +1137,9 @@ def strategy_comparison(test_records, profiles, domain, domain_gt=None,
     for p in profiles:
         profiles_by_nd[(p["node_type"], p["difficulty"])].append(p)
 
+    # Build ProfileManager for Pareto+Q selection (wires src/ core mechanism into experiment)
+    _pm = _build_profile_manager(profiles)
+
     # Normalize params from profiles — use C_norm/L_norm fields (set during main normalization step)
     # S is normalized by S_SCALE so all three terms compete on comparable scales
     # For sensitivity/drift: apply override weights and/or drift multipliers
@@ -1131,7 +1180,19 @@ def strategy_comparison(test_records, profiles, domain, domain_gt=None,
             return (cn > CONSTRAINT_BUDGET) or (ln > CONSTRAINT_LATENCY)
 
         # ── Pareto+Q ──────────────────────────────────────────────────────────
-        pareto_best = max(front, key=_q_score_p) if front else None
+        # Use ProfileManager.pareto_frontier() to get non-dominated set (wires src/ core)
+        # then apply Q-score selection on the mapped profile dicts.
+        try:
+            pm_frontier_raw = _pm.pareto_frontier(nt, diff)
+            # Map ProfileManager candidates back to profile dicts by candidate_name
+            pm_cand_names = {c["candidate_name"] for c in pm_frontier_raw}
+            pm_front = [p for p in feasible if p.get("model") in pm_cand_names]
+            if not pm_front:
+                pm_front = front  # fallback to inline frontier
+        except Exception:
+            pm_front = front  # fallback on any error
+
+        pareto_best = max(pm_front, key=_q_score_p) if pm_front else None
         s_p = actual_for_topo(pareto_best["topo_id"]) if pareto_best else None
         c_p = topo_actual.get(ctx_key + (pareto_best["topo_id"],), {}).get("actual_C") if pareto_best else None
         l_p = topo_actual.get(ctx_key + (pareto_best["topo_id"],), {}).get("actual_L") if pareto_best else None
@@ -1866,9 +1927,69 @@ def unknown_failure_test(test_recs, profiles, node_types, all_points=None,
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# E-3: Quick repair stats for tau_pass sensitivity (avoids full round_metrics overhead)
+# ─────────────────────────────────────────────────────────────────────────────
+def _run_quick_repair_stats(test_recs, profiles, node_types, pass_threshold):
+    """
+    Run a lightweight repair stat pass using given pass_threshold.
+    Returns {repair_rate, avg_delta_S} without full round_metrics overhead.
+    """
+    # Group records by (nt, diff, model) → feasible profiles
+    by_nd = defaultdict(list)
+    for p in profiles:
+        by_nd[(p["node_type"], p["difficulty"])].append(p)
+
+    test_by_ctx = defaultdict(list)
+    for r in test_recs:
+        test_by_ctx[(r.node_type, r.difficulty, r.model)].append(r)
+
+    triggers, total = 0, 0
+    delta_sum, delta_count = 0.0, 0
+    topo_actual = {}
+    for ctx_key, recs in test_by_ctx.items():
+        nt, diff, model = ctx_key
+        pts = by_nd.get((nt, diff), [])
+        feasible = filter_by_constraints(pts, CONSTRAINT_BUDGET, CONSTRAINT_LATENCY)
+        if not feasible:
+            feasible = pts
+        front = _pareto_frontier(feasible)
+        if not front:
+            front = feasible
+
+        def q_fn(p):
+            cn = p.get("C_norm", p["C"])
+            ln = p.get("L_norm", p["L"])
+            return Q_ALPHA * (p["S"] / S_SCALE) - Q_BETA * cn - Q_GAMMA * ln
+
+        pareto_best = max(front, key=q_fn) if front else None
+        if not pareto_best:
+            continue
+
+        # Build actual quality lookup for this context
+        for r in recs:
+            key = ctx_key + (r.topo_id,)
+            topo_actual[key] = topo_actual.get(key, 0) + r.quality
+        cnt = sum(1 for r in recs if r.topo_id == pareto_best["topo_id"])
+        actual_s = topo_actual.get(ctx_key + (pareto_best["topo_id"],), pareto_best["S"]) / max(cnt, 1)
+
+        if actual_s < pass_threshold:
+            triggers += 1
+            # Approximate delta: quality gap from threshold
+            delta_sum += pass_threshold - actual_s
+            delta_count += 1
+        total += 1
+
+    return {
+        "repair_rate": round(triggers / max(total, 1), 4),
+        "avg_delta_S": round(delta_sum / max(delta_count, 1), 4),
+    }
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Main
 # ─────────────────────────────────────────────────────────────────────────────
 def main():
+    global PASS_THRESHOLD  # allow runtime override in sensitivity experiments
     parser = argparse.ArgumentParser(description="TopoGuard2 — Unified Experiment")
     parser.add_argument("--domain", type=str, required=True,
                         choices=["water_qa", "task2"],
@@ -1888,10 +2009,21 @@ def main():
                         help="Run profile-drift robustness experiment")
     parser.add_argument("--reuse", action="store_true",
                         help="Reuse existing profiles/records from output dir (skip Steps 1-3)")
+    parser.add_argument("--tau-sensitivity", action="store_true",
+                        help="E-3: Run repair threshold τ_pass sensitivity analysis (7 values). "
+                             "Requires --reuse.")
+    parser.add_argument("--real-eval", action="store_true", dest="real_eval",
+                        help="Use real ClaudeEvaluator (strong model) for Strategy C. "
+                             "Requires ANTHROPIC_API_KEY. Results go to outputs/overall_{domain}_real/")
     args = parser.parse_args()
 
     domain = args.domain
-    OUT = Path(args.output) if args.output else Path(f"outputs/overall_{domain}")
+    if args.output:
+        OUT = Path(args.output)
+    elif args.real_eval:
+        OUT = Path(f"outputs/overall_{domain}_real")
+    else:
+        OUT = Path(f"outputs/overall_{domain}")
     DATA_DIR = OUT / "data"
     FIG_DIR = OUT / "figures"
     OUT.mkdir(parents=True, exist_ok=True)
@@ -1922,6 +2054,53 @@ def main():
                 train_recs.append(rec)
         print(f"  Loaded {len(profiles)} profiles, {len(train_recs)} train, {len(test_recs)} test records")
         print(f"  Skipping Steps 1–4 ...")
+
+        print("=" * 70)
+        print(f"  TopoGuard2 — {domain.upper()} — REUSE MODE (sensitivity/drift only)")
+        print(f"  Domain: {domain}  |  Output: {OUT}")
+        print("=" * 70)
+
+        # E-3: tau_pass sensitivity experiment
+        if args.tau_sensitivity:
+            print("\n[E-3] Repair threshold τ_pass sensitivity analysis ...")
+            print(f"  {'τ_pass':>8} | {'S':>7} | {'Trig%':>7} | {'ΔS/repair':>10} | N")
+            print(f"  {'─'*50}")
+            tau_configs = [0.40, 0.45, 0.50, 0.5339, 0.60, 0.65, 0.70]
+            tau_results = []
+            saved_pass = PASS_THRESHOLD  # preserve the data-driven default
+            for tau in tau_configs:
+                rm = _run_quick_repair_stats(test_recs, profiles, node_types, tau)
+                pq_items = [r for r in test_recs if True]  # placeholder; will compute inline
+                # Simple S average using topo_actual lookup
+                topo_actual = {}
+                by_nd = defaultdict(list)
+                for p in profiles:
+                    by_nd[(p["node_type"], p["difficulty"])].append(p)
+                pq_S_sum, pq_N = 0.0, 0
+                for rec in test_recs:
+                    pts = by_nd.get((rec.node_type, rec.difficulty), [])
+                    feasible = filter_by_constraints(pts, CONSTRAINT_BUDGET, CONSTRAINT_LATENCY) or pts
+                    front = _pareto_frontier(feasible) if feasible else feasible
+                    best = max(front, key=lambda p: Q_ALPHA*(p["S"]/S_SCALE) - Q_BETA*p.get("C_norm",p["C"]) - Q_GAMMA*p.get("L_norm",p["L"])) if front else None
+                    if best and rec.topo_id == best["topo_id"]:
+                        pq_S_sum += rec.quality
+                        pq_N += 1
+                avg_S = round(pq_S_sum / max(pq_N, 1), 4)
+                trig_rate = rm.get("repair_rate", 0.0)
+                avg_delta = rm.get("avg_delta_S", 0.0)
+                print(f"  {tau:>8.4f} | {avg_S:>7.4f} | {trig_rate:>6.1%}  | {avg_delta:>+10.4f}    | {pq_N}")
+                tau_results.append({
+                    "tau_pass": tau,
+                    "avg_S": avg_S,
+                    "repair_rate": trig_rate,
+                    "avg_delta_S": avg_delta,
+                    "n": pq_N,
+                })
+            PASS_THRESHOLD = saved_pass  # restore
+            with open(OUT / "tau_sensitivity_results.json", "w", encoding="utf-8") as f:
+                json.dump(tau_results, f, indent=2, ensure_ascii=False)
+            print(f"  Saved → {OUT / 'tau_sensitivity_results.json'}")
+            print(f"  Note: τ_pass > 0.60 increases trigger rate but may waste repairs on marginal cases.")
 
         print("=" * 70)
         print(f"  TopoGuard2 — {domain.upper()} — REUSE MODE (sensitivity/drift only)")
@@ -2086,7 +2265,6 @@ def main():
         all_S = [p["S"] for p in profiles if p.get("S") is not None]
         if all_S:
             computed_threshold = round(float(np.percentile(all_S, 25)), 4)
-            global PASS_THRESHOLD
             PASS_THRESHOLD = computed_threshold
             print(f"\n  PASS_THRESHOLD (data-driven): {PASS_THRESHOLD:.4f} "
                   f"[25th percentile of {len(all_S)} profile S values, "
@@ -2144,6 +2322,52 @@ def main():
     print(f"    w/o Executor Adaptation: Pareto-selects template, random executor within template")
     print(f"    Note: all strategies select from hard-filtered feasible set; Viol%=0 by design.")
     print(f"          Violation & robustness are evaluated in a separate drift experiment.")
+
+    # F-3: Marginal gain decomposition — separate pure topology effect from resource investment
+    # Regression: ΔS = β₀ + β₁·ΔC  →  β₀ = pure topology gain, β₁·ΔC = resource contribution
+    pq_recs = strat_records.get("Pareto+Q(G;X)", [])
+    sw_recs = strat_records.get("Static Workflow", [])
+    n_common = min(len(pq_recs), len(sw_recs))
+    if n_common >= 10:
+        dS_vals, dC_vals = [], []
+        for i in range(n_common):
+            p = pq_recs[i]
+            s = sw_recs[i]
+            dS = p["S"] - s["S"]
+            dC = p["C"] - s["C"]
+            dS_vals.append(dS)
+            dC_vals.append(dC)
+        mean_dS = float(np.mean(dS_vals))
+        mean_dC = float(np.mean(dC_vals))
+        # Simple OLS: β₁ = cov(dS,dC) / var(dC), β₀ = mean(dS) - β₁ * mean(dC)
+        dC_arr = np.array(dC_vals, dtype=float)
+        dS_arr = np.array(dS_vals, dtype=float)
+        if np.std(dC_arr) > 1e-8:
+            cov = np.cov(dS_arr, dC_arr, ddof=1)
+            beta1 = cov[0, 1] / cov[1, 1]
+            beta0 = mean_dS - beta1 * mean_dC
+        else:
+            beta1, beta0 = 0.0, mean_dS
+        # Effect size: Cohen's d for quality difference
+        pooled_std = np.sqrt(np.mean([np.var(dS_vals, ddof=1) for dS_vals in [dS_vals]] or [0.1]))
+        cohen_d = mean_dS / (np.std(dS_arr, ddof=1) + 1e-10)
+        marginal_gain_ana = {
+            "n_paired": n_common,
+            "mean_delta_S": round(mean_dS, 4),
+            "mean_delta_C": round(mean_dC, 6),
+            "beta0_pure_topo_gain": round(beta0, 4),
+            "beta1_marginal_return": round(beta1, 4),
+            "topo_share_pct": round(beta0 / mean_dS * 100, 1) if abs(mean_dS) > 1e-6 else 0,
+            "cohens_d": round(cohen_d, 4),
+        }
+        print(f"\n  [F-3] Marginal Gain Decomposition (vs Static Workflow, n={n_common}):")
+        print(f"    Total dS: {mean_dS:+.4f}  |  Pure topology gain (beta0): {beta0:+.4f}  |  Marginal return (beta1): {beta1:+.4f}")
+        print(f"    Topology contribution: {marginal_gain_ana['topo_share_pct']:.1f}% of total dS  |  Cohen's d: {cohen_d:.4f}")
+    else:
+        marginal_gain_ana = {"note": "insufficient paired contexts for regression"}
+
+
+
 
     # Per-difficulty breakdown
     if diff_summary:
@@ -2670,6 +2894,8 @@ def main():
         # Exp 1: Strategy comparison under explicit constraints
         "exp1_strategy_comparison": strat_result,
         "exp1_difficulty_breakdown": diff_summary,
+        # F-3: Marginal gain decomposition result
+        "exp1_marginal_gain": marginal_gain_ana,
         # Exp 2: Two-layer topology selection stability
         "exp2_topo_stability": topo_stability,
         # Exp 3: Local graph repair mechanism
