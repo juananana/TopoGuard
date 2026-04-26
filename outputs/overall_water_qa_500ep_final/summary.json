@@ -18,23 +18,23 @@
   "overall_frontier_size": 28,
   "exp1_strategy_comparison": {
     "Pareto+Q(G;X)": {
-      "avg_S": 0.7151,
-      "avg_C_total": 0.397637,
-      "avg_L": 103.614,
+      "avg_S": 0.8229,
+      "avg_C_total": 0.005016,
+      "avg_L": 66.941,
       "viol_rate": 0.0,
       "n": 255
     },
     "Random": {
-      "avg_S": 0.682,
-      "avg_C_total": 0.337208,
-      "avg_L": 85.72,
+      "avg_S": 0.6866,
+      "avg_C_total": 0.453005,
+      "avg_L": 91.753,
       "viol_rate": 0.0,
-      "n": 248
+      "n": 247
     },
     "Best-Quality": {
-      "avg_S": 0.7478,
-      "avg_C_total": 0.560435,
-      "avg_L": 137.484,
+      "avg_S": 0.7487,
+      "avg_C_total": 0.56044,
+      "avg_L": 137.878,
       "viol_rate": 0.0,
       "n": 255
     },
@@ -53,9 +53,9 @@
       "n": 255
     },
     "FrugalGPT Cascade": {
-      "avg_S": 0.7058,
-      "avg_C_total": 0.401867,
-      "avg_L": 105.19,
+      "avg_S": 0.7071,
+      "avg_C_total": 0.401855,
+      "avg_L": 105.759,
       "viol_rate": 0.0,
       "n": 255
     },
@@ -67,16 +67,16 @@
       "n": 255
     },
     "w/o Template Selection": {
-      "avg_S": 0.7539,
-      "avg_C_total": 0.581908,
-      "avg_L": 141.374,
+      "avg_S": 0.7813,
+      "avg_C_total": 0.004394,
+      "avg_L": 61.717,
       "viol_rate": 0.0,
       "n": 255
     },
     "w/o Executor Adaptation": {
-      "avg_S": 0.7261,
-      "avg_C_total": 0.438337,
-      "avg_L": 114.957,
+      "avg_S": 0.7437,
+      "avg_C_total": 0.002871,
+      "avg_L": 87.664,
       "viol_rate": 0.0,
       "n": 255
     }

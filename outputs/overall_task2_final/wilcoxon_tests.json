@@ -1,34 +1,34 @@
 {
-  "Best-Quality": {
-    "n": 20,
-    "stat": 72.0,
-    "p_value": 0.83131,
+  "Random": {
+    "n": 21,
+    "stat": 76.0,
+    "p_value": 0.981117,
     "significant": false,
-    "mean_delta_S": 0.0043,
+    "mean_delta_S": 0.0007,
     "direction": "ref_better"
+  },
+  "Best-Quality": {
+    "n": 23,
+    "stat": 48.0,
+    "p_value": 0.177293,
+    "significant": false,
+    "mean_delta_S": -0.0339,
+    "direction": "comp_better"
   },
   "Static Workflow": {
-    "n": 20,
-    "stat": 21.0,
-    "p_value": 0.000851,
+    "n": 23,
+    "stat": 26.0,
+    "p_value": 0.000654,
     "significant": true,
-    "mean_delta_S": 0.1025,
-    "direction": "ref_better"
-  },
-  "Random": {
-    "n": 16,
-    "stat": 61.0,
-    "p_value": 0.743561,
-    "significant": false,
-    "mean_delta_S": 0.0032,
+    "mean_delta_S": 0.0796,
     "direction": "ref_better"
   },
   "Cheapest": {
     "n": 18,
-    "stat": 70.0,
-    "p_value": 0.522614,
+    "stat": 81.0,
+    "p_value": 0.865044,
     "significant": false,
-    "mean_delta_S": 0.0415,
+    "mean_delta_S": 0.0075,
     "direction": "ref_better"
   }
 }

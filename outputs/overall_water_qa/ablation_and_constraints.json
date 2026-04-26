@@ -1,0 +1,126 @@
+{
+  "ablations": {
+    "w/o Local Repair": {
+      "avg_S": 0.8058,
+      "avg_C_total": 0.0,
+      "avg_L": 0.0,
+      "n": 255
+    },
+    "w/o Bayesian Calibration": {
+      "avg_S": 0.8203,
+      "avg_C_total": 0.004977,
+      "avg_L": 88.07,
+      "viol_rate": 0.0,
+      "n": 255
+    }
+  },
+  "constraint_robustness": {
+    "Cmax=0.3": {
+      "avg_S": 0.8203,
+      "avg_C": 0.004977,
+      "avg_L": 88.07,
+      "feasible_pct": 100.0,
+      "n": 255
+    },
+    "Cmax=0.4": {
+      "avg_S": 0.8203,
+      "avg_C": 0.004977,
+      "avg_L": 88.07,
+      "feasible_pct": 100.0,
+      "n": 255
+    },
+    "Cmax=0.5": {
+      "avg_S": 0.8203,
+      "avg_C": 0.004977,
+      "avg_L": 88.07,
+      "feasible_pct": 100.0,
+      "n": 255
+    },
+    "Cmax=0.6": {
+      "avg_S": 0.8203,
+      "avg_C": 0.004977,
+      "avg_L": 88.07,
+      "feasible_pct": 100.0,
+      "n": 255
+    },
+    "Cmax=0.7": {
+      "avg_S": 0.8203,
+      "avg_C": 0.004977,
+      "avg_L": 88.07,
+      "feasible_pct": 100.0,
+      "n": 255
+    }
+  },
+  "wilcoxon_ablation": {
+    "Random": {
+      "n": 250,
+      "stat": 957.0,
+      "p_value": 0.0,
+      "significant": true,
+      "mean_delta_S": 0.1469,
+      "direction": "ref_better"
+    },
+    "Best-Quality": {
+      "n": 255,
+      "stat": 0.0,
+      "p_value": 0.0,
+      "significant": true,
+      "mean_delta_S": -0.0125,
+      "direction": "comp_better"
+    },
+    "Cheapest": {
+      "n": 230,
+      "stat": 3597.0,
+      "p_value": 0.0,
+      "significant": true,
+      "mean_delta_S": 0.1112,
+      "direction": "ref_better"
+    },
+    "Static Workflow": {
+      "n": 255,
+      "stat": 3485.0,
+      "p_value": 0.0,
+      "significant": true,
+      "mean_delta_S": 0.1177,
+      "direction": "ref_better"
+    },
+    "FrugalGPT Cascade": {
+      "n": 255,
+      "stat": 595.0,
+      "p_value": 0.0,
+      "significant": true,
+      "mean_delta_S": 0.0539,
+      "direction": "ref_better"
+    },
+    "LLM Router": {
+      "n": 255,
+      "stat": 153.0,
+      "p_value": 0.0,
+      "significant": true,
+      "mean_delta_S": 0.0668,
+      "direction": "ref_better"
+    },
+    "w/o Template Selection": {
+      "n": 255,
+      "stat": 847.0,
+      "p_value": 0.0,
+      "significant": true,
+      "mean_delta_S": 0.0565,
+      "direction": "ref_better"
+    },
+    "w/o Executor Adaptation": {
+      "n": 255,
+      "stat": 543.0,
+      "p_value": 0.0,
+      "significant": true,
+      "mean_delta_S": 0.0641,
+      "direction": "ref_better"
+    }
+  },
+  "bootstrap_ci": {
+    "S_mean": 0.8203,
+    "ci_low": 0.7969,
+    "ci_high": 0.8428,
+    "n_bs": 1000
+  }
+}

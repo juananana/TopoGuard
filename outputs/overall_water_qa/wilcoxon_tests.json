@@ -1,66 +1,66 @@
 {
   "Random": {
-    "n": 227,
-    "stat": 8206.0,
-    "p_value": 6.3e-05,
+    "n": 247,
+    "stat": 1394.0,
+    "p_value": 0.0,
     "significant": true,
-    "mean_delta_S": 0.0563,
+    "mean_delta_S": 0.1395,
     "direction": "ref_better"
   },
   "Best-Quality": {
-    "n": 238,
+    "n": 255,
     "stat": 0.0,
     "p_value": 0.0,
     "significant": true,
-    "mean_delta_S": -0.0112,
+    "mean_delta_S": -0.0125,
     "direction": "comp_better"
   },
   "Cheapest": {
-    "n": 225,
-    "stat": 7563.0,
-    "p_value": 0.000299,
+    "n": 230,
+    "stat": 3597.0,
+    "p_value": 0.0,
     "significant": true,
-    "mean_delta_S": 0.055,
+    "mean_delta_S": 0.1112,
     "direction": "ref_better"
   },
   "Static Workflow": {
-    "n": 238,
-    "stat": 4683.5,
+    "n": 255,
+    "stat": 3485.0,
     "p_value": 0.0,
     "significant": true,
-    "mean_delta_S": 0.09,
+    "mean_delta_S": 0.1177,
     "direction": "ref_better"
   },
   "FrugalGPT Cascade": {
-    "n": 238,
-    "stat": 2761.0,
-    "p_value": 0.000142,
+    "n": 255,
+    "stat": 595.0,
+    "p_value": 0.0,
     "significant": true,
-    "mean_delta_S": 0.0163,
+    "mean_delta_S": 0.0539,
     "direction": "ref_better"
   },
   "LLM Router": {
-    "n": 238,
-    "stat": 826.5,
+    "n": 255,
+    "stat": 153.0,
     "p_value": 0.0,
     "significant": true,
-    "mean_delta_S": 0.0561,
+    "mean_delta_S": 0.0668,
     "direction": "ref_better"
   },
   "w/o Template Selection": {
-    "n": 238,
-    "stat": 0.0,
+    "n": 255,
+    "stat": 513.0,
     "p_value": 0.0,
     "significant": true,
-    "mean_delta_S": -0.0112,
-    "direction": "comp_better"
+    "mean_delta_S": 0.0591,
+    "direction": "ref_better"
   },
   "w/o Executor Adaptation": {
-    "n": 238,
-    "stat": 0.0,
-    "p_value": 0.000293,
+    "n": 255,
+    "stat": 494.0,
+    "p_value": 0.0,
     "significant": true,
-    "mean_delta_S": -0.0067,
-    "direction": "comp_better"
+    "mean_delta_S": 0.0648,
+    "direction": "ref_better"
   }
 }

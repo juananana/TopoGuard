@@ -1,0 +1,72 @@
+[
+  {
+    "label": "Default",
+    "alpha": 0.65,
+    "beta": 0.25,
+    "gamma": 0.1,
+    "avg_S": 0.821,
+    "avg_C": 0.003041,
+    "avg_L": 61.164,
+    "N": 238
+  },
+  {
+    "label": "Quality-dominant",
+    "alpha": 0.92,
+    "beta": 0.05,
+    "gamma": 0.03,
+    "avg_S": 0.8337,
+    "avg_C": 0.002898,
+    "avg_L": 91.758,
+    "N": 238
+  },
+  {
+    "label": "Balanced",
+    "alpha": 0.5,
+    "beta": 0.3,
+    "gamma": 0.2,
+    "avg_S": 0.7275,
+    "avg_C": 0.006598,
+    "avg_L": 17.735,
+    "N": 238
+  },
+  {
+    "label": "Cost-priority",
+    "alpha": 0.4,
+    "beta": 0.5,
+    "gamma": 0.1,
+    "avg_S": 0.775,
+    "avg_C": 0.003145,
+    "avg_L": 35.166,
+    "N": 238
+  },
+  {
+    "label": "Latency-priority",
+    "alpha": 0.1,
+    "beta": 0.1,
+    "gamma": 0.8,
+    "avg_S": 0.6365,
+    "avg_C": 0.005786,
+    "avg_L": 9.56,
+    "N": 196
+  },
+  {
+    "label": "Q+C only",
+    "alpha": 0.8,
+    "beta": 0.2,
+    "gamma": 0.0,
+    "avg_S": 0.8337,
+    "avg_C": 0.002898,
+    "avg_L": 91.758,
+    "N": 238
+  },
+  {
+    "label": "Q+L only",
+    "alpha": 0.8,
+    "beta": 0.0,
+    "gamma": 0.2,
+    "avg_S": 0.7746,
+    "avg_C": 0.005502,
+    "avg_L": 34.882,
+    "N": 238
+  }
+]

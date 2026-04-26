@@ -1,0 +1,102 @@
+{
+  "ablations": {
+    "w/o Local Repair": {
+      "avg_S": 0.8525,
+      "avg_C_total": 0.045747,
+      "avg_L": 16.718,
+      "n": 20
+    },
+    "w/o Bayesian Calibration": {
+      "avg_S": 0.8296,
+      "avg_C_total": 0.022124,
+      "avg_L": 9.419,
+      "viol_rate": 0.0,
+      "n": 28
+    }
+  },
+  "constraint_robustness": {
+    "Cmax=0.3": {
+      "avg_S": 0.8451,
+      "avg_C": 0.045823,
+      "avg_L": 16.957,
+      "feasible_pct": 67.9,
+      "n": 19
+    },
+    "Cmax=0.4": {
+      "avg_S": 0.8525,
+      "avg_C": 0.045747,
+      "avg_L": 16.718,
+      "feasible_pct": 71.4,
+      "n": 20
+    },
+    "Cmax=0.5": {
+      "avg_S": 0.8525,
+      "avg_C": 0.045747,
+      "avg_L": 16.718,
+      "feasible_pct": 71.4,
+      "n": 20
+    },
+    "Cmax=0.6": {
+      "avg_S": 0.8525,
+      "avg_C": 0.045747,
+      "avg_L": 16.718,
+      "feasible_pct": 71.4,
+      "n": 20
+    },
+    "Cmax=0.7": {
+      "avg_S": 0.8525,
+      "avg_C": 0.045747,
+      "avg_L": 16.718,
+      "feasible_pct": 71.4,
+      "n": 20
+    }
+  },
+  "wilcoxon_ablation": {
+    "Random": {
+      "n": 21,
+      "stat": 76.0,
+      "p_value": 0.981117,
+      "significant": false,
+      "mean_delta_S": 0.0007,
+      "direction": "ref_better"
+    },
+    "Best-Quality": {
+      "n": 23,
+      "stat": 48.0,
+      "p_value": 0.177293,
+      "significant": false,
+      "mean_delta_S": -0.0339,
+      "direction": "comp_better"
+    },
+    "Static Workflow": {
+      "n": 23,
+      "stat": 26.0,
+      "p_value": 0.000654,
+      "significant": true,
+      "mean_delta_S": 0.0796,
+      "direction": "ref_better"
+    },
+    "Cheapest": {
+      "n": 18,
+      "stat": 81.0,
+      "p_value": 0.865044,
+      "significant": false,
+      "mean_delta_S": 0.0075,
+      "direction": "ref_better"
+    },
+    "w/o Local Repair": {
+      "n": 20,
+      "stat": 23.0,
+      "p_value": 0.646462,
+      "significant": false,
+      "mean_delta_S": -0.0068,
+      "direction": "comp_better"
+    }
+  },
+  "bootstrap_ci": {
+    "S_mean": 0.8296,
+    "ci_low": 0.7867,
+    "ci_high": 0.8709,
+    "n_bs": 1000
+  }
+}
