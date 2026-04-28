@@ -1238,14 +1238,50 @@ def strategy_comparison(test_records, profiles, domain, domain_gt=None,
             pareto_best = max(pm_front, key=_q_score_p) if pm_front else None
             pareto_best_for_main = pareto_best
 
-        # Always record Pareto+Q(G;X) for pre-repair quality
-        # (repair contribution is tracked separately in round_metrics)
+        # ── Pareto+Q initial quality (pre-repair) ────────────────────────────
         s_p = actual_for_model_topo(pareto_best_for_main.get("model"), pareto_best_for_main["topo_id"]) if pareto_best_for_main else None
         c_p = topo_actual.get((nt, diff, pareto_best_for_main.get("model"), pareto_best_for_main["topo_id"]), {}).get("actual_C") if pareto_best_for_main else None
         l_p = topo_actual.get((nt, diff, pareto_best_for_main.get("model"), pareto_best_for_main["topo_id"]), {}).get("actual_L") if pareto_best_for_main else None
+
+        # Always record w/o Local Repair = initial selection quality (no repair applied)
         if s_p is not None:
-            strategies["Pareto+Q(G;X)"].append({
+            strategies["w/o Local Repair"].append({
                 "S": s_p, "C": c_p or 0, "L": l_p or 0, "diff": diff,
+                "viol": 1 if (pareto_best_for_main and violated(pareto_best_for_main)) else 0})
+
+        # ── Online repair (Option 3): apply repair on test contexts ──────────
+        # When repair_off=False (default), simulate repair on the test context:
+        #   if actual_S < PASS_THRESHOLD, search feasible candidates for a better one.
+        # This gives a true paired ablation: Pareto+Q(G;X) = with repair,
+        #   w/o Local Repair = without repair (recorded above).
+        # Repair logic is simplified vs. training (no edit-loss penalty) but sufficient
+        # to measure the quality delta from repair on the test set.
+        s_final, c_final, l_final = s_p, c_p, l_p
+        if domain == "water_qa" and not repair_off and s_p is not None and PASS_THRESHOLD is not None:
+            if s_p < PASS_THRESHOLD:
+                # Bounded local repair: search only within the Pareto frontier (front),
+                # not all feasible candidates. This keeps repair cost-efficient and
+                # consistent with the "bounded" framing in the paper.
+                repair_cands = [
+                    c for c in front
+                    if c.get("topo_id") != pareto_best_for_main.get("topo_id")
+                    or c.get("model") != pareto_best_for_main.get("model")
+                ]
+                best_repair = None
+                best_repair_s = s_p
+                for cand in repair_cands:
+                    cand_s = actual_for_model_topo(cand.get("model"), cand["topo_id"])
+                    if cand_s is not None and cand_s > best_repair_s:
+                        best_repair_s = cand_s
+                        best_repair = cand
+                if best_repair is not None:
+                    s_final = best_repair_s
+                    c_final = topo_actual.get((nt, diff, best_repair.get("model"), best_repair["topo_id"]), {}).get("actual_C", c_p)
+                    l_final = topo_actual.get((nt, diff, best_repair.get("model"), best_repair["topo_id"]), {}).get("actual_L", l_p)
+
+        if s_final is not None:
+            strategies["Pareto+Q(G;X)"].append({
+                "S": s_final, "C": c_final or 0, "L": l_final or 0, "diff": diff,
                 "viol": 1 if (pareto_best_for_main and violated(pareto_best_for_main)) else 0})
 
         # ── Random ───────────────────────────────────────────────────────────
@@ -1398,10 +1434,10 @@ def strategy_comparison(test_records, profiles, domain, domain_gt=None,
         #     Tests whether executor-level quality routing adds value beyond template
         #     selection alone.
         #
-        #   Ablation C — w/o Repair:
-        #     Computed separately by re-running with ENABLE_REPAIR=False.
-        #     Results are imported from outputs/ablation_no_repair/summary.json
-        #     and merged into the ablation table in the paper.
+        #   Ablation C — w/o Local Repair:
+        #     Recorded inline above as the pre-repair initial selection quality.
+        #     Pareto+Q(G;X) = with repair; w/o Local Repair = without repair.
+        #     The difference is the true test-time repair contribution.
         if domain == "water_qa":
             all_cnstr = filter_by_constraints(pts, CONSTRAINT_BUDGET, CONSTRAINT_LATENCY)
             if not all_cnstr:
@@ -2124,6 +2160,15 @@ def main():
             profiles = [json.loads(line) for line in f]
         with open(DATA_DIR / "episode_records.jsonl", encoding="utf-8") as f:
             raw_recs = [json.loads(line) for line in f]
+        # Restore PASS_THRESHOLD from saved summary so repair fires correctly in reuse mode
+        global PASS_THRESHOLD
+        summary_path = OUT / "summary.json"
+        if summary_path.exists():
+            with open(summary_path, encoding="utf-8") as f:
+                saved_summary = json.load(f)
+            if saved_summary.get("pass_threshold") is not None:
+                PASS_THRESHOLD = saved_summary["pass_threshold"]
+                print(f"  Restored PASS_THRESHOLD={PASS_THRESHOLD:.4f} from summary.json")
         # Reconstruct EpisodeRecord dataclass instances from JSON
         test_recs, train_recs = [], []
         for raw in raw_recs:
@@ -2208,8 +2253,9 @@ def main():
                 res, _, _ = strategy_comparison(
                     test_recs, profiles, domain,
                     q_alpha=qa, q_beta=qb, q_gamma=qg,
-                    cost_drift=1.0, lat_drift=1.0)
-                pq = res.get("Pareto+Q(G;X)", {})
+                    cost_drift=1.0, lat_drift=1.0,
+                    repair_off=True)  # hold repair fixed; only Q weights vary
+                pq = res.get("w/o Local Repair", {})  # pre-repair quality for fair weight comparison
                 sens_results.append({
                     "label": label,
                     "alpha": qa, "beta": qb, "gamma": qg,

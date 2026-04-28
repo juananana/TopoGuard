@@ -155,7 +155,7 @@ $$a_t^* = \arg\max_{a\in\mathcal{A}_t^\mathrm{feasible}}\Big(Q(G_{t+1}(a), X) - 
 
 $$\mathcal{A}_t^\mathrm{feasible} = \{a\in\mathcal{A}_t \mid S(G_{t+1}(a), X) \ge \tau_\mathrm{pass}\}$$
 
-其中 $\tau_\mathrm{pass} = 0.5292$，是数据驱动的修复触发阈值（训练 episode 质量分数的 25th percentile），在训练时计算一次，评估时保持固定。
+其中 $\tau_\mathrm{pass} = 0.5141$，是数据驱动的修复触发阈值（训练 episode 质量分数的 25th percentile），在训练时计算一次，评估时保持固定。
 
 此形式化将修复与初始拓扑选择分离：初始阶段在硬约束下选择全局可行的工作流，而修复执行旨在恢复执行质量的局部校正，无需全局重规划。
 

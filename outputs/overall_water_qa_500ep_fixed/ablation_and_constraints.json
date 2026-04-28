@@ -1,126 +1,134 @@
 {
   "ablations": {
     "w/o Local Repair": {
-      "avg_S": 0.821,
-      "avg_C_total": 0.0,
-      "avg_L": 0.0,
-      "n": 238
+      "avg_S": 0.7785,
+      "avg_C_total": 0.003442,
+      "avg_L": 80.654,
+      "n": 255
     },
     "w/o Bayesian Calibration": {
-      "avg_S": 0.821,
-      "avg_C_total": 0.003041,
-      "avg_L": 61.164,
+      "avg_S": 0.7785,
+      "avg_C_total": 0.003442,
+      "avg_L": 80.654,
       "viol_rate": 0.0,
-      "n": 238
+      "n": 255
     }
   },
   "constraint_robustness": {
     "Cmax=0.3": {
-      "avg_S": 0.821,
-      "avg_C": 0.003041,
-      "avg_L": 61.164,
-      "feasible_pct": 93.3,
-      "n": 238
+      "avg_S": 0.7785,
+      "avg_C": 0.003442,
+      "avg_L": 80.654,
+      "feasible_pct": 100.0,
+      "n": 255
     },
     "Cmax=0.4": {
-      "avg_S": 0.821,
-      "avg_C": 0.003041,
-      "avg_L": 61.164,
-      "feasible_pct": 93.3,
-      "n": 238
+      "avg_S": 0.7785,
+      "avg_C": 0.003442,
+      "avg_L": 80.654,
+      "feasible_pct": 100.0,
+      "n": 255
     },
     "Cmax=0.5": {
-      "avg_S": 0.821,
-      "avg_C": 0.003041,
-      "avg_L": 61.164,
-      "feasible_pct": 93.3,
-      "n": 238
+      "avg_S": 0.7785,
+      "avg_C": 0.003442,
+      "avg_L": 80.654,
+      "feasible_pct": 100.0,
+      "n": 255
     },
     "Cmax=0.6": {
-      "avg_S": 0.821,
-      "avg_C": 0.003041,
-      "avg_L": 61.164,
-      "feasible_pct": 93.3,
-      "n": 238
+      "avg_S": 0.7785,
+      "avg_C": 0.003442,
+      "avg_L": 80.654,
+      "feasible_pct": 100.0,
+      "n": 255
     },
     "Cmax=0.7": {
-      "avg_S": 0.821,
-      "avg_C": 0.003041,
-      "avg_L": 61.164,
-      "feasible_pct": 93.3,
-      "n": 238
+      "avg_S": 0.7785,
+      "avg_C": 0.003442,
+      "avg_L": 80.654,
+      "feasible_pct": 100.0,
+      "n": 255
     }
   },
   "wilcoxon_ablation": {
-    "Random": {
-      "n": 231,
-      "stat": 1766.0,
-      "p_value": 0.0,
-      "significant": true,
-      "mean_delta_S": 0.1528,
-      "direction": "ref_better"
-    },
-    "Best-Quality": {
-      "n": 238,
+    "w/o Local Repair": {
+      "n": 255,
       "stat": 0.0,
       "p_value": 0.0,
       "significant": true,
-      "mean_delta_S": -0.0127,
+      "mean_delta_S": 0.019,
+      "direction": "ref_better"
+    },
+    "Random": {
+      "n": 244,
+      "stat": 2303.0,
+      "p_value": 0.0,
+      "significant": true,
+      "mean_delta_S": 0.1355,
+      "direction": "ref_better"
+    },
+    "Best-Quality": {
+      "n": 255,
+      "stat": 153.0,
+      "p_value": 0.010848,
+      "significant": true,
+      "mean_delta_S": -0.0042,
       "direction": "comp_better"
     },
     "Cheapest": {
-      "n": 212,
-      "stat": 3426.0,
+      "n": 229,
+      "stat": 3074.0,
       "p_value": 0.0,
       "significant": true,
-      "mean_delta_S": 0.1825,
+      "mean_delta_S": 0.1534,
       "direction": "ref_better"
     },
     "Static Workflow": {
-      "n": 238,
-      "stat": 2465.0,
+      "n": 255,
+      "stat": 3349.0,
       "p_value": 0.0,
       "significant": true,
-      "mean_delta_S": 0.1167,
+      "mean_delta_S": 0.0949,
       "direction": "ref_better"
     },
     "FrugalGPT Cascade": {
-      "n": 238,
-      "stat": 1462.0,
+      "n": 255,
+      "stat": 0.0,
       "p_value": 0.0,
       "significant": true,
-      "mean_delta_S": 0.0903,
+      "mean_delta_S": 0.0924,
       "direction": "ref_better"
     },
     "LLM Router": {
-      "n": 238,
-      "stat": 442.0,
+      "n": 255,
+      "stat": 0.0,
       "p_value": 0.0,
       "significant": true,
-      "mean_delta_S": 0.057,
+      "mean_delta_S": 0.064,
       "direction": "ref_better"
     },
     "w/o Template Selection": {
-      "n": 238,
-      "stat": 286.0,
+      "n": 255,
+      "stat": 301.0,
       "p_value": 0.0,
       "significant": true,
-      "mean_delta_S": 0.0563,
+      "mean_delta_S": 0.0627,
       "direction": "ref_better"
     },
     "w/o Executor Adaptation": {
-      "n": 238,
-      "stat": 165.0,
+      "n": 255,
+      "stat": 0.0,
       "p_value": 0.0,
       "significant": true,
-      "mean_delta_S": 0.0846,
+      "mean_delta_S": 0.0998,
       "direction": "ref_better"
     }
   },
   "bootstrap_ci": {
-    "S_mean": 0.821,
-    "ci_low": 0.7978,
-    "ci_high": 0.8422,
+    "S_mean": 0.7975,
+    "ci_low": 0.7775,
+    "ci_high": 0.82,
     "n_bs": 1000
   }
 }
