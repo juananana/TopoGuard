@@ -53,11 +53,11 @@
   },
   "wilcoxon_ablation": {
     "Random": {
-      "n": 229,
-      "stat": 1840.5,
+      "n": 231,
+      "stat": 1766.0,
       "p_value": 0.0,
       "significant": true,
-      "mean_delta_S": 0.1579,
+      "mean_delta_S": 0.1528,
       "direction": "ref_better"
     },
     "Best-Quality": {
@@ -102,18 +102,18 @@
     },
     "w/o Template Selection": {
       "n": 238,
-      "stat": 265.0,
+      "stat": 286.0,
       "p_value": 0.0,
       "significant": true,
-      "mean_delta_S": 0.06,
+      "mean_delta_S": 0.0563,
       "direction": "ref_better"
     },
     "w/o Executor Adaptation": {
       "n": 238,
-      "stat": 92.0,
+      "stat": 165.0,
       "p_value": 0.0,
       "significant": true,
-      "mean_delta_S": 0.0999,
+      "mean_delta_S": 0.0846,
       "direction": "ref_better"
     }
   },
