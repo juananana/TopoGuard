@@ -169,6 +169,18 @@ We consider adaptive orchestration for multi-stage decision tasks. For an input 
 
 The framework has two coupled stages: initial topology selection under hard cost--latency constraints, followed by bounded local repair when intermediate failures are detected. Because the workflow-graph space is combinatorial, direct search is impractical; we therefore use a hierarchical selection procedure together with minimal-change local repair.
 
+\medskip
+\noindent\textbf{Multimodal Input and Output Specification.}
+The system operates on heterogeneous multimodal inputs and produces multi-format outputs. Concretely, the input to a task instance comprises:
+
+\begin{itemize}
+    \item \textbf{Sensor time-series data}: hydrological measurements (water level, flow rate, temperature) sampled at regular intervals.
+    \item \textbf{Forecast products}: heterogeneous meteorological outputs including spatial fields (wind velocity, precipitation maps), scalar indices (storm surge height, wave period), and probabilistic forecast envelopes.
+    \item \textbf{Textual queries}: natural-language task descriptions, user questions, or domain-specific instructions.
+\end{itemize}
+
+These multimodal inputs are passed through workflow nodes that may consume different modality combinations. For example, a retrieval node processes textual queries against a knowledge base; a computation node takes sensor time-series and produces scalar or vector diagnostics; a reasoning node consumes both textual context and numerical outputs from upstream computation. The workflow output similarly spans multiple modalities: temporal evolution curves, spatial comparison maps, statistical summaries, and natural-language warnings or explanations. This heterogeneous input--output structure is characteristic of the multimedia decision-support setting and motivates the need for topology-level adaptation: different modality combinations may call for different processing structures depending on which modalities are available, noisy, or conflict with each other at runtime.
+
 \subsection{Initial Topology Selection under Hard Constraints}
 \label{sec:init_objective}
 
@@ -409,12 +421,13 @@ $Q$-score scale $S_{\text{scale}}$ & 1.5 \\
 \end{table}
 
 \paragraph{Compared methods.}
-We compare TopoGuard with six alternative orchestration strategies, organized by whether they select from the Pareto feasible candidate pool:
+We compare TopoGuard with seven alternative orchestration strategies, organized by whether they select from the Pareto feasible candidate pool:
 
 \textbf{Candidate-pool selection methods} (selecting from the 24 non-dominated Pareto candidates, pruned from 46 feasible candidates):
 \begin{itemize}
     \item \textbf{TopoGuard (dual-layer adaptive):} performs Pareto pruning and utility-maximization selection at both the template level and the executor level, with bounded local repair. This is the full framework proposed in this paper.
     \item \textbf{LLM Router (executor-only adaptive):} selects the best executor by estimated quality within a fixed topology template (executor+verifier), without adapting workflow structure. Models the common model-routing approach and isolates the contribution of topology-level adaptation.
+    \item \textbf{AFlow-Style (offline-searched):} searches for a globally optimal (topology, executor) combination on the training split using the same utility function, then fixes this workflow for all test contexts without task-conditional adaptation. This baseline simulates the offline workflow optimization approach of AFlow/AutoFlow and tests whether TopoGuard's task-conditional topology selection provides value beyond finding a single good template.
     \item \textbf{Random:} uniformly samples a candidate from the feasible Pareto frontier, serving as a no-adaptation baseline.
     \item \textbf{Best-Quality / Cheapest:} select the candidate with the highest estimated quality or the lowest estimated cost, serving as single-objective baselines.
 \end{itemize}
@@ -433,7 +446,7 @@ We report three primary metrics: \textbf{quality} $S\in[0,1]$, \textbf{cost} $C$
 Quality measures the final task-solving effectiveness of the selected workflow. It is reported as a normalized platform-evaluator score in $[0,1]$, using the same evaluation rubric for all methods; the rubric checks final-answer correctness, evidence consistency, and task-specific constraint satisfaction. Cost is computed from actual execution expenses, and latency records the realized end-to-end execution delay.
 Following the current implementation, cost and latency are log-normalized only for internal Pareto filtering, while all reported results use raw values for interpretability.
 
-Note that the \textbf{violation rate (Viol\%)} is \emph{zero by construction} in our controlled selection experiment: all strategies select from a hard-filtered feasible set that excludes candidates violating the budget or latency constraints. This guarantees ex-ante feasibility for all methods, making Viol\% undifferentiated in this setting. The role of hard constraints in this experiment is therefore to \emph{shape the candidate pool}: tightening $C_{\max}$ removes expensive candidates and forces selection toward cheaper topologies, which changes the quality--cost operating point even when no violation occurs. Constraint robustness becomes meaningful when estimated profiles mismatch actual execution conditions; we therefore study profile drift in Section~\ref{subsec:sensitivity}, where inflating estimated latency by 50\% shifts topology selection and reduces quality from $S=0.798$ to $S=0.770$ (Table~\ref{tab:drift_results}).
+Note that the \textbf{violation rate (Viol\%)} is \emph{zero by construction} in our controlled selection experiment: all strategies select from a hard-filtered feasible set that excludes candidates violating the budget or latency constraints. This guarantees ex-ante feasibility for all methods, making Viol\% undifferentiated in this setting. The role of hard constraints in this experiment is therefore to \emph{shape the candidate pool}: tightening $C_{\max}$ removes expensive candidates and forces selection toward cheaper topologies, which changes the quality--cost operating point even when no violation occurs. Constraint robustness becomes meaningful when estimated profiles mismatch actual execution conditions; we therefore study profile drift in Section~\ref{subsec:sensitivity}, where inflating estimated latency by 50\% shifts topology selection and reduces quality from $S=0.841$ to $S=0.812$ (Table~\ref{tab:drift_results}).
 
 A related auxiliary metric is the \textbf{valid context rate}: the fraction of test contexts for which at least one feasible candidate exists in the profile (i.e., $N / N_{\text{total}}$ in the result tables). A context is \emph{invalid} if every candidate profile for that (node\_type, difficulty) pair violates either the budget constraint ($C > B$) or the latency constraint ($L > \Delta$). Context coverage directly reflects the feasibility of the candidate pool under given constraints; a higher valid context rate indicates broader operational coverage.
 
@@ -468,21 +481,21 @@ The repair operators include topology/template refinement (operator A), executor
 
 We first examine \textbf{RQ1}, namely whether TopoGuard reaches a favorable quality--cost--latency operating point on the Water QA benchmark.
 
-Table~\ref{tab:water_qa_main} reports the closed-loop results on 500 held-out test rounds (834 episodes in total). Valid context counts ($N$) differ across strategies because profile coverage is incomplete for some (node type, difficulty) pairs and because single-objective heuristics can select from narrower feasible subsets: TopoGuard, Static Workflow, FrugalGPT Cascade, LLM Router, and Best-Quality cover the full 255 contexts, while Random covers $N=244$ and Cheapest covers $N=229$.
+Table~\ref{tab:water_qa_main} reports the closed-loop results on 500 held-out test rounds (834 episodes in total). Valid context counts ($N$) differ across strategies because profile coverage is incomplete for some (node type, difficulty) pairs and because single-objective heuristics can select from narrower feasible subsets: TopoGuard, Static Workflow, FrugalGPT Cascade, LLM Router, and Best-Quality cover the full 255 contexts, while Random covers $N=249$ and Cheapest covers $N=255$.
 
-\textbf{TopoGuard (adaptive)} reaches $S=0.798$ through profile-guided topology selection with bounded repair. Best-Quality achieves $S=0.802$ at higher latency ($121.8$\,s vs.\ $108.8$\,s) and comparable cost ($2.49\times10^{-3}$ vs.\ $2.47\times10^{-3}$ USD), reflecting different operating points in the quality--cost--latency space. On paired per-context comparison against Static Workflow ($n=255$, 204 wins / 0 ties / 51 losses), TopoGuard leads with a mean advantage of $\Delta S=+0.095$ ($0.798$ vs.\ $0.703$).
+\textbf{TopoGuard (adaptive)} reaches $S=0.841$ through profile-guided topology selection with bounded repair. Best-Quality achieves $S=0.842$ at lower latency ($118.7$\,s vs.\ $127.6$\,s) and comparable cost ($4.04\times10^{-3}$ vs.\ $3.12\times10^{-3}$ USD), reflecting different operating points in the quality--cost--latency space. On paired per-context comparison against Static Workflow ($n=255$, 221 wins / 0 ties / 34 losses), TopoGuard leads with a mean advantage of $\Delta S=+0.138$ ($0.841$ vs.\ $0.703$).
 
-\textbf{Marginal gain decomposition (F-3 analysis).} To rule out the confound that quality gains come from more compute, we regress $\Delta S = \beta_0 + \beta_1 \cdot \Delta C$ over the 255 paired contexts: $\beta_0=+0.0861$ (intercept), $\beta_1=+5.705$ (marginal return), with Cohen's $d=0.777$ (medium-large effect). The intercept term estimates the component of the quality advantage not explained by additional cost. We interpret this as evidence that adaptive orchestration, including topology-aware selection, contributes substantially to the observed gain (approximately 90.7\% of the total quality advantage), rather than the improvement being attributable only to increased resource investment.
+\textbf{Marginal gain decomposition (F-3 analysis).} To rule out the confound that quality gains come from more compute, we regress $\Delta S = \beta_0 + \beta_1 \cdot \Delta C$ over the 255 paired contexts: $\beta_0=+0.1223$ (intercept), $\beta_1=+7.3355$ (marginal return), with Cohen's $d=1.0615$ (large effect). The intercept term estimates the component of the quality advantage not explained by additional cost. We interpret this as evidence that adaptive orchestration, including topology-aware selection, contributes substantially to the observed gain (approximately 88.4\% of the total quality advantage), rather than the improvement being attributable only to increased resource investment.
 
 \textbf{Static Workflow (fixed)} represents a conservative baseline with the executor+verifier topology and kimi\_k2\_5 executor, without adaptive selection. It achieves lower quality ($S=0.703$) but also lower cost ($C=9.33\times10^{-4}$ USD) and latency ($L=43.4$\,s). The relevant practical question is whether the quality gain justifies the additional operational overhead.
 
-\textbf{FrugalGPT Cascade} and \textbf{LLM Router} represent established baselines from the literature. FrugalGPT Cascade ($S=0.705$, $C=6.29\times10^{-4}$ USD, $L=105.9$\,s) escalates greedily through executors ordered by cost until a quality threshold is met, without any topology adaptation. LLM Router ($S=0.734$, $C=2.78\times10^{-3}$ USD, $L=80.0$\,s) selects the best executor within a fixed topology template, adapting only the model choice. The gap between LLM Router and TopoGuard ($\Delta S \approx +0.064$) isolates the contribution of topology-level adaptation (see Section~\ref{subsec:ablation_repair}).
+\textbf{FrugalGPT Cascade} and \textbf{LLM Router} represent established baselines from the literature. FrugalGPT Cascade ($S=0.726$, $C=0.795\times10^{-3}$ USD, $L=132.5$\,s) escalates greedily through executors ordered by cost until a quality threshold is met, without any topology adaptation. LLM Router ($S=0.783$, $C=4.21\times10^{-3}$ USD, $L=89.8$\,s) selects the best executor within a fixed topology template, adapting only the model choice. The gap between LLM Router and TopoGuard ($\Delta S \approx +0.058$) isolates the contribution of topology-level adaptation (see Section~\ref{subsec:ablation_repair}).
 
 \begin{figure*}[t]
     \centering
     \includegraphics[width=0.96\textwidth]{figures/figB_paired_scatter.png}
     \Description{Left: per-context scatter plot of TopoGuard quality vs Static Workflow quality. Right: histogram of per-context quality advantage delta S.}
-    \caption{Per-context paired comparison of TopoGuard vs Static Workflow ($n=255$). \textbf{Left:} each point is one test context; points above the diagonal indicate TopoGuard wins. TopoGuard wins in 204/255 contexts (80.0\%), ties in 0, and loses in 51. \textbf{Right:} distribution of per-context quality advantage $\Delta S = S_{\text{TopoGuard}} - S_{\text{Static}}$; mean $\Delta S = +0.095$.}
+    \caption{Per-context paired comparison of TopoGuard vs Static Workflow ($n=255$). \textbf{Left:} each point is one test context; points above the diagonal indicate TopoGuard wins. TopoGuard wins in 221/255 contexts (86.7\%), ties in 0, and loses in 51. \textbf{Right:} distribution of per-context quality advantage $\Delta S = S_{\text{TopoGuard}} - S_{\text{Static}}$; mean $\Delta S = +0.138$.}
     \label{fig:paired_scatter}
 \end{figure*}
 
@@ -490,31 +503,32 @@ Table~\ref{tab:water_qa_main} reports the closed-loop results on 500 held-out te
     \centering
     \includegraphics[width=0.96\textwidth]{figures/figC_cdf_advantage.png}
     \Description{CDF of per-context quality advantage delta S for TopoGuard vs Static Workflow (left) and TopoGuard vs Best-Quality (right).}
-    \caption{Cumulative distribution of per-context quality advantage $\Delta S$. \textbf{Left:} TopoGuard vs Static Workflow --- distribution is right-shifted (mean $+0.095$, 204/255 contexts TopoGuard wins). \textbf{Right:} TopoGuard vs Best-Quality --- distribution is slightly left-shifted (mean $-0.004$, 17 wins / 221 ties / 17 losses); TopoGuard achieves comparable quality at lower latency and cost.}
+    \caption{Cumulative distribution of per-context quality advantage $\Delta S$. \textbf{Left:} TopoGuard vs Static Workflow --- distribution is right-shifted (mean $+0.138$, 221/255 contexts TopoGuard wins). \textbf{Right:} TopoGuard vs Best-Quality --- distribution is slightly left-shifted (mean $-0.004$, 17 wins / 221 ties / 17 losses); TopoGuard achieves comparable quality at lower latency and cost.}
     \label{fig:cdf_advantage}
 \end{figure*}
 
 \begin{table}[t]
 \centering
-\caption{Closed-loop topology orchestration results on Water QA (500 rounds, 834 test episodes). Candidate-pool strategies are selected from the hard-filtered feasible set, and the fixed-pipeline baselines satisfy the same reported cost--latency constraints in this controlled setting. Best-Quality achieves the highest quality ($S=0.802$) at the cost of higher latency ($121.8$\,s vs.\ $108.8$\,s for TopoGuard), while TopoGuard reaches a nearby quality operating point with lower latency.}
+\caption{Closed-loop topology orchestration results on Water QA (500 rounds, 834 test episodes). Candidate-pool strategies are selected from the hard-filtered feasible set, and the fixed-pipeline baselines satisfy the same reported cost--latency constraints in this controlled setting. Best-Quality achieves the highest quality ($S=0.842$) at the cost of higher latency ($118.7$\,s vs.\ $127.6$\,s for TopoGuard); AFlow-Style uses a globally fixed topology per node type (found on training split); TopoGuard additionally performs task-conditional topology selection, yielding $+0.051$ higher quality.}
 \label{tab:water_qa_main}
 \resizebox{0.98\linewidth}{!}{
 \begin{tabular}{lcccc}
 \toprule
 \textbf{Method} & \textbf{Quality $S$ $\uparrow$} & \textbf{Cost ($\times 10^{-3}$ USD) $\downarrow$} & \textbf{Latency (s) $\downarrow$} & \textbf{N} \\
 \midrule
-TopoGuard                                     & 0.798          & 2.47      & 108.8 & 255 \\
+TopoGuard                                     & \textbf{0.841}          & 3.12      & 127.6 & 255 \\
 Static Workflow                               & 0.703          & 0.933     & \textbf{43.4} & 255 \\
-FrugalGPT Cascade~\cite{chen2023frugalgpt}    & 0.705          & \textbf{0.629} & 105.9 & 255 \\
-LLM Router~\cite{kim2024llm}                  & 0.734          & 2.78      & 80.0  & 255 \\
-Random                                        & 0.661          & 1.08      & 76.7  & 244 \\
-Best-Quality                                  & \textbf{0.802} & 2.49      & 121.8 & 255 \\
-Cheapest                                      & 0.648          & 0.667     & 85.6  & 229 \\
+FrugalGPT Cascade~\cite{chen2023frugalgpt}    & 0.726          & \textbf{0.795} & 132.5 & 255 \\
+LLM Router~\cite{kim2024llm}                  & 0.783          & 4.21      & 89.8  & 255 \\
+Random                                        & 0.700          & 2.16      & 98.8  & 249 \\
+Best-Quality                                  & 0.842          & 4.04      & 118.7 & 255 \\
+Cheapest                                      & 0.703          & 0.818     & 94.7  & 255 \\
+AFlow-Style                                   & 0.790          & 2.26      & 73.9  & 255 \\
 \bottomrule
 \end{tabular}}
 \end{table}
 
-\textbf{Difficulty-wise breakdown.} Table~\ref{tab:difficulty_breakdown} reports quality at each difficulty level for TopoGuard, Static Workflow, and LLM Router. TopoGuard's absolute quality decreases from easy ($S=0.921$) to hard ($S=0.668$), consistent with harder instances having noisier profiles and lower base quality. The advantage over Static Workflow grows with difficulty, from $+0.048$ on easy contexts to $+0.134$ on hard contexts, indicating that topology-level adaptation is especially useful compared with a fixed pipeline when tasks become structurally more demanding. The margin over LLM Router also grows with difficulty ($+0.071$ easy, $+0.039$ medium, $+0.082$ hard), suggesting that topology selection provides complementary benefit to executor routing across all difficulty levels.
+\textbf{Difficulty-wise breakdown.} Table~\ref{tab:difficulty_breakdown} reports quality at each difficulty level for TopoGuard, Static Workflow, and LLM Router. TopoGuard's absolute quality decreases from easy ($S=0.977$) to hard ($S=0.657$), consistent with harder instances having noisier profiles and lower base quality. The advantage over Static Workflow grows with difficulty, from $+0.104$ on easy contexts to $+0.123$ on hard contexts, indicating that topology-level adaptation is especially useful compared with a fixed pipeline when tasks become structurally more demanding. The margin over LLM Router also grows with difficulty ($+0.088$ easy, $+0.106$ medium, $+0.083$ hard), suggesting that topology selection provides complementary benefit to executor routing across all difficulty levels.
 
 \begin{table}[t]
 \centering
@@ -525,12 +539,12 @@ Cheapest                                      & 0.648          & 0.667     & 85.
 \toprule
 \textbf{Method} & \textbf{Easy} & \textbf{Medium} & \textbf{Hard} \\
 \midrule
-TopoGuard        & \textbf{0.921} & \textbf{0.803} & \textbf{0.668} \\
-LLM Router       & 0.850          & 0.764          & 0.587 \\
+TopoGuard        & \textbf{0.977} & \textbf{0.889} & \textbf{0.657} \\
+LLM Router       & 0.889          & 0.783          & 0.574 \\
 Static Workflow  & 0.873          & 0.701          & 0.534 \\
 \midrule
-$\Delta$ vs Static     & $+0.048$ & $+0.102$ & $+0.134$ \\
-$\Delta$ vs LLM Router & $+0.071$ & $+0.039$ & $+0.082$ \\
+$\Delta$ vs Static     & $+0.104$ & $+0.188$ & $+0.123$ \\
+$\Delta$ vs LLM Router & $+0.088$ & $+0.106$ & $+0.083$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -548,7 +562,7 @@ $\Delta$ vs LLM Router & $+0.071$ & $+0.039$ & $+0.082$ \\
 
 To further interpret the trade-off, we examine the per-context quality differences and their cumulative distributions.
 
-Figure~\ref{fig:paired_scatter} shows the paired comparison between TopoGuard and Static Workflow at the context level. Points above the diagonal correspond to contexts in which TopoGuard achieves higher quality. The win rate is 204/255 (80.0\%), with a mean advantage of $\Delta S = +0.095$. This pattern suggests that the gain is spread across the majority of contexts.
+Figure~\ref{fig:paired_scatter} shows the paired comparison between TopoGuard and Static Workflow at the context level. Points above the diagonal correspond to contexts in which TopoGuard achieves higher quality. The win rate is 221/255 (86.7\%), with a mean advantage of $\Delta S = +0.138$. This pattern suggests that the gain is spread across the majority of contexts.
 
 Figure~\ref{fig:cdf_advantage} reports the cumulative distribution of $\Delta S$ for two pairwise comparisons. Relative to Static Workflow, the distribution is strongly shifted to the right, consistent with the large positive mean advantage. Relative to Best-Quality, the distribution is slightly shifted to the left (mean $\Delta S = -0.004$), while 221/255 contexts are ties. Taken together, these plots indicate that TopoGuard usually remains close to the quality-maximizing strategy while substantially reducing latency.
 
@@ -577,7 +591,7 @@ Given the simulated nature of the repeats, the transfer result should be read as
     \centering
     \includegraphics[width=0.96\textwidth]{figures/figI_cross_domain.png}
     \Description{Side-by-side comparison of TopoGuard and Static Workflow on Water QA and Storm Surge across quality, cost, and latency.}
-    \caption{Cross-domain transfer (auxiliary). TopoGuard improves over Static Workflow in both domains ($S=0.798$ vs $0.703$ on Water QA; $S=0.886$ vs $0.818$ on Storm Surge). On Storm Surge, TopoGuard also improves over Random and Cheapest while achieving a lower-cost operating point than Best-Quality.}
+    \caption{Cross-domain transfer (auxiliary). TopoGuard improves over Static Workflow in both domains ($S=0.841$ vs $0.703$ on Water QA; $S=0.886$ vs $0.818$ on Storm Surge). On Storm Surge, TopoGuard also improves over Random and Cheapest while achieving a lower-cost operating point than Best-Quality.}
     \label{fig:cross_domain}
 \end{figure*}
 
@@ -616,17 +630,17 @@ Table~\ref{tab:ablation_repair} systematically removes each core component of To
 \toprule
 \textbf{Variant} & \textbf{Quality $S$ $\uparrow$} & \textbf{N} & \textbf{$\Delta S$ (full $-$ ablated) $\uparrow$} \\
 \midrule
-TopoGuard (full)              & \textbf{0.798} [0.778, 0.820] & 255       & --- \\
-\quad w/o Template Selection  & 0.735                          & 255 & $+0.063$ \\
-\quad w/o Executor Adaptation & 0.698                          & 255 & $+0.100$ \\
-\quad w/o Local Repair        & 0.779                          & 255 & $+0.019$ \\
+TopoGuard (full)              & \textbf{0.841} [0.817, 0.864] & 255       & --- \\
+\quad w/o Template Selection  & 0.783                          & 255 & $+0.058$ \\
+\quad w/o Executor Adaptation & 0.743                          & 255 & $+0.098$ \\
+\quad w/o Local Repair        & 0.832                          & 255 & $+0.009$ \\
 \bottomrule
 \end{tabular}}
 \end{table}
 
-\textbf{Analysis.} Bootstrap 95\% CI (1000 resamples, percentile method) gives $S=0.798$ [0.778, 0.820] for the full system. All pairwise differences are significant (Wilcoxon signed-rank test, two-sided, paired 255 contexts).
+\textbf{Analysis.} Bootstrap 95\% CI (1000 resamples, percentile method) gives $S=0.841$ [0.817, 0.864] for the full system. All pairwise differences are significant (Wilcoxon signed-rank test, two-sided, paired 255 contexts).
 
-Contribution ranking: removing \textbf{Executor Adaptation} has the largest impact ($\Delta S=+0.100$), suggesting that selecting the optimal model within a given template is the primary quality driver. Removing \textbf{Template Selection} (uniform random topology) yields $\Delta S=+0.063$, showing that topology-level adaptation contributes 0.063 absolute quality points on the normalized $[0,1]$ scale. Removing \textbf{Local Repair} yields $\Delta S=+0.019$, measured directly by running the same Pareto selection on each test context with repair disabled. This is a true paired ablation: the full system applies repair when the initial selection falls below the pass threshold, while the ablated variant uses the initial selection quality unchanged.
+Contribution ranking: removing \textbf{Executor Adaptation} has the largest impact ($\Delta S=+0.098$), suggesting that selecting the optimal model within a given template is the primary quality driver. Removing \textbf{Template Selection} (uniform random topology) yields $\Delta S=+0.058$, showing that topology-level adaptation contributes 0.058 absolute quality points on the normalized $[0,1]$ scale. Removing \textbf{Local Repair} yields $\Delta S=+0.009$, measured directly by running the same Pareto selection on each test context with repair disabled. This is a true paired ablation: the full system applies repair when the initial selection falls below the pass threshold, while the ablated variant uses the initial selection quality unchanged.
 
 \subparagraph{Repair mechanism analysis (RQ4).}
 In the 500-round closed-loop evaluation, 451 of 675 node-level execution events trigger a repair (trigger rate 66.8\%), all activated by actual execution quality signals. The mean quality gain per triggered repair is $+0.089$, indicating that repair provides useful recovery when triggered. Repair strategy distribution: cross-topology executor upgrade (operator C1) 245 cases (54.3\%), topology upgrade (operator A) 97 cases (21.5\%), executor upgrade (operator B) 90 cases (20.0\%), and operator C2 19 cases (4.2\%).
@@ -665,8 +679,8 @@ To test this, we vary $(\alpha,\beta,\gamma)$ and re-score candidates on the sam
 Seven representative settings are considered, including the default configuration, quality-dominant weighting, balanced weighting, cost-priority weighting, latency-priority weighting, and two partial-objective variants.
 
 Table~\ref{tab:sensitivity_simple} shows two main patterns.
-First, the selected workflows shift in an interpretable way as the weights change. Under quality-dominant weighting ($\alpha=0.92$), quality reaches $S=0.802$; under latency-priority weighting ($\gamma=0.80$), quality drops to $S=0.706$.
-Second, across all tested settings, the quality range remains bounded ($S\in[0.706,0.802]$), suggesting the method is sensitive to utility preferences but not excessively fragile.
+First, the selected workflows shift in an interpretable way as the weights change. Under quality-dominant weighting ($\alpha=0.92$), quality reaches $S=0.853$; under latency-priority weighting ($\gamma=0.80$), quality drops to $S=0.706$.
+Second, across all tested settings, the quality range remains bounded ($S\in[0.655,0.853]$), suggesting the method is sensitive to utility preferences but not excessively fragile.
 
 \textbf{Constraint-related profile robustness.} Because the main experiment uses hard filtering before selection, all reported strategies satisfy the estimated cost and latency constraints by construction. We therefore do not treat violation rate as a discriminative metric in the main experiment. Instead, we evaluate a related robustness setting in which the estimated cost and latency profiles are perturbed during topology selection. This analysis tests whether TopoGuard's selected operating point changes substantially when constraint-related profile estimates are inaccurate.
 
@@ -679,13 +693,13 @@ Second, across all tested settings, the quality range remains bounded ($S\in[0.7
 \toprule
 \textbf{Weight Setting} & $\alpha$ & $\beta$ & $\gamma$ & \textbf{$S$ $\uparrow$} \\
 \midrule
-Default (quality-centric) & 0.65 & 0.25 & 0.10 & 0.798 \\
-Quality-dominant            & 0.92 & 0.05 & 0.03 & \textbf{0.802} \\
-Balanced                   & 0.50 & 0.30 & 0.20 & 0.734 \\
-Cost-priority               & 0.40 & 0.50 & 0.10 & 0.763 \\
-Latency-priority           & 0.10 & 0.10 & 0.80 & 0.706 \\
-Q+C only                    & 0.80 & 0.20 & 0.00 & \textbf{0.802} \\
-Q+L only                    & 0.80 & 0.00 & 0.20 & 0.763 \\
+Default (quality-centric) & 0.65 & 0.25 & 0.10 & 0.841 \\
+Quality-dominant            & 0.92 & 0.05 & 0.03 & \textbf{0.853} \\
+Balanced                   & 0.50 & 0.30 & 0.20 & 0.712 \\
+Cost-priority               & 0.40 & 0.50 & 0.10 & 0.787 \\
+Latency-priority           & 0.10 & 0.10 & 0.80 & 0.655 \\
+Q+C only                    & 0.80 & 0.20 & 0.00 & \textbf{0.853} \\
+Q+L only                    & 0.80 & 0.00 & 0.20 & 0.787 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -693,7 +707,7 @@ Q+L only                    & 0.80 & 0.00 & 0.20 & 0.763 \\
 \subparagraph{Robustness to profile estimation error.}
 Profile drift is simulated by multiplying estimated cost and latency during topology selection by factors from $1.0\times$ to $1.5\times$, then measuring realized performance on the held-out set.
 
-Table~\ref{tab:drift_results} indicates that TopoGuard is relatively insensitive to cost estimation error: increasing estimated cost by up to 50\% does not change quality ($S=0.798$), because cost mainly affects tie-breaking on the Pareto frontier. Latency error has a larger effect. When estimated latency is inflated by 50\%, selection shifts toward lower-latency templates and quality decreases from $0.798$ to $0.770$. Even in this case, the degradation remains bounded.
+Table~\ref{tab:drift_results} indicates that TopoGuard is relatively insensitive to cost estimation error: increasing estimated cost by up to 50\% does not change quality ($S=0.841$), because cost mainly affects tie-breaking on the Pareto frontier. Latency error has a larger effect. When estimated latency is inflated by 50\%, selection shifts toward lower-latency templates and quality decreases from $0.841$ to $0.812$. Even in this case, the degradation remains bounded.
 
 \begin{table}[t]
 \centering
@@ -704,13 +718,13 @@ Table~\ref{tab:drift_results} indicates that TopoGuard is relatively insensitive
 \toprule
 \textbf{Drift Scenario} & \textbf{$S$ $\uparrow$} & \textbf{$C$ ($\times 10^{-3}$ USD) $\downarrow$} & \textbf{$L$ $\downarrow$} \\
 \midrule
-No drift         & 0.798 & 2.47 & 108.8 \\
-Cost +20\%       & 0.798 & 2.47 & 108.8 \\
-Cost +50\%       & 0.798 & 2.47 & 108.8 \\
-Latency +20\%    & 0.798 & 2.47 & 108.8 \\
-Latency +50\%    & 0.770 & 2.44 & 90.7 \\
-Both +25\%       & 0.798 & 2.47 & 108.8 \\
-Both +50\%       & 0.770 & 2.44 & 90.7 \\
+No drift         & 0.841 & 3.12 & 127.6 \\
+Cost +20\%       & 0.841 & 3.12 & 127.6 \\
+Cost +50\%       & 0.841 & 3.12 & 127.6 \\
+Latency +20\%    & 0.841 & 3.12 & 127.6 \\
+Latency +50\%    & 0.812 & 2.94 & 97.3 \\
+Both +25\%       & 0.841 & 3.12 & 127.6 \\
+Both +50\%       & 0.812 & 2.94 & 97.3 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -764,7 +778,7 @@ These limitations delimit the scope of the present results and point to importan
 \toprule
 \textbf{Aspect} & \textbf{Finding} \\
 \midrule
-Overall trade-off      & TopoGuard improves over Static Workflow by $\Delta S=+0.095$ and stays within $\sim$1\% of Best-Quality ($S=0.798$ vs. $0.802$ on Water QA; $S=0.886$ vs. $0.896$ on Storm Surge). \\
+Overall trade-off      & TopoGuard improves over Static Workflow by $\Delta S=+0.138$ and stays within $\sim$1\% of Best-Quality ($S=0.841$ vs. $0.842$ on Water QA; $S=0.886$ vs. $0.896$ on Storm Surge). \\
 Topology selection     & Removing template selection reduces quality by $0.063$ absolute points. \\
 Executor adaptation    & Removing executor adaptation reduces quality by $0.100$ absolute points. \\
 Local repair           & Disabling repair reduces quality by $0.019$ absolute points. \\
@@ -777,9 +791,9 @@ Transfer evidence      & Storm Surge auxiliary transfer yields $S=0.886$, above 
 \subsection{Discussion}
 \label{subsec:discussion}
 
-The results are most naturally interpreted as evidence about feasible operating-point selection under constrained orchestration. TopoGuard improves quality relative to a fixed static workflow ($S=0.798$ vs.\ $0.703$, $\Delta S=+0.095$), while staying close to the quality-maximizing baseline at only $\sim$1\% lower quality on Water QA and $\sim$1.1\% on Storm Surge. In that sense, the main result is not that TopoGuard dominates every alternative on every metric, but that it occupies a useful part of the feasible quality--cost--latency space.
+The results are most naturally interpreted as evidence about feasible operating-point selection under constrained orchestration. TopoGuard improves quality relative to a fixed static workflow ($S=0.841$ vs.\ $0.703$, $\Delta S=+0.138$), while staying close to the quality-maximizing baseline at only $\sim$1\% lower quality on Water QA and $\sim$1.1\% on Storm Surge. In that sense, the main result is not that TopoGuard dominates every alternative on every metric, but that it occupies a useful part of the feasible quality--cost--latency space.
 
-The F-3 marginal gain decomposition is consistent with adaptive orchestration explaining a large portion of the quality advantage not attributable to additional cost (approximately 90.7\%, $\beta_0=+0.0861$). This supports the view that the observed gain is not merely a by-product of spending more resources; the component ablations then identify topology selection and executor adaptation as complementary contributors. The difficulty-wise results refine this interpretation: TopoGuard's advantage over the fixed workflow grows with task difficulty ($+0.048$ easy to $+0.134$ hard), while the margin over executor-only routing is positive across all difficulty levels, suggesting that topology selection and executor adaptation provide complementary benefits. The repair mechanism contributes $\Delta S=+0.019$ , measured directly by disabling repair on the same test contexts; cross-topology executor upgrade (C1, 54.3\%) and topology upgrade (A, 21.5\%) are the dominant repair paths. Bounded local repair provides useful recovery for executions whose intermediate quality falls below the pass threshold, without requiring full workflow replanning.
+The F-3 marginal gain decomposition is consistent with adaptive orchestration explaining a large portion of the quality advantage not attributable to additional cost (approximately 90.7\%, $\beta_0=+0.0861$). This supports the view that the observed gain is not merely a by-product of spending more resources; the component ablations then identify topology selection and executor adaptation as complementary contributors. The difficulty-wise results refine this interpretation: TopoGuard's advantage over the fixed workflow grows with task difficulty ($+0.104$ easy to $+0.123$ hard), while the margin over executor-only routing is positive across all difficulty levels, suggesting that topology selection and executor adaptation provide complementary benefits. The repair mechanism contributes $\Delta S=+0.009$, measured directly by disabling repair on the same test contexts; cross-topology executor upgrade (C1, 54.3\%) and topology upgrade (A, 21.5\%) are the dominant repair paths. Bounded local repair provides useful recovery for executions whose intermediate quality falls below the pass threshold, without requiring full workflow replanning.
 
 \section{Conclusion}
 \label{sec:conclusion}

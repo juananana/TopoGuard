@@ -1,0 +1,17 @@
+{
+  "retrieval": {
+    "topo_id": "direct"
+  },
+  "reasoning": {
+    "topo_id": "executor_verifier_agg"
+  },
+  "aggregation": {
+    "topo_id": "executor_verifier_agg"
+  },
+  "computation": {
+    "topo_id": "executor_verifier_agg"
+  },
+  "verification": {
+    "topo_id": "executor_verifier_agg"
+  }
+}

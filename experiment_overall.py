@@ -1098,7 +1098,8 @@ def strategy_comparison(test_records, profiles, domain, domain_gt=None,
                          q_alpha=None, q_beta=None, q_gamma=None,
                          cost_drift=1.0, lat_drift=1.0,
                          repair_off=False,
-                         calib_off=False):
+                         calib_off=False,
+                         aflow_global_topo=None):
     """
     Evaluate multiple strategies on test set and return comparison dict.
 
@@ -1108,6 +1109,8 @@ def strategy_comparison(test_records, profiles, domain, domain_gt=None,
       Best-Quality:  max quality
       Cheapest:      min cost
       Static Workflow: fixed conservative workflow — executor_verifier_agg template
+      AFlow-Style (if aflow_global_topo is provided): globally fixed topo per node_type,
+                adapts model but not topology per context
 
     Ablation variants (computed inline):
       w/o Template Selection:  forced deepest template, adapts executor
@@ -1283,6 +1286,25 @@ def strategy_comparison(test_records, profiles, domain, domain_gt=None,
             strategies["Pareto+Q(G;X)"].append({
                 "S": s_final, "C": c_final or 0, "L": l_final or 0, "diff": diff,
                 "viol": 1 if (pareto_best_for_main and violated(pareto_best_for_main)) else 0})
+
+        # ── AFlow-Style: globally fixed topo per node_type, best model per context ──
+        if aflow_global_topo is not None:
+            global_topo = aflow_global_topo.get(nt)
+            if global_topo is None:
+                global_topo = pareto_best_for_main["topo_id"] if pareto_best_for_main else None
+            if global_topo:
+                aflow_cands = [p for p in feasible if p["topo_id"] == global_topo]
+                if not aflow_cands:
+                    aflow_cands = feasible
+                best_aflow = max(aflow_cands, key=_q_score_p) if aflow_cands else None
+                if best_aflow:
+                    s_af = actual_for_model_topo(best_aflow.get("model"), best_aflow["topo_id"])
+                    if s_af is not None:
+                        c_af = topo_actual.get((nt, diff, best_aflow.get("model"), best_aflow["topo_id"]), {}).get("actual_C", 0)
+                        l_af = topo_actual.get((nt, diff, best_aflow.get("model"), best_aflow["topo_id"]), {}).get("actual_L", 0)
+                        strategies["AFlow-Style"].append({
+                            "S": s_af, "C": c_af or 0, "L": l_af or 0, "diff": diff,
+                            "viol": 1 if (best_aflow and violated(best_aflow)) else 0})
 
         # ── Random ───────────────────────────────────────────────────────────
         rng_r = random.Random(hash(ctx_key))
@@ -2579,6 +2601,11 @@ def main():
 
     all_points = profiles
 
+    # Build profiles_by_nd for AFlow-Style computation
+    profiles_by_nd = defaultdict(list)
+    for p in profiles:
+        profiles_by_nd[(p["node_type"], p["difficulty"])].append(p)
+
     # ── Pareto frontiers ─────────────────────────────────────────────────────
     print("\n[Step 4] Computing Pareto frontiers ...")
     node_frontiers = {}
@@ -2594,15 +2621,35 @@ def main():
     overall_frontier = _pareto_frontier(feasible_all)
     print(f"  [OVERALL] {len(all_points)} candidates, {len(feasible_all)} feasible → {len(overall_frontier)} on frontier")
 
+    # ── AFlow-Style: compute globally optimal topo per node_type from training ──
+    train_actual = defaultdict(list)
+    for r in train_recs:
+        key = (r.node_type, r.difficulty, r.model, r.topo_id)
+        train_actual[key].append(r)
+
+    topo_train_scores = defaultdict(lambda: defaultdict(list))
+    for (nt, diff, model, topo_id), recs in train_actual.items():
+        pts = [p for p in profiles_by_nd.get((nt, diff), [])
+               if p["model"] == model and p["topo_id"] == topo_id]
+        if pts:
+            topo_train_scores[nt][topo_id].append(_q_score(pts[0]))
+    aflow_global_topo = {}
+    for nt, topo_scores in topo_train_scores.items():
+        topo_avg_q = {t: float(np.mean(qs)) for t, qs in topo_scores.items() if qs}
+        if topo_avg_q:
+            aflow_global_topo[nt] = max(topo_avg_q, key=topo_avg_q.get)
+    print(f"\n  AFlow-Style global topo (from training): {dict(aflow_global_topo)}")
+
     # ── Strategy comparison ────────────────────────────────────────────────
     print("\n[Step 5] Strategy comparison on test set ...")
     strat_result, diff_summary, strat_records = strategy_comparison(
         test_recs, profiles, domain,
-        domain_gt=tool_gt if domain == "task2" else None)
+        domain_gt=tool_gt if domain == "task2" else None,
+        aflow_global_topo=aflow_global_topo)
 
     print(f"\n  Strategy          | Avg S    | Avg C         | Avg L (s) | N")
     print(f"  {'─'*65}")
-    for name in ["Pareto+Q(G;X)", "Random", "Best-Quality", "Cheapest", "Static Workflow"]:
+    for name in ["Pareto+Q(G;X)", "Random", "Best-Quality", "Cheapest", "Static Workflow", "AFlow-Style"]:
         r = strat_result.get(name, {})
         if r:
             print(f"  {name:<18} | {r['avg_S']:>7.4f} | {r['avg_C_total']:>12.6f} | {r['avg_L']:>9.3f} | {r['n']:>4}")

@@ -1,0 +1,14 @@
+{
+  "TopoGuard (full)": {
+    "avg_S": 0.8313,
+    "avg_C": 0.002973,
+    "avg_L": 113.757,
+    "n": 255
+  },
+  "AFlow-style (fixed topo_id)": {
+    "avg_S": 0.8049,
+    "avg_C": 0.00329,
+    "avg_L": 100.373,
+    "n": 255
+  }
+}

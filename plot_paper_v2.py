@@ -54,6 +54,7 @@ COLORS = {
     "cheapest":    "#A8A8A8",  # gray
     "frugalgpt":   "#E69F00",   # amber (FrugalGPT Cascade)
     "llmrouter":   "#7B68EE",  # medium slate blue (LLM Router)
+    "aflow":       "#B8860B",  # dark goldenrod (AFlow-Style)
     "repair":      "#F4A582",
     "w/o":         "#92C5DE",
     "pareto":      "#C7A8B0",
@@ -105,12 +106,13 @@ def fig_strategy_comparison(summary, matched, paired, out_path):
 
     strategies_ordered = [
         ("Pareto+Q(G;X)",    "TopoGuard",         COLORS["topoguard"]),
+        ("AFlow-Style",      "AFlow-Style",       COLORS["aflow"]),
         ("FrugalGPT Cascade","FrugalGPT Cascade",  COLORS["frugalgpt"]),
         ("LLM Router",       "LLM Router",        COLORS["llmrouter"]),
-        ("Static Workflow",   "Static Workflow",    COLORS["static"]),
-        ("Random",            "Random",             COLORS["random"]),
-        ("Best-Quality",      "Best-Quality",       COLORS["bestq"]),
-        ("Cheapest",         "Cheapest",           COLORS["cheapest"]),
+        ("Static Workflow",  "Static Workflow",   COLORS["static"]),
+        ("Random",           "Random",            COLORS["random"]),
+        ("Best-Quality",     "Best-Quality",      COLORS["bestq"]),
+        ("Cheapest",         "Cheapest",          COLORS["cheapest"]),
     ]
 
     S_vals = [exp1[s[0]]["avg_S"] for s in strategies_ordered]
@@ -185,7 +187,8 @@ def fig_strategy_comparison(summary, matched, paired, out_path):
     # Use real exp1 data (same source as panels 1-3), correct key mapping
     qc_strategies = [
         ("Pareto+Q(G;X)", "TopoGuard",      COLORS["topoguard"], 220),
-        ("Best-Quality",  "Best-Q",          COLORS["bestq"],     160),
+        ("AFlow-Style",   "AFlow",          COLORS["aflow"],     160),
+        ("Best-Quality",  "Best-Q",         COLORS["bestq"],     160),
         ("Static Workflow","Static",         COLORS["static"],    160),
         ("Random",        "Random",          COLORS["random"],    100),
         ("Cheapest",      "Cheapest",        COLORS["cheapest"],  100),
@@ -414,7 +417,7 @@ def fig_cdf_advantage(summary, paired, out_path):
         (axes[0], deltas_s,  vs_static, "TopoGuard vs Static Workflow",
          COLORS["static"],  "TopoGuard wins\n(quality advantage)"),
         (axes[1], deltas_bq, vs_bestq,  "TopoGuard vs Best-Quality",
-         COLORS["bestq"],   "Quality gap\n(cost savings instead)"),
+         COLORS["bestq"],   "Nearly tied\n(same quality, lower cost)"),
     ]
 
     for ax, deltas, vs_data, title, ref_color, trade_note in panels:
@@ -696,7 +699,7 @@ def fig_waterfall(summary, out_path):
     exp1 = summary["exp1_strategy_comparison"]
     TOPOGUARD_S = exp1["Pareto+Q(G;X)"]["avg_S"]
     STATIC_S    = exp1["Static Workflow"]["avg_S"]
-    WO_TEMP_S   = exp1.get("w/o Adaptive Template", {}).get("avg_S", 0.685)
+    WO_TEMP_S   = exp1.get("w/o Template Selection", {}).get("avg_S", 0.685)
     # WO_EXE_S    = exp1.get("w/o Adaptive Executor", {}).get("avg_S", 0.742)
     REPAIR_D_S  = summary.get("exp3_repair", {}).get("avg_delta_S", 0.29)
     REPAIR_RATE = summary.get("exp3_repair", {}).get("repair_rate", 0.022)
@@ -776,7 +779,9 @@ def fig_radar(summary, out_path):
     # Normalize each metric to [0,1] for radar (higher=better for all)
     strategies = [
         ("Pareto+Q(G;X)",  "TopoGuard",       COLORS["topoguard"]),
-        ("Static Workflow", "Static Workflow",  COLORS["static"]),
+        ("AFlow-Style",    "AFlow-Style",     COLORS["aflow"]),
+        ("Static Workflow", "Static Workflow", COLORS["static"]),
+        ("LLM Router",     "LLM Router",       COLORS["llmrouter"]),
         ("Best-Quality",   "Best-Quality",    COLORS["bestq"]),
         ("Random",         "Random",           COLORS["random"]),
         ("Cheapest",       "Cheapest",         COLORS["cheapest"]),
@@ -789,19 +794,23 @@ def fig_radar(summary, out_path):
     L_vals = [raw[s[0]]["avg_L"]       for s in strategies]
     N_vals = [raw[s[0]]["n"]           for s in strategies]
 
-    def norm_0_1(vals, higher_is_better=True):
-        """Normalize a list to [0,1]; for cost/latency invert so higher=better."""
-        lo, hi = min(vals), max(vals)
-        span = hi - lo + 1e-9
-        normed = [(v - lo) / span for v in vals]
-        if not higher_is_better:
-            normed = [1.0 - x for x in normed]
+    def norm_rank(vals, higher_is_better=True):
+        """Rank-based [0,1] normalization. Ranks are 1=best (highest cost is worst), so invert for cost/latency."""
+        import scipy.stats as _stats
+        ranks = _stats.rankdata(vals, method="average")  # 1 = smallest cost, 3 = cheapest
+        n = len(vals)
+        # For cost/latency (lower is better): smallest cost → rank n → score 1.0
+        # For quality (higher is better): highest quality → rank n → score 1.0
+        if higher_is_better:
+            normed = (ranks - 1) / (n - 1)
+        else:
+            normed = (n - ranks) / (n - 1)
         return np.array(normed)
 
-    S_norm = norm_0_1(S_vals, higher_is_better=True)
-    C_norm = norm_0_1(C_vals, higher_is_better=False)   # lower cost → higher score
-    L_norm = norm_0_1(L_vals, higher_is_better=False)   # lower latency → higher score
-    N_norm = norm_0_1(N_vals, higher_is_better=True)
+    S_norm = norm_rank(S_vals, higher_is_better=True)
+    C_norm = norm_rank(C_vals, higher_is_better=False)
+    L_norm = norm_rank(L_vals, higher_is_better=False)
+    N_norm = norm_rank(N_vals, higher_is_better=True)
 
     metrics = ["Quality\n(S)", "Cost\nEfficiency", "Latency\nEfficiency", "Context\nCoverage"]
     N_MET   = len(metrics)

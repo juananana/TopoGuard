@@ -1,0 +1,53 @@
+% Multimodal Workflow Example Figure for TopoGuard
+% Compile with: pdflatex, XeLaTeX, or LuaLaTeX
+\documentclass[tikz,border=5pt]{standalone}
+\usepackage{pgfplots}
+\usetikzlibrary{arrows.meta,shapes.geometric,calc,positioning}
+
+\begin{document}
+\begin{tikzpicture}[
+    node distance=1.5cm and 2cm,
+    box/.style={rectangle, draw, rounded corners, minimum width=2cm, minimum height=1cm, align=center, font=\small},
+    arrow/.style={->, thick, -Stealth},
+    multimodal/.style={box, fill=blue!10},
+    compute/.style={box, fill=green!10},
+    verify/.style={box, fill=yellow!20},
+    reason/.style={box, fill=orange!15},
+    agg/.style={box, fill=purple!10},
+    io/.style={box, dashed, fill=gray!5}
+]
+
+% Input layer
+\node[io] (input) {Input: Text Query + Sensors + Forecast Fields};
+
+% Node layer
+\node[multimodal, below=1.5cm of input] (retrieval) {Retrieval\\Node};
+\node[compute, below=1.5cm of retrieval] (computation) {Computation\\Node};
+\node[verify, below=1.5cm of computation] (verification) {Verification\\Node};
+\node[reason, below=1.5cm of verification] (reasoning) {Reasoning\\Node};
+\node[agg, below=1.5cm of reasoning] (aggregation) {Aggregation\\Node};
+
+% Output layer
+\node[io, right=2cm of aggregation] (output) {Output: Warning + Curves + Maps};
+
+% Arrows
+\draw[arrow] (input) -- (retrieval);
+\draw[arrow] (retrieval) -- (computation);
+\draw[arrow] (computation) -- (verification);
+\draw[arrow] (verification) -- (reasoning);
+\draw[arrow] (reasoning) -- (aggregation);
+\draw[arrow] (aggregation) -- (output);
+
+% Side annotations for modalities
+\node[left=0.3cm of retrieval, font=\tiny, align=right] {Text};
+\node[left=0.3cm of computation, font=\tiny, align=right] {Time-series\\Spatial fields};
+\node[left=0.3cm of verification, font=\tiny, align=right] {Scalars\\Curves};
+\node[left=0.3cm of reasoning, font=\tiny, align=right] {All formats};
+\node[left=0.3cm of aggregation, font=\tiny, align=right] {Synthesized};
+
+% Repair annotation
+\node[draw=red, dashed, thick, rounded corners, fit=(computation), font=\tiny, red, label=above:{Repair triggered}] (repair-box) {};
+\node[right=0.5cm of repair-box, font=\tiny, red] {Local upgrade};
+
+\end{tikzpicture}
+\end{document}

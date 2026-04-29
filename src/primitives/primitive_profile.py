@@ -9,6 +9,7 @@ primitive_profile.py
 - CandidateProfile：单个 agent / agent组合的性能画像
 - PrimitiveProfile：一个原语模块下所有候选单元的画像集合
 """
+from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum
