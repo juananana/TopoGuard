@@ -1,0 +1,106 @@
+This is BibTeX, Version 0.99e
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: TopoGuard_latest_clean.aux
+Reallocating 'name_of_file' (item size: 1) to 21 items.
+The style file: ACM-Reference-Format.bst
+Reallocating 'name_of_file' (item size: 1) to 10 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'wiz_functions' (item size: 4) to 6000 items.
+Database file #1: reference.bib
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Reallocating 'wiz_functions' (item size: 4) to 9000 items.
+Reallocating 'glb_str_end' (item size: 4) to 20 items.
+Reallocating 'glb_str_ptr' (item size: 4) to 20 items.
+Reallocating 'global_strs' (item size: 1) to 4000000 items.
+Reallocating 'singl_function' (item size: 4) to 100 items.
+Warning--empty address in cao2024online
+Warning--no number and no volume in chen2023frugalgpt
+Warning--page numbers missing in both pages and numpages fields in chen2023frugalgpt
+Warning--no number and no volume in dekoninck2024routing
+Warning--page numbers missing in both pages and numpages fields in dekoninck2024routing
+Warning--no number and no volume in fan2024workflowllm
+Warning--page numbers missing in both pages and numpages fields in fan2024workflowllm
+Warning--empty publisher in huang2023dag
+Warning--empty address in huang2023dag
+Warning--no number and no volume in huang2024understanding
+Warning--page numbers missing in both pages and numpages fields in huang2024understanding
+Warning--empty publisher in hutter2023online
+Warning--empty address in hutter2023online
+Warning--no number and no volume in inyang2025digital
+Warning--empty address in kim2024llm
+Warning--no number and no volume in li2024autoflow
+Warning--page numbers missing in both pages and numpages fields in li2024autoflow
+Warning--page numbers missing in both pages and numpages fields in liaqat2025chameleon
+Warning--no number and no volume in miettinen2010nonlinear
+Warning--unusual to have number, but no volume, for pathak2020hydroinformatics
+Warning--page numbers missing in both pages and numpages fields in pathak2020hydroinformatics
+Warning--no number and no volume in peled2021graph
+Warning--page numbers missing in both pages and numpages fields in peled2021graph
+Warning--no number and no volume in reza2024robust
+Warning--page numbers missing in both pages and numpages fields in reza2024robust
+Warning--empty publisher in schick2023toolformer
+Warning--empty address in schick2023toolformer
+Warning--page numbers missing in both pages and numpages fields in schick2023toolformer
+Warning--empty publisher in wang2023adaptive
+Warning--empty address in wang2023adaptive
+Warning--no number and no volume in wu2024mlmmsurvey
+Warning--page numbers missing in both pages and numpages fields in wu2024mlmmsurvey
+Warning--no number and no volume in zhai2025survey
+Warning--page numbers missing in both pages and numpages fields in zhai2025survey
+Warning--empty publisher in yao2023tot
+Warning--empty address in yao2023tot
+Warning--page numbers missing in both pages and numpages fields in yao2023tot
+Warning--empty publisher in yao2023react
+Warning--empty address in yao2023react
+Warning--page numbers missing in both pages and numpages fields in yao2023react
+Warning--empty publisher in zeng2023flowmind
+Warning--empty address in zeng2023flowmind
+Warning--no number and no volume in zhang2024mm
+Warning--page numbers missing in both pages and numpages fields in zhang2024mm
+Warning--no number and no volume in zhang2024aflow
+Warning--page numbers missing in both pages and numpages fields in zhang2024aflow
+Warning--no number and no volume in zhou2023foundation
+Warning--page numbers missing in both pages and numpages fields in zhou2023foundation
+You've used 43 entries,
+            6273 wiz_defined-function locations,
+            1794 strings with 28840 characters,
+and the built_in function-call counts, 53822 in all, are:
+= -- 7700
+> -- 2098
+< -- 0
++ -- 731
+- -- 695
+* -- 4270
+:= -- 5120
+add.period$ -- 218
+call.type$ -- 43
+change.case$ -- 401
+chr.to.int$ -- 40
+cite$ -- 91
+duplicate$ -- 4222
+empty$ -- 2992
+format.name$ -- 856
+if$ -- 13596
+int.to.chr$ -- 5
+int.to.str$ -- 1
+missing$ -- 177
+newline$ -- 439
+num.names$ -- 298
+pop$ -- 1690
+preamble$ -- 1
+purify$ -- 727
+quote$ -- 0
+skip$ -- 1431
+stack$ -- 0
+substring$ -- 3610
+swap$ -- 399
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 816
+warning$ -- 48
+while$ -- 210
+width$ -- 0
+write$ -- 897
+(There were 48 warnings)

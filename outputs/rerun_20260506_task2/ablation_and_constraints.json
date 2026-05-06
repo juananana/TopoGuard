@@ -1,0 +1,103 @@
+{
+  "ablations": {
+    "w/o Bayesian Calibration": {
+      "avg_S": 0.8859,
+      "avg_C_total": 0.025748,
+      "avg_L": 9.779,
+      "viol_rate": 0.0,
+      "n": 168
+    }
+  },
+  "constraint_robustness": {
+    "Cmax=0.3": {
+      "avg_S": 0,
+      "avg_C": 0,
+      "avg_L": 0,
+      "feasible_pct": 0.0,
+      "n": 0
+    },
+    "Cmax=0.4": {
+      "avg_S": 0,
+      "avg_C": 0,
+      "avg_L": 0,
+      "feasible_pct": 0.0,
+      "n": 0
+    },
+    "Cmax=0.5": {
+      "avg_S": 0,
+      "avg_C": 0,
+      "avg_L": 0,
+      "feasible_pct": 0.0,
+      "n": 0
+    },
+    "Cmax=0.6": {
+      "avg_S": 0,
+      "avg_C": 0,
+      "avg_L": 0,
+      "feasible_pct": 0.0,
+      "n": 0
+    },
+    "Cmax=0.7": {
+      "avg_S": 0,
+      "avg_C": 0,
+      "avg_L": 0,
+      "feasible_pct": 0.0,
+      "n": 0
+    }
+  },
+  "wilcoxon_ablation": {
+    "w/o Local Repair": {
+      "n": 156,
+      "stat": 0.0,
+      "p_value": 1.0,
+      "significant": false,
+      "note": "all ties"
+    },
+    "AFlow-Style": {
+      "n": 150,
+      "stat": 831.0,
+      "p_value": 0.0,
+      "significant": true,
+      "mean_delta_S": 0.0229,
+      "direction": "ref_better"
+    },
+    "Random": {
+      "n": 153,
+      "stat": 1903.0,
+      "p_value": 6e-06,
+      "significant": true,
+      "mean_delta_S": 0.0269,
+      "direction": "ref_better"
+    },
+    "Best-Quality": {
+      "n": 150,
+      "stat": 231.0,
+      "p_value": 1e-05,
+      "significant": true,
+      "mean_delta_S": -0.0089,
+      "direction": "comp_better"
+    },
+    "Cheapest": {
+      "n": 144,
+      "stat": 2180.0,
+      "p_value": 0.0,
+      "significant": true,
+      "mean_delta_S": 0.047,
+      "direction": "ref_better"
+    },
+    "Static Workflow": {
+      "n": 156,
+      "stat": 234.0,
+      "p_value": 0.0,
+      "significant": true,
+      "mean_delta_S": 0.0677,
+      "direction": "ref_better"
+    }
+  },
+  "bootstrap_ci": {
+    "S_mean": 0.8859,
+    "ci_low": 0.8775,
+    "ci_high": 0.8943,
+    "n_bs": 1000
+  }
+}

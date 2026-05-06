@@ -1,0 +1,16 @@
+{"template_id":"direct","difficulty":"easy","quality_mean":0.82,"cost_mean":1.0}
+{"template_id":"direct","difficulty":"medium","quality_mean":0.75,"cost_mean":1.0}
+{"template_id":"direct","difficulty":"hard","quality_mean":0.60,"cost_mean":1.0}
+{"template_id":"direct","difficulty":"extreme","quality_mean":0.45,"cost_mean":1.0}
+{"template_id":"exec_verify","difficulty":"easy","quality_mean":0.90,"cost_mean":1.6}
+{"template_id":"exec_verify","difficulty":"medium","quality_mean":0.85,"cost_mean":1.6}
+{"template_id":"exec_verify","difficulty":"hard","quality_mean":0.80,"cost_mean":1.6}
+{"template_id":"exec_verify","difficulty":"extreme","quality_mean":0.70,"cost_mean":1.6}
+{"template_id":"dual_exec_aggregate","difficulty":"easy","quality_mean":0.93,"cost_mean":2.5}
+{"template_id":"dual_exec_aggregate","difficulty":"medium","quality_mean":0.90,"cost_mean":2.5}
+{"template_id":"dual_exec_aggregate","difficulty":"hard","quality_mean":0.88,"cost_mean":2.5}
+{"template_id":"dual_exec_aggregate","difficulty":"extreme","quality_mean":0.82,"cost_mean":2.5}
+{"template_id":"exec_verify_hci","difficulty":"easy","quality_mean":0.95,"cost_mean":5.0}
+{"template_id":"exec_verify_hci","difficulty":"medium","quality_mean":0.93,"cost_mean":5.0}
+{"template_id":"exec_verify_hci","difficulty":"hard","quality_mean":0.92,"cost_mean":5.0}
+{"template_id":"exec_verify_hci","difficulty":"extreme","quality_mean":0.88,"cost_mean":5.0}

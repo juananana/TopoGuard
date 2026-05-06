@@ -28,11 +28,19 @@ import random
 import sys
 import csv as _csv
 import argparse
+import hashlib
 from collections import defaultdict, Counter
 from dataclasses import dataclass, asdict
 from pathlib import Path
 
 import numpy as np
+
+
+def _stable_seed(*parts) -> int:
+    """Return a process-stable integer seed for deterministic experiments."""
+    payload = json.dumps(parts, sort_keys=True, ensure_ascii=True, default=str)
+    digest = hashlib.sha256(payload.encode("utf-8")).hexdigest()
+    return int(digest[:16], 16)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Add src/ to path for primitives imports
@@ -453,7 +461,7 @@ def generate_dataset(domain, gt, rng, seed=42, train_samples=9, test_episodes=30
                 for topo_id in TOPO_IDS:
                     if topo_id == "bad_direct" and rng.random() > BAD_TOPO_FRACTION:
                         continue
-                    nt = WQA_NODE_TYPES[hash((model, diff)) % len(WQA_NODE_TYPES)]
+                    nt = WQA_NODE_TYPES[_stable_seed(model, diff) % len(WQA_NODE_TYPES)]
                     wq, wc, wl = _build_workflow_scl_wqa(gt, model, diff, nt, topo_id)
                     if wq is None:
                         continue
@@ -982,7 +990,7 @@ def simulate_training_rounds(train_records, profiles, node_types,
 
             # Track what other strategies would pick — at (nt,diff) level, once per pair
             if feasible:
-                rng_r = random.Random(hash((nt, diff, rnd)))
+                rng_r = random.Random(_stable_seed(nt, diff, rnd))
                 shuffled = list(feasible)
                 rng_r.shuffle(shuffled)
                 round_topo_selection[(nt, diff)]["Random"].append(shuffled[0]["topo_id"])
@@ -1253,12 +1261,9 @@ def strategy_comparison(test_records, profiles, domain, domain_gt=None,
                 "viol": 1 if (pareto_best_for_main and violated(pareto_best_for_main)) else 0})
 
         # ── Online repair (Option 3): apply repair on test contexts ──────────
-        # When repair_off=False (default), simulate repair on the test context:
-        #   if actual_S < PASS_THRESHOLD, search feasible candidates for a better one.
-        # This gives a true paired ablation: Pareto+Q(G;X) = with repair,
-        #   w/o Local Repair = without repair (recorded above).
-        # Repair logic is simplified vs. training (no edit-loss penalty) but sufficient
-        # to measure the quality delta from repair on the test set.
+        # When repair_off=False (default), simulate repair on the test context.
+        # Repair selection uses frozen training-profile estimates only; realized
+        # test quality is used after selection to evaluate the repaired workflow.
         s_final, c_final, l_final = s_p, c_p, l_p
         if domain == "water_qa" and not repair_off and s_p is not None and PASS_THRESHOLD is not None:
             if s_p < PASS_THRESHOLD:
@@ -1267,18 +1272,15 @@ def strategy_comparison(test_records, profiles, domain, domain_gt=None,
                 # consistent with the "bounded" framing in the paper.
                 repair_cands = [
                     c for c in front
-                    if c.get("topo_id") != pareto_best_for_main.get("topo_id")
-                    or c.get("model") != pareto_best_for_main.get("model")
+                    if (
+                        c.get("topo_id") != pareto_best_for_main.get("topo_id")
+                        or c.get("model") != pareto_best_for_main.get("model")
+                    )
+                    and c.get("S", 0.0) >= PASS_THRESHOLD
                 ]
-                best_repair = None
-                best_repair_s = s_p
-                for cand in repair_cands:
-                    cand_s = actual_for_model_topo(cand.get("model"), cand["topo_id"])
-                    if cand_s is not None and cand_s > best_repair_s:
-                        best_repair_s = cand_s
-                        best_repair = cand
+                best_repair = max(repair_cands, key=_q_score_p) if repair_cands else None
                 if best_repair is not None:
-                    s_final = best_repair_s
+                    s_final = actual_for_model_topo(best_repair.get("model"), best_repair["topo_id"])
                     c_final = topo_actual.get((nt, diff, best_repair.get("model"), best_repair["topo_id"]), {}).get("actual_C", c_p)
                     l_final = topo_actual.get((nt, diff, best_repair.get("model"), best_repair["topo_id"]), {}).get("actual_L", l_p)
 
@@ -1307,7 +1309,7 @@ def strategy_comparison(test_records, profiles, domain, domain_gt=None,
                             "viol": 1 if (best_aflow and violated(best_aflow)) else 0})
 
         # ── Random ───────────────────────────────────────────────────────────
-        rng_r = random.Random(hash(ctx_key))
+        rng_r = random.Random(_stable_seed(ctx_key))
         rng_r.shuffle(feasible)
         rand_best = feasible[0] if feasible else None
         s_r = actual_for_model_topo(rand_best["model"], rand_best["topo_id"]) if rand_best else None
@@ -1473,7 +1475,7 @@ def strategy_comparison(test_records, profiles, domain, domain_gt=None,
                                      if p["topo_id"] != "bad_direct"})
             if not valid_topo_ids:
                 valid_topo_ids = sorted({p["topo_id"] for p in all_cnstr})
-            rng_ts = random.Random(hash(ctx_key) ^ 0x1234)
+            rng_ts = random.Random(_stable_seed(ctx_key, "template_selection"))
             rand_topo = rng_ts.choice(valid_topo_ids)
             rand_pool = [p for p in all_cnstr if p["topo_id"] == rand_topo]
             if not rand_pool:
@@ -1496,7 +1498,7 @@ def strategy_comparison(test_records, profiles, domain, domain_gt=None,
                 exec_pool = [p for p in all_cnstr if p["topo_id"] == pareto_topo]
                 if not exec_pool:
                     exec_pool = all_cnstr
-                rng_ab = random.Random(hash(ctx_key) ^ 0xABCD)
+                rng_ab = random.Random(_stable_seed(ctx_key, "executor_ablation"))
                 ab_ea_best = rng_ab.choice(exec_pool)
                 # Use selected model's actual quality (not test_model's) to measure executor impact
                 s_ab = actual_for_model_topo(ab_ea_best.get("model"), ab_ea_best["topo_id"])
@@ -1798,7 +1800,7 @@ def unknown_failure_test(test_recs, profiles, node_types, all_points=None,
         elif strategy == "Cheapest":
             return min(pts, key=lambda p: p["C"])["topo_id"], min(pts, key=lambda p: p["C"])
         elif strategy == "Random":
-            rng_s = random.Random(hash((pts[0]["node_type"], pts[0]["difficulty"], shock_seed)))
+            rng_s = random.Random(_stable_seed(pts[0]["node_type"], pts[0]["difficulty"], shock_seed))
             rng_s.shuffle(pts)
             return pts[0]["topo_id"], pts[0]
         elif strategy == "Static":

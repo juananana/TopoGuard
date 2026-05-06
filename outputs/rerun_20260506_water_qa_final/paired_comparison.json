@@ -1,0 +1,32 @@
+{
+  "vs_Best_Quality": {
+    "strat1": "Pareto+Q(G;X)",
+    "strat2": "Best-Quality",
+    "n_common": 221,
+    "wins": 0,
+    "ties": 136,
+    "loses": 85,
+    "win_rate": 0.0,
+    "tie_rate": 0.6154,
+    "lose_rate": 0.3846,
+    "mean_delta_S": -0.0119,
+    "std_delta_S": 0.0198,
+    "pareto_dominates": 0,
+    "pareto_dom_rate": 0.0
+  },
+  "vs_Static_Workflow": {
+    "strat1": "Pareto+Q(G;X)",
+    "strat2": "Static Workflow",
+    "n_common": 221,
+    "wins": 204,
+    "ties": 0,
+    "loses": 17,
+    "win_rate": 0.9231,
+    "tie_rate": 0.0,
+    "lose_rate": 0.0769,
+    "mean_delta_S": 0.1759,
+    "std_delta_S": 0.1643,
+    "pareto_dominates": 51,
+    "pareto_dom_rate": 0.2308
+  }
+}

@@ -1,0 +1,652 @@
+%%% -*-BibTeX-*-
+%%% Do NOT edit. File created by BibTeX with style
+%%% ACM-Reference-Format-Journals [18-Jan-2012].
+
+\begin{thebibliography}{43}
+
+%%% ====================================================================
+%%% NOTE TO THE USER: you can override these defaults by providing
+%%% customized versions of any of these macros before the \bibliography
+%%% command.  Each of them MUST provide its own final punctuation,
+%%% except for \shownote{} and \showURL{}.  The latter two
+%%% do not use final punctuation, in order to avoid confusing it with
+%%% the Web address.
+%%%
+%%% To suppress output of a particular field, define its macro to expand
+%%% to an empty string, or better, \unskip, like this:
+%%%
+%%% \newcommand{\showURL}[1]{\unskip}   % LaTeX syntax
+%%%
+%%% \def \showURL #1{\unskip}           % plain TeX syntax
+%%%
+%%% ====================================================================
+
+\ifx \showCODEN    \undefined \def \showCODEN     #1{\unskip}     \fi
+\ifx \showISBNx    \undefined \def \showISBNx     #1{\unskip}     \fi
+\ifx \showISBNxiii \undefined \def \showISBNxiii  #1{\unskip}     \fi
+\ifx \showISSN     \undefined \def \showISSN      #1{\unskip}     \fi
+\ifx \showLCCN     \undefined \def \showLCCN      #1{\unskip}     \fi
+\ifx \shownote     \undefined \def \shownote      #1{#1}          \fi
+\ifx \showarticletitle \undefined \def \showarticletitle #1{#1}   \fi
+\ifx \showURL      \undefined \def \showURL       {\relax}        \fi
+% The following commands are used for tagged output and should be
+% invisible to TeX
+\providecommand\bibfield[2]{#2}
+\providecommand\bibinfo[2]{#2}
+\providecommand\natexlab[1]{#1}
+\providecommand\showeprint[2][]{arXiv:#2}
+
+\bibitem[Algiriyage et~al\mbox{.}(2022)]%
+        {algiriyage2022multi}
+\bibfield{author}{\bibinfo{person}{Nilani Algiriyage}, \bibinfo{person}{Raj
+  Prasanna}, \bibinfo{person}{Kristin Stock}, \bibinfo{person}{Emma E.~H.
+  Doyle}, {and} \bibinfo{person}{David Johnston}.}
+  \bibinfo{year}{2022}\natexlab{}.
+\newblock \showarticletitle{Multi-source Multimodal Data and Deep Learning for
+  Disaster Response: A Systematic Review}.
+\newblock \bibinfo{journal}{\emph{SN Computer Science}} \bibinfo{volume}{3},
+  \bibinfo{number}{1} (\bibinfo{year}{2022}), \bibinfo{pages}{92}.
+\newblock
+\href{https://doi.org/10.1007/s42979-021-00971-4}{doi:\nolinkurl{10.1007/s42979-021-00971-4}}
+
+
+\bibitem[Cao et~al\mbox{.}(2024)]%
+        {cao2024online}
+\bibfield{author}{\bibinfo{person}{Tian Cao}, \bibinfo{person}{Fang Liu},
+  \bibinfo{person}{Yu Zhang}, {and} \bibinfo{person}{Yi Chen}.}
+  \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{Online Learning for Adaptive Risk-Sensitive
+  Systems}. In \bibinfo{booktitle}{\emph{Proceedings of the International
+  Conference on Machine Learning}}. \bibinfo{publisher}{PMLR},
+  \bibinfo{pages}{11234--11247}.
+\newblock
+
+
+\bibitem[Chen et~al\mbox{.}(2024)]%
+        {chen2023frugalgpt}
+\bibfield{author}{\bibinfo{person}{Lingjiao Chen}, \bibinfo{person}{Matei
+  Zaharia}, {and} \bibinfo{person}{James Zou}.}
+  \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{{FrugalGPT}: How to Use Large Language Models While
+  Reducing Cost and Improving Performance}.
+\newblock \bibinfo{journal}{\emph{Transactions on Machine Learning Research}}
+  (\bibinfo{year}{2024}).
+\newblock
+\showeprint[arxiv]{2305.05176}~[cs.CL]
+\newblock
+\shownote{Citation key retained from manuscript}.
+
+
+\bibitem[Chiu et~al\mbox{.}(2001)]%
+        {chiu2001exception}
+\bibfield{author}{\bibinfo{person}{Dickson K.~W. Chiu}, \bibinfo{person}{Qing
+  Li}, {and} \bibinfo{person}{Kamalakar Karlapalem}.}
+  \bibinfo{year}{2001}\natexlab{}.
+\newblock \showarticletitle{Web Interface-Driven Cooperative Exception Handling
+  in {ADOME} Workflow Management System}.
+\newblock \bibinfo{journal}{\emph{Information Systems}} \bibinfo{volume}{26},
+  \bibinfo{number}{2} (\bibinfo{year}{2001}), \bibinfo{pages}{93--120}.
+\newblock
+\href{https://doi.org/10.1016/S0306-4379(01)00012-6}{doi:\nolinkurl{10.1016/S0306-4379(01)00012-6}}
+
+
+\bibitem[Dekoninck et~al\mbox{.}(2024)]%
+        {dekoninck2024routing}
+\bibfield{author}{\bibinfo{person}{Jasper Dekoninck},
+  \bibinfo{person}{Maximilian Baader}, {and} \bibinfo{person}{Martin Vechev}.}
+  \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{A Unified Approach to Routing and Cascading for
+  {LLM}s}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2410.10347}}
+  (\bibinfo{year}{2024}).
+\newblock
+\showeprint[arxiv]{2410.10347}~[cs.CL]
+\href{https://doi.org/10.48550/arXiv.2410.10347}{doi:\nolinkurl{10.48550/arXiv.2410.10347}}
+
+
+\bibitem[Fan et~al\mbox{.}(2024)]%
+        {fan2024workflowllm}
+\bibfield{author}{\bibinfo{person}{Shengda Fan}, \bibinfo{person}{Xin Cong},
+  \bibinfo{person}{Yuepeng Fu}, \bibinfo{person}{Zhong Zhang},
+  \bibinfo{person}{Shuyan Zhang}, \bibinfo{person}{Yuanwei Liu},
+  \bibinfo{person}{Yesai Wu}, \bibinfo{person}{Yankai Lin},
+  \bibinfo{person}{Zhiyuan Liu}, {and} \bibinfo{person}{Maosong Sun}.}
+  \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{{WorkflowLLM}: Enhancing Workflow Orchestration
+  Capability of Large Language Models}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2411.05451}}
+  (\bibinfo{year}{2024}).
+\newblock
+\showeprint[arxiv]{2411.05451}~[cs.CL]
+\href{https://doi.org/10.48550/arXiv.2411.05451}{doi:\nolinkurl{10.48550/arXiv.2411.05451}}
+
+
+\bibitem[Gao et~al\mbox{.}(2024)]%
+        {gao2024constraintaware}
+\bibfield{author}{\bibinfo{person}{Xiang Gao}, \bibinfo{person}{Qiang Liu},
+  \bibinfo{person}{Siyu Chen}, \bibinfo{person}{Lin Zou}, {and}
+  \bibinfo{person}{Fan Wang}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{Constraint-Aware Routing for Cloud-Based AI
+  Services}.
+\newblock \bibinfo{journal}{\emph{IEEE Transactions on Network and Service
+  Management}} \bibinfo{volume}{21}, \bibinfo{number}{3}
+  (\bibinfo{year}{2024}), \bibinfo{pages}{1198--1211}.
+\newblock
+\href{https://doi.org/10.1109/TNSM.2024.3390120}{doi:\nolinkurl{10.1109/TNSM.2024.3390120}}
+
+
+\bibitem[Ge and Qin(2025)]%
+        {ge2025urbanflooddt}
+\bibfield{author}{\bibinfo{person}{Chenyu Ge} {and} \bibinfo{person}{Shengfeng
+  Qin}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{Urban Flooding Digital Twin System Framework}.
+\newblock \bibinfo{journal}{\emph{Systems Science and Control Engineering}}
+  \bibinfo{volume}{13}, \bibinfo{number}{1} (\bibinfo{year}{2025}),
+  \bibinfo{pages}{2460432}.
+\newblock
+\href{https://doi.org/10.1080/21642583.2025.2460432}{doi:\nolinkurl{10.1080/21642583.2025.2460432}}
+
+
+\bibitem[Gonzalez et~al\mbox{.}(2022)]%
+        {gonzalez2022constrained}
+\bibfield{author}{\bibinfo{person}{Luis~F. Gonzalez}, \bibinfo{person}{Juan
+  Tan}, {and} \bibinfo{person}{Balasubramaniam Srinivasan}.}
+  \bibinfo{year}{2022}\natexlab{}.
+\newblock \showarticletitle{Constrained Multi-Objective Optimization for Hybrid
+  Decision Systems under Uncertainty}.
+\newblock \bibinfo{journal}{\emph{Journal of Optimization Theory and
+  Applications}}  \bibinfo{volume}{174} (\bibinfo{year}{2022}),
+  \bibinfo{pages}{432--455}.
+\newblock
+\href{https://doi.org/10.1007/s10957-021-03005-8}{doi:\nolinkurl{10.1007/s10957-021-03005-8}}
+
+
+\bibitem[Huang et~al\mbox{.}(2023)]%
+        {huang2023dag}
+\bibfield{author}{\bibinfo{person}{Bolin Huang}, \bibinfo{person}{Zhong Wu},
+  \bibinfo{person}{Qiang Li}, {and} \bibinfo{person}{Feng Zhang}.}
+  \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{DAG Scheduling with Deadlines and Resource
+  Constraints in Uncertain Environments}. In
+  \bibinfo{booktitle}{\emph{International Conference on Automated Planning and
+  Scheduling}}. \bibinfo{pages}{178--187}.
+\newblock
+\href{https://doi.org/10.1609/icaps.v33i1.21818}{doi:\nolinkurl{10.1609/icaps.v33i1.21818}}
+
+
+\bibitem[Huang et~al\mbox{.}(2024)]%
+        {huang2024understanding}
+\bibfield{author}{\bibinfo{person}{Xu Huang}, \bibinfo{person}{Weiwen Liu},
+  \bibinfo{person}{Xiaolong Chen}, \bibinfo{person}{Xingmei Wang},
+  \bibinfo{person}{Hao Wang}, \bibinfo{person}{Defu Lian},
+  \bibinfo{person}{Yasheng Wang}, \bibinfo{person}{Ruiming Tang}, {and}
+  \bibinfo{person}{Enhong Chen}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{Understanding the Planning of {LLM} Agents: A
+  Survey}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2402.02716}}
+  (\bibinfo{year}{2024}).
+\newblock
+\showeprint[arxiv]{2402.02716}~[cs.AI]
+\href{https://doi.org/10.48550/arXiv.2402.02716}{doi:\nolinkurl{10.48550/arXiv.2402.02716}}
+
+
+\bibitem[Hutter et~al\mbox{.}(2023)]%
+        {hutter2023online}
+\bibfield{author}{\bibinfo{person}{Dominik Hutter}, \bibinfo{person}{Steffen
+  Wolf}, \bibinfo{person}{Berk Hermann}, {and} \bibinfo{person}{Matteo
+  Pinciroli}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{Online Failure Recovery for Workflow Execution with
+  Adaptive Checkpointing}. In \bibinfo{booktitle}{\emph{Proceedings of the
+  International Conference on Software Engineering}}.
+  \bibinfo{pages}{1187--1199}.
+\newblock
+\href{https://doi.org/10.1145/3510003.3510158}{doi:\nolinkurl{10.1145/3510003.3510158}}
+
+
+\bibitem[Inyang and Taghikhah(2025)]%
+        {inyang2025digital}
+\bibfield{author}{\bibinfo{person}{Solomon Inyang} {and}
+  \bibinfo{person}{Firouzeh~Rosa Taghikhah}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{Digital Twin-Based Decision Support Systems for
+  Natural Disaster Management: A Systematic Review of Current Trends and
+  Approaches}.
+\newblock \bibinfo{journal}{\emph{Smart Cities and Transport}}
+  (\bibinfo{year}{2025}), \bibinfo{pages}{100406}.
+\newblock
+\href{https://doi.org/10.1016/j.sctalk.2024.100406}{doi:\nolinkurl{10.1016/j.sctalk.2024.100406}}
+
+
+\bibitem[Kim et~al\mbox{.}(2024)]%
+        {kim2024llm}
+\bibfield{author}{\bibinfo{person}{Sehoon Kim}, \bibinfo{person}{Suhong Moon},
+  \bibinfo{person}{Ryan Tabrizi}, \bibinfo{person}{Nicholas Lee},
+  \bibinfo{person}{Michael~W. Mahoney}, \bibinfo{person}{Kurt Keutzer}, {and}
+  \bibinfo{person}{Amir Gholami}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{An {LLM} Compiler for Parallel Function Calling}.
+  In \bibinfo{booktitle}{\emph{Proceedings of the 41st International Conference
+  on Machine Learning}} \emph{(\bibinfo{series}{Proceedings of Machine Learning
+  Research}, Vol.~\bibinfo{volume}{235})}. \bibinfo{publisher}{PMLR},
+  \bibinfo{pages}{24370--24391}.
+\newblock
+
+
+\bibitem[Kim et~al\mbox{.}(2010)]%
+        {sato2010adaff}
+\bibfield{author}{\bibinfo{person}{Yuna Kim}, \bibinfo{person}{Wan~Yeon Lee},
+  \bibinfo{person}{Kyong~Hoon Kim}, {and} \bibinfo{person}{Jong Kim}.}
+  \bibinfo{year}{2010}\natexlab{}.
+\newblock \showarticletitle{{AdaFF}: Adaptive Failure-Handling Framework for
+  Composite Web Services}.
+\newblock \bibinfo{journal}{\emph{IEICE Transactions on Information and
+  Systems}} \bibinfo{volume}{E93-D}, \bibinfo{number}{4}
+  (\bibinfo{year}{2010}), \bibinfo{pages}{834--842}.
+\newblock
+\href{https://doi.org/10.1587/transinf.E93.D.834}{doi:\nolinkurl{10.1587/transinf.E93.D.834}}
+\newblock
+\shownote{Citation key retained from manuscript}.
+
+
+\bibitem[Koch et~al\mbox{.}(2019)]%
+        {koch2019robust}
+\bibfield{author}{\bibinfo{person}{Paul~N. Koch}, \bibinfo{person}{Barry
+  Wujek}, {and} \bibinfo{person}{Oleg Golovidov}.}
+  \bibinfo{year}{2019}\natexlab{}.
+\newblock \showarticletitle{Robust Optimization and Risk-Sensitive Decision
+  Making in Complex Engineering Systems}.
+\newblock \bibinfo{journal}{\emph{Structural and Multidisciplinary
+  Optimization}}  \bibinfo{volume}{59} (\bibinfo{year}{2019}),
+  \bibinfo{pages}{2061--2083}.
+\newblock
+\href{https://doi.org/10.1007/s00158-018-2104-0}{doi:\nolinkurl{10.1007/s00158-018-2104-0}}
+
+
+\bibitem[Lan et~al\mbox{.}(2025)]%
+        {lan2025robust}
+\bibfield{author}{\bibinfo{person}{Guilin Lan}, \bibinfo{person}{Ye-Qian Du},
+  {and} \bibinfo{person}{Zhouwang Yang}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{Robust Multimodal Representation Learning for
+  Missing Modalities}.
+\newblock \bibinfo{journal}{\emph{ACM Transactions on Multimedia Computing,
+  Communications, and Applications}} \bibinfo{volume}{21}, \bibinfo{number}{1}
+  (\bibinfo{year}{2025}), \bibinfo{pages}{34:1--34:23}.
+\newblock
+\href{https://doi.org/10.1145/3702003}{doi:\nolinkurl{10.1145/3702003}}
+
+
+\bibitem[Li et~al\mbox{.}(2024a)]%
+        {li2024intelligentwater}
+\bibfield{author}{\bibinfo{person}{Wengang Li}, \bibinfo{person}{Zifei Ma},
+  \bibinfo{person}{Jing Li}, \bibinfo{person}{Qinghua Li},
+  \bibinfo{person}{Yang Li}, {and} \bibinfo{person}{Juan Yang}.}
+  \bibinfo{year}{2024}\natexlab{a}.
+\newblock \showarticletitle{Digital Twin Smart Water Conservancy: Status,
+  Challenges, and Prospects}.
+\newblock \bibinfo{journal}{\emph{Water}} \bibinfo{volume}{16},
+  \bibinfo{number}{14} (\bibinfo{year}{2024}), \bibinfo{pages}{2038}.
+\newblock
+\href{https://doi.org/10.3390/w16142038}{doi:\nolinkurl{10.3390/w16142038}}
+
+
+\bibitem[Li et~al\mbox{.}(2024b)]%
+        {li2024autoflow}
+\bibfield{author}{\bibinfo{person}{Zelong Li}, \bibinfo{person}{Shuyuan Xu},
+  \bibinfo{person}{Kai Mei}, \bibinfo{person}{Wenyue Hua},
+  \bibinfo{person}{Balaji Rama}, \bibinfo{person}{Om Raheja},
+  \bibinfo{person}{Hao Wang}, \bibinfo{person}{He Zhu}, {and}
+  \bibinfo{person}{Yongfeng Zhang}.} \bibinfo{year}{2024}\natexlab{b}.
+\newblock \showarticletitle{{AutoFlow}: Automated Workflow Generation for Large
+  Language Model Agents}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2407.12821}}
+  (\bibinfo{year}{2024}).
+\newblock
+\showeprint[arxiv]{2407.12821}~[cs.AI]
+\href{https://doi.org/10.48550/arXiv.2407.12821}{doi:\nolinkurl{10.48550/arXiv.2407.12821}}
+
+
+\bibitem[Liaqat et~al\mbox{.}(2025)]%
+        {liaqat2025chameleon}
+\bibfield{author}{\bibinfo{person}{Muhammad~Irzam Liaqat},
+  \bibinfo{person}{Shah Nawaz}, \bibinfo{person}{Muhammad~Zaigham Zaheer},
+  \bibinfo{person}{Muhammad Saeed}, \bibinfo{person}{Hamza Sajjad},
+  \bibinfo{person}{Toon De~Schepper}, \bibinfo{person}{Karthik Nandakumar},
+  \bibinfo{person}{Muhammad~Haris Khan}, \bibinfo{person}{Ignazio Gallo}, {and}
+  \bibinfo{person}{Markus Schedl}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{Chameleon: A Multimodal Learning Framework Robust
+  to Missing Modalities}.
+\newblock \bibinfo{journal}{\emph{International Journal of Multimedia
+  Information Retrieval}} \bibinfo{volume}{14}, \bibinfo{number}{21}
+  (\bibinfo{year}{2025}).
+\newblock
+\href{https://doi.org/10.1007/s13735-025-00370-y}{doi:\nolinkurl{10.1007/s13735-025-00370-y}}
+
+
+\bibitem[Liu et~al\mbox{.}(2024)]%
+        {liu2024risk}
+\bibfield{author}{\bibinfo{person}{Chen Liu}, \bibinfo{person}{Jia Wu},
+  \bibinfo{person}{Yefan Zheng}, \bibinfo{person}{Tong Luo}, {and}
+  \bibinfo{person}{Wei Zhao}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{Risk-Aware Task Offloading for Edge-Cloud
+  Collaborative Multimedia Systems}.
+\newblock \bibinfo{journal}{\emph{IEEE Transactions on Mobile Computing}}
+  \bibinfo{volume}{23}, \bibinfo{number}{7} (\bibinfo{year}{2024}),
+  \bibinfo{pages}{7892--7907}.
+\newblock
+\href{https://doi.org/10.1109/TMC.2023.3345821}{doi:\nolinkurl{10.1109/TMC.2023.3345821}}
+
+
+\bibitem[Miettinen et~al\mbox{.}(2010)]%
+        {miettinen2010nonlinear}
+\bibfield{author}{\bibinfo{person}{Kaisa Miettinen}, \bibinfo{person}{Francisco
+  Ruiz}, {and} \bibinfo{person}{Margaret~M. Wiecek}.}
+  \bibinfo{year}{2010}\natexlab{}.
+\newblock \showarticletitle{Interactive Nonlinear Multiobjective Optimization
+  Procedures}.
+\newblock \bibinfo{journal}{\emph{Handbook on Multicriteria Decision Analysis}}
+  (\bibinfo{year}{2010}), \bibinfo{pages}{153--196}.
+\newblock
+\href{https://doi.org/10.1007/978-0-387-74713-0_6}{doi:\nolinkurl{10.1007/978-0-387-74713-0_6}}
+
+
+\bibitem[Pathak et~al\mbox{.}(2020)]%
+        {pathak2020hydroinformatics}
+\bibfield{author}{\bibinfo{person}{Drashti Pathak}, \bibinfo{person}{Aparna~S.
+  Varde}, \bibinfo{person}{Gerard de Melo}, {and} \bibinfo{person}{Clement
+  Alo}.} \bibinfo{year}{2020}\natexlab{}.
+\newblock \showarticletitle{Hydroinformatics and the Web: Analytics and
+  Dissemination of Hydrology Data for Climate Change and Sustainability}.
+\newblock \bibinfo{journal}{\emph{ACM SIGWEB Newsletter}}
+  \bibinfo{number}{Autumn} (\bibinfo{year}{2020}).
+\newblock
+\href{https://doi.org/10.1145/3427478.3427481}{doi:\nolinkurl{10.1145/3427478.3427481}}
+
+
+\bibitem[Peled et~al\mbox{.}(2021)]%
+        {peled2021graph}
+\bibfield{author}{\bibinfo{person}{Uri Peled}, \bibinfo{person}{Arin Jacob},
+  {and} \bibinfo{person}{Assaf Goldberger}.} \bibinfo{year}{2021}\natexlab{}.
+\newblock \showarticletitle{Graph Neural Networks for Graph-Level Tasks: A
+  Survey}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2109.10832}}
+  (\bibinfo{year}{2021}).
+\newblock
+\showeprint[arxiv]{2109.10832}
+\href{https://doi.org/10.48550/arXiv.2109.10832}{doi:\nolinkurl{10.48550/arXiv.2109.10832}}
+
+
+\bibitem[Qin et~al\mbox{.}(2023)]%
+        {cheng2023review}
+\bibfield{author}{\bibinfo{person}{Yuxin Qin} {et~al\mbox{.}}}
+  \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{A Review of Application of Machine Learning in
+  Storm Surge Problems}.
+\newblock \bibinfo{journal}{\emph{Journal of Marine Science and Engineering}}
+  \bibinfo{volume}{11}, \bibinfo{number}{9} (\bibinfo{year}{2023}),
+  \bibinfo{pages}{1729}.
+\newblock
+\href{https://doi.org/10.3390/jmse11091729}{doi:\nolinkurl{10.3390/jmse11091729}}
+\newblock
+\shownote{Citation key retained from manuscript; author metadata should be
+  verified}.
+
+
+\bibitem[Reza et~al\mbox{.}(2024)]%
+        {reza2024robust}
+\bibfield{author}{\bibinfo{person}{Md.~F. Reza} {et~al\mbox{.}}}
+  \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{Robust Multimodal Learning with Missing Modalities
+  via Parameter-Efficient Adaptation}.
+\newblock \bibinfo{journal}{\emph{IEEE Transactions on Pattern Analysis and
+  Machine Intelligence}} (\bibinfo{year}{2024}).
+\newblock
+\href{https://doi.org/10.1109/TPAMI.2024.3476487}{doi:\nolinkurl{10.1109/TPAMI.2024.3476487}}
+\newblock
+\shownote{Author metadata should be verified}.
+
+
+\bibitem[Schick et~al\mbox{.}(2023)]%
+        {schick2023toolformer}
+\bibfield{author}{\bibinfo{person}{Timo Schick}, \bibinfo{person}{Jane
+  Dwivedi-Yu}, \bibinfo{person}{Roberto Dess{\`i}}, \bibinfo{person}{Roberta
+  Raileanu}, \bibinfo{person}{Maria Lomeli}, \bibinfo{person}{Eric Hambro},
+  \bibinfo{person}{Luke Zettlemoyer}, \bibinfo{person}{Nicola Cancedda}, {and}
+  \bibinfo{person}{Thomas Scialom}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{{Toolformer}: Language Models Can Teach Themselves
+  to Use Tools}. In \bibinfo{booktitle}{\emph{Advances in Neural Information
+  Processing Systems}}, Vol.~\bibinfo{volume}{36}.
+\newblock
+\showeprint[arxiv]{2302.04761}~[cs.CL]
+
+
+\bibitem[Sun et~al\mbox{.}(2023)]%
+        {sun2023pareto}
+\bibfield{author}{\bibinfo{person}{Yixuan Sun}, \bibinfo{person}{Xin Fan},
+  \bibinfo{person}{Ziqi Wang}, \bibinfo{person}{Lingxi Liu}, {and}
+  \bibinfo{person}{Zheng Zhou}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{Pareto-Optimal Sensor Selection for Multimodal
+  Decision Systems under Budget Constraints}.
+\newblock \bibinfo{journal}{\emph{IEEE Sensors Journal}} \bibinfo{volume}{23},
+  \bibinfo{number}{11} (\bibinfo{year}{2023}), \bibinfo{pages}{11234--11247}.
+\newblock
+\href{https://doi.org/10.1109/JSEN.2023.3268402}{doi:\nolinkurl{10.1109/JSEN.2023.3268402}}
+
+
+\bibitem[Tang et~al\mbox{.}(2016)]%
+        {tang2016emergency}
+\bibfield{author}{\bibinfo{person}{John~C. Tang}, \bibinfo{person}{Siripen
+  Pongpaichet}, {and} \bibinfo{person}{Ramesh Jain}.}
+  \bibinfo{year}{2016}\natexlab{}.
+\newblock \showarticletitle{Research Challenges in Developing Multimedia
+  Systems for Managing Emergency Situations}.
+\newblock \bibinfo{journal}{\emph{ACM Transactions on Multimedia Computing,
+  Communications, and Applications}} \bibinfo{volume}{12}, \bibinfo{number}{4s}
+  (\bibinfo{year}{2016}), \bibinfo{pages}{1--18}.
+\newblock
+\href{https://doi.org/10.1145/2964284.2976761}{doi:\nolinkurl{10.1145/2964284.2976761}}
+
+
+\bibitem[Tian et~al\mbox{.}(2024)]%
+        {tian2024constraint}
+\bibfield{author}{\bibinfo{person}{Xin Tian}, \bibinfo{person}{Jing Wang},
+  \bibinfo{person}{Yang Liu}, {and} \bibinfo{person}{Wei Chen}.}
+  \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{Constraint-Aware Sequence-to-Sequence Learning for
+  Resource-Limited Decision Systems}.
+\newblock \bibinfo{journal}{\emph{Artificial Intelligence Review}}
+  \bibinfo{volume}{57} (\bibinfo{year}{2024}), \bibinfo{pages}{1--24}.
+\newblock
+\href{https://doi.org/10.1007/s10462-023-10656-2}{doi:\nolinkurl{10.1007/s10462-023-10656-2}}
+
+
+\bibitem[Tomczak et~al\mbox{.}(2024)]%
+        {tomczak2024development}
+\bibfield{author}{\bibinfo{person}{Andrzej Tomczak}, \bibinfo{person}{Tomasz
+  Kogut}, \bibinfo{person}{Marta Lacka}, {et~al\mbox{.}}}
+  \bibinfo{year}{2024}\natexlab{}.
+\newblock \bibinfo{title}{Development of a Digital Twin of the Harbour Waters
+  and Surrounding Infrastructure Based on Spatial Data Acquired with Multimodal
+  and Multi-Sensor Mapping Systems}.
+\newblock
+\newblock
+\shownote{Metadata should be verified}.
+
+
+\bibitem[Wang et~al\mbox{.}(2023)]%
+        {wang2023adaptive}
+\bibfield{author}{\bibinfo{person}{Yuhan Wang}, \bibinfo{person}{Xing Zhang},
+  \bibinfo{person}{Sijia Liu}, \bibinfo{person}{Yang Chen}, {and}
+  \bibinfo{person}{Dong Xu}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{Adaptive Workflow Recovery for Multi-Stage Decision
+  Pipelines}. In \bibinfo{booktitle}{\emph{European Conference on Machine
+  Learning and Principles and Practice of Knowledge Discovery in Databases}}.
+  \bibinfo{pages}{445--461}.
+\newblock
+\href{https://doi.org/10.1007/978-3-031-43427-3_41}{doi:\nolinkurl{10.1007/978-3-031-43427-3_41}}
+
+
+\bibitem[Wu et~al\mbox{.}(2024)]%
+        {wu2024mlmmsurvey}
+\bibfield{author}{\bibinfo{person}{Renjie Wu}, \bibinfo{person}{Hu Wang},
+  \bibinfo{person}{Hsiang-Ting Chen}, {and} \bibinfo{person}{Gustavo
+  Carneiro}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{Deep Multimodal Learning with Missing Modality: A
+  Survey}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2409.07825}}
+  (\bibinfo{year}{2024}).
+\newblock
+\showeprint[arxiv]{2409.07825}~[cs.CV]
+\href{https://doi.org/10.48550/arXiv.2409.07825}{doi:\nolinkurl{10.48550/arXiv.2409.07825}}
+
+
+\bibitem[Yang et~al\mbox{.}(2024)]%
+        {zhai2025survey}
+\bibfield{author}{\bibinfo{person}{Ke Yang}, \bibinfo{person}{Jiateng Liu},
+  \bibinfo{person}{John Wu}, \bibinfo{person}{Chaoqi Yang},
+  \bibinfo{person}{Yi~R. Fung}, \bibinfo{person}{Sha Li},
+  \bibinfo{person}{Zixuan Huang}, \bibinfo{person}{Xu Cao},
+  \bibinfo{person}{Xingyao Wang}, \bibinfo{person}{Yiquan Wang},
+  \bibinfo{person}{Heng Ji}, {and} \bibinfo{person}{ChengXiang Zhai}.}
+  \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{If {LLM} Is the Wizard, Then Code Is the Wand: A
+  Survey on How Code Empowers Large Language Models to Serve as Intelligent
+  Agents}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2401.00812}}
+  (\bibinfo{year}{2024}).
+\newblock
+\showeprint[arxiv]{2401.00812}~[cs.CL]
+\href{https://doi.org/10.48550/arXiv.2401.00812}{doi:\nolinkurl{10.48550/arXiv.2401.00812}}
+\newblock
+\shownote{Citation key retained from manuscript}.
+
+
+\bibitem[Yao et~al\mbox{.}(2023a)]%
+        {yao2023tot}
+\bibfield{author}{\bibinfo{person}{Shunyu Yao}, \bibinfo{person}{Dian Yu},
+  \bibinfo{person}{Jeffrey Zhao}, \bibinfo{person}{Izhak Shafran},
+  \bibinfo{person}{Thomas~L. Griffiths}, \bibinfo{person}{Yuan Cao}, {and}
+  \bibinfo{person}{Karthik Narasimhan}.} \bibinfo{year}{2023}\natexlab{a}.
+\newblock \showarticletitle{Tree of Thoughts: Deliberate Problem Solving with
+  Large Language Models}. In \bibinfo{booktitle}{\emph{Advances in Neural
+  Information Processing Systems}}, Vol.~\bibinfo{volume}{36}.
+\newblock
+\showeprint[arxiv]{2305.10601}~[cs.CL]
+
+
+\bibitem[Yao et~al\mbox{.}(2023b)]%
+        {yao2023react}
+\bibfield{author}{\bibinfo{person}{Shunyu Yao}, \bibinfo{person}{Jeffrey Zhao},
+  \bibinfo{person}{Dian Yu}, \bibinfo{person}{Nan Du}, \bibinfo{person}{Izhak
+  Shafran}, \bibinfo{person}{Karthik Narasimhan}, {and} \bibinfo{person}{Yuan
+  Cao}.} \bibinfo{year}{2023}\natexlab{b}.
+\newblock \showarticletitle{{ReAct}: Synergizing Reasoning and Acting in
+  Language Models}. In \bibinfo{booktitle}{\emph{International Conference on
+  Learning Representations}}.
+\newblock
+\urldef\tempurl%
+\url{https://openreview.net/forum?id=WE_vluYUL-X}
+\showURL{%
+\tempurl}
+
+
+\bibitem[Yu et~al\mbox{.}(2024)]%
+        {yu2024warenet}
+\bibfield{author}{\bibinfo{person}{Xiaoya Yu}, \bibinfo{person}{Kejun Wu},
+  \bibinfo{person}{You Yang}, {and} \bibinfo{person}{Qiong Liu}.}
+  \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{{WaRENet}: A Novel Urban Waterlogging Risk
+  Evaluation Network}.
+\newblock \bibinfo{journal}{\emph{ACM Transactions on Multimedia Computing,
+  Communications, and Applications}} \bibinfo{volume}{20}, \bibinfo{number}{7}
+  (\bibinfo{year}{2024}), \bibinfo{pages}{1--28}.
+\newblock
+\href{https://doi.org/10.1145/3651163}{doi:\nolinkurl{10.1145/3651163}}
+
+
+\bibitem[Yuan et~al\mbox{.}(2024)]%
+        {yuan2024digitaltwin}
+\bibfield{author}{\bibinfo{person}{Min Yuan}, \bibinfo{person}{Siyuan Wang},
+  \bibinfo{person}{Huan Chen}, {and} \bibinfo{person}{Qing Liu}.}
+  \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{Digital Twin for Industrial Control Systems: A
+  Systematic Review of Architecture and Applications}.
+\newblock \bibinfo{journal}{\emph{IEEE Transactions on Industrial Informatics}}
+  \bibinfo{volume}{20}, \bibinfo{number}{6} (\bibinfo{year}{2024}),
+  \bibinfo{pages}{8283--8294}.
+\newblock
+\href{https://doi.org/10.1109/TII.2024.3371023}{doi:\nolinkurl{10.1109/TII.2024.3371023}}
+
+
+\bibitem[Zeng et~al\mbox{.}(2023)]%
+        {zeng2023flowmind}
+\bibfield{author}{\bibinfo{person}{Aohan Zeng}, \bibinfo{person}{Mingdao Liu},
+  \bibinfo{person}{Ruxiao Du}, {et~al\mbox{.}}}
+  \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{{FlowMind}: Automatic Workflow Generation with
+  {LLM}s}. In \bibinfo{booktitle}{\emph{Proceedings of the Fourth ACM
+  International Conference on AI in Finance}}. \bibinfo{pages}{73--81}.
+\newblock
+\href{https://doi.org/10.1145/3604237.3626908}{doi:\nolinkurl{10.1145/3604237.3626908}}
+\newblock
+\shownote{Author metadata should be verified}.
+
+
+\bibitem[Zhang et~al\mbox{.}(2023)]%
+        {zhang2023multimodalfusion}
+\bibfield{author}{\bibinfo{person}{Chen Zhang}, \bibinfo{person}{Yikang Liu},
+  \bibinfo{person}{Ruyu Xu}, \bibinfo{person}{Hui Wang}, {and}
+  \bibinfo{person}{Xiaolan Fu}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{Multimodal Fusion for Risk Assessment in Critical
+  Infrastructure Systems}.
+\newblock \bibinfo{journal}{\emph{ACM Transactions on Multimedia Computing,
+  Communications, and Applications}} \bibinfo{volume}{19}, \bibinfo{number}{2}
+  (\bibinfo{year}{2023}), \bibinfo{pages}{52:1--52:23}.
+\newblock
+\href{https://doi.org/10.1145/3564992}{doi:\nolinkurl{10.1145/3564992}}
+
+
+\bibitem[Zhang et~al\mbox{.}(2024b)]%
+        {zhang2024mm}
+\bibfield{author}{\bibinfo{person}{Duzhen Zhang}, \bibinfo{person}{Yahan Yu},
+  \bibinfo{person}{Jiahua Dong}, \bibinfo{person}{Chenxing Li},
+  \bibinfo{person}{Dan Su}, \bibinfo{person}{Chenhui Chu}, {and}
+  \bibinfo{person}{Dong Yu}.} \bibinfo{year}{2024}\natexlab{b}.
+\newblock \showarticletitle{{MM-LLMs}: Recent Advances in Multimodal Large
+  Language Models}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2401.13601}}
+  (\bibinfo{year}{2024}).
+\newblock
+\showeprint[arxiv]{2401.13601}~[cs.CV]
+\href{https://doi.org/10.48550/arXiv.2401.13601}{doi:\nolinkurl{10.48550/arXiv.2401.13601}}
+
+
+\bibitem[Zhang et~al\mbox{.}(2024a)]%
+        {zhang2024aflow}
+\bibfield{author}{\bibinfo{person}{Jiayi Zhang}, \bibinfo{person}{Jinyu Xiang},
+  \bibinfo{person}{Zhaoyang Yu}, \bibinfo{person}{Fengwei Teng},
+  \bibinfo{person}{Xionghui Chen}, \bibinfo{person}{Jiaqi Chen},
+  \bibinfo{person}{Mingchen Zhuge}, \bibinfo{person}{Xin Cheng},
+  \bibinfo{person}{Sirui Hong}, \bibinfo{person}{Jinlin Wang},
+  \bibinfo{person}{Bingnan Zheng}, \bibinfo{person}{Bang Liu},
+  \bibinfo{person}{Yuyu Luo}, {and} \bibinfo{person}{Chenglin Wu}.}
+  \bibinfo{year}{2024}\natexlab{a}.
+\newblock \showarticletitle{{AFlow}: Automating Agentic Workflow Generation}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2410.10762}}
+  (\bibinfo{year}{2024}).
+\newblock
+\showeprint[arxiv]{2410.10762}~[cs.AI]
+\href{https://doi.org/10.48550/arXiv.2410.10762}{doi:\nolinkurl{10.48550/arXiv.2410.10762}}
+
+
+\bibitem[Zhou et~al\mbox{.}(2023)]%
+        {zhou2023foundation}
+\bibfield{author}{\bibinfo{person}{Wei Zhou}, \bibinfo{person}{Ming Chen},
+  \bibinfo{person}{Dong Li}, \bibinfo{person}{Li Shen}, {and}
+  \bibinfo{person}{Xin Wang}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{Foundation Model for End-to-End Multimodal
+  Reasoning in Risk-Sensitive Decision Support}.
+\newblock \bibinfo{journal}{\emph{IEEE Transactions on Knowledge and Data
+  Engineering}} (\bibinfo{year}{2023}).
+\newblock
+\href{https://doi.org/10.1109/TKDE.2023.3314122}{doi:\nolinkurl{10.1109/TKDE.2023.3314122}}
+
+
+\end{thebibliography}
