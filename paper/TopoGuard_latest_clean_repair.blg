@@ -1,6 +1,6 @@
 This is BibTeX, Version 0.99e
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
-The top-level auxiliary file: TopoGuard_latest_clean.aux
+The top-level auxiliary file: TopoGuard_latest_clean_repair.aux
 Reallocating 'name_of_file' (item size: 1) to 21 items.
 The style file: ACM-Reference-Format.bst
 Reallocating 'name_of_file' (item size: 1) to 10 items.
@@ -64,43 +64,43 @@ Warning--no number and no volume in zhou2023foundation
 Warning--page numbers missing in both pages and numpages fields in zhou2023foundation
 You've used 43 entries,
             6273 wiz_defined-function locations,
-            1794 strings with 28799 characters,
-and the built_in function-call counts, 54084 in all, are:
-= -- 7707
-> -- 2130
+            1790 strings with 28683 characters,
+and the built_in function-call counts, 53724 in all, are:
+= -- 7686
+> -- 2098
 < -- 0
-+ -- 740
-- -- 711
-* -- 4288
-:= -- 5187
-add.period$ -- 212
++ -- 731
+- -- 695
+* -- 4256
+:= -- 5120
+add.period$ -- 211
 call.type$ -- 43
-change.case$ -- 405
-chr.to.int$ -- 56
+change.case$ -- 401
+chr.to.int$ -- 40
 cite$ -- 91
-duplicate$ -- 4229
-empty$ -- 2990
-format.name$ -- 865
-if$ -- 13639
+duplicate$ -- 4215
+empty$ -- 2985
+format.name$ -- 856
+if$ -- 13582
 int.to.chr$ -- 5
 int.to.str$ -- 1
 missing$ -- 177
-newline$ -- 427
+newline$ -- 425
 num.names$ -- 298
-pop$ -- 1702
+pop$ -- 1697
 preamble$ -- 1
-purify$ -- 731
+purify$ -- 727
 quote$ -- 0
-skip$ -- 1437
+skip$ -- 1431
 stack$ -- 0
-substring$ -- 3614
-swap$ -- 407
-text.length$ -- 23
+substring$ -- 3596
+swap$ -- 399
+text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 816
 warning$ -- 48
-while$ -- 218
+while$ -- 210
 width$ -- 0
-write$ -- 886
+write$ -- 883
 (There were 48 warnings)

@@ -448,19 +448,15 @@
 \href{https://doi.org/10.1007/s10462-023-10656-2}{doi:\nolinkurl{10.1007/s10462-023-10656-2}}
 
 
-\bibitem[Tomczak et~al\mbox{.}(2025)]%
+\bibitem[Tomczak et~al\mbox{.}(2024)]%
         {tomczak2024development}
-\bibfield{author}{\bibinfo{person}{Arkadiusz Tomczak},
-  \bibinfo{person}{Grzegorz Stepien}, \bibinfo{person}{Tomasz Kogut},
-  \bibinfo{person}{Lukasz Jedynak}, \bibinfo{person}{Grzegorz Zaniewicz},
-  \bibinfo{person}{Malgorzata Lacka}, {and} \bibinfo{person}{Izabela
-  Bodus-Olkowska}.} \bibinfo{year}{2025}\natexlab{}.
+\bibfield{author}{\bibinfo{person}{Andrzej Tomczak}, \bibinfo{person}{Tomasz
+  Kogut}, \bibinfo{person}{Marta Lacka}, {et~al\mbox{.}}}
+  \bibinfo{year}{2024}\natexlab{}.
 \newblock \bibinfo{title}{Development of a Digital Twin of the Harbour Waters
   and Surrounding Infrastructure Based on Spatial Data Acquired with Multimodal
   and Multi-Sensor Mapping Systems}.
-\newblock \bibinfo{numpages}{315}~pages.
 \newblock
-\href{https://doi.org/10.3390/app15010315}{doi:\nolinkurl{10.3390/app15010315}}
 
 
 \bibitem[Wang et~al\mbox{.}(2023)]%

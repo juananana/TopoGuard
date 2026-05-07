@@ -1,0 +1,698 @@
+{
+  "Hard local node failure": {
+    "factor": 0.58,
+    "shock_scope": "selected_only",
+    "targets": [
+      "aggregation",
+      "computation",
+      "reasoning",
+      "retrieval",
+      "verification"
+    ],
+    "difficulties": [
+      "hard"
+    ],
+    "per_strategy": {
+      "Pareto+Q(G;X)": {
+        "n": 3,
+        "avg_nominal_S": 0.854,
+        "avg_base_S": 0.4953,
+        "avg_repaired_S": 0.6056,
+        "avg_delta_all": 0.1102,
+        "repair_trigger_rate": 0.3333,
+        "avg_repair_delta_triggered": 0.3307,
+        "quality_drop_vs_nominal": 0.3587,
+        "recovery_rate": 0.3073
+      },
+      "Best-Quality": {
+        "n": 3,
+        "avg_nominal_S": 0.8895,
+        "avg_base_S": 0.5159,
+        "avg_repaired_S": 0.6261,
+        "avg_delta_all": 0.1102,
+        "repair_trigger_rate": 0.3333,
+        "avg_repair_delta_triggered": 0.3307,
+        "quality_drop_vs_nominal": 0.3736,
+        "recovery_rate": 0.2951
+      },
+      "Static Workflow": {
+        "n": 3,
+        "avg_nominal_S": 0.802,
+        "avg_base_S": 0.4652,
+        "avg_repaired_S": 0.5943,
+        "avg_delta_all": 0.1291,
+        "repair_trigger_rate": 0.6667,
+        "avg_repair_delta_triggered": 0.1937,
+        "quality_drop_vs_nominal": 0.3368,
+        "recovery_rate": 0.3833
+      }
+    },
+    "context_details": {
+      "computation::hard::Pareto+Q(G;X)::0": {
+        "Pareto+Q(G;X)": {
+          "nominal_S": 0.9964,
+          "base_S": 0.577912,
+          "repaired_S": 0.577912,
+          "delta_S": 0.0,
+          "repair_triggered": false,
+          "topo": "executor_verifier_agg",
+          "model": "qwen_14b",
+          "repair_topo": "",
+          "repair_model": ""
+        }
+      },
+      "computation::hard::Best-Quality::0": {
+        "Best-Quality": {
+          "nominal_S": 0.9964,
+          "base_S": 0.577912,
+          "repaired_S": 0.577912,
+          "delta_S": 0.0,
+          "repair_triggered": false,
+          "topo": "executor_verifier_agg",
+          "model": "qwen_14b",
+          "repair_topo": "",
+          "repair_model": ""
+        }
+      },
+      "computation::hard::Static Workflow::0": {
+        "Static Workflow": {
+          "nominal_S": 0.8984,
+          "base_S": 0.521072,
+          "repaired_S": 0.5441,
+          "delta_S": 0.02302800000000005,
+          "repair_triggered": true,
+          "topo": "executor_plus_verifier",
+          "model": "qwen_14b",
+          "repair_topo": "executor_verifier_agg",
+          "repair_model": "deepseek_r1"
+        }
+      },
+      "reasoning::hard::Pareto+Q(G;X)::0": {
+        "Pareto+Q(G;X)": {
+          "nominal_S": 0.9763,
+          "base_S": 0.5662539999999999,
+          "repaired_S": 0.5662539999999999,
+          "delta_S": 0.0,
+          "repair_triggered": false,
+          "topo": "executor_plus_verifier",
+          "model": "qwen_32b",
+          "repair_topo": "",
+          "repair_model": ""
+        }
+      },
+      "reasoning::hard::Best-Quality::0": {
+        "Best-Quality": {
+          "nominal_S": 1.0827,
+          "base_S": 0.6279659999999999,
+          "repaired_S": 0.6279659999999999,
+          "delta_S": 0.0,
+          "repair_triggered": false,
+          "topo": "executor_verifier_agg",
+          "model": "qwen_32b",
+          "repair_topo": "",
+          "repair_model": ""
+        }
+      },
+      "reasoning::hard::Static Workflow::0": {
+        "Static Workflow": {
+          "nominal_S": 0.9763,
+          "base_S": 0.5662539999999999,
+          "repaired_S": 0.5662539999999999,
+          "delta_S": 0.0,
+          "repair_triggered": false,
+          "topo": "executor_plus_verifier",
+          "model": "qwen_32b",
+          "repair_topo": "",
+          "repair_model": ""
+        }
+      },
+      "verification::hard::Pareto+Q(G;X)::0": {
+        "Pareto+Q(G;X)": {
+          "nominal_S": 0.5893,
+          "base_S": 0.341794,
+          "repaired_S": 0.6725,
+          "delta_S": 0.330706,
+          "repair_triggered": true,
+          "topo": "executor_verifier_agg",
+          "model": "kimi_k2_5",
+          "repair_topo": "executor_verifier_agg",
+          "repair_model": "qwen_397b"
+        }
+      },
+      "verification::hard::Best-Quality::0": {
+        "Best-Quality": {
+          "nominal_S": 0.5893,
+          "base_S": 0.341794,
+          "repaired_S": 0.6725,
+          "delta_S": 0.330706,
+          "repair_triggered": true,
+          "topo": "executor_verifier_agg",
+          "model": "kimi_k2_5",
+          "repair_topo": "executor_verifier_agg",
+          "repair_model": "qwen_397b"
+        }
+      },
+      "verification::hard::Static Workflow::0": {
+        "Static Workflow": {
+          "nominal_S": 0.5313,
+          "base_S": 0.308154,
+          "repaired_S": 0.6725,
+          "delta_S": 0.364346,
+          "repair_triggered": true,
+          "topo": "executor_plus_verifier",
+          "model": "kimi_k2_5",
+          "repair_topo": "executor_verifier_agg",
+          "repair_model": "qwen_397b"
+        }
+      }
+    },
+    "protocol": {
+      "profile_frozen": true,
+      "test_time_shock_only": true,
+      "predeclared_complex_contexts": true,
+      "repair_selection_uses_profile_estimates": true,
+      "heldout_realized_quality_used_only_after_selection": true
+    }
+  },
+  "Hard reasoning-computation local failure": {
+    "factor": 0.55,
+    "shock_scope": "selected_only",
+    "targets": [
+      "computation",
+      "reasoning",
+      "verification"
+    ],
+    "difficulties": [
+      "hard"
+    ],
+    "per_strategy": {
+      "Pareto+Q(G;X)": {
+        "n": 3,
+        "avg_nominal_S": 0.854,
+        "avg_base_S": 0.4697,
+        "avg_repaired_S": 0.7322,
+        "avg_delta_all": 0.2625,
+        "repair_trigger_rate": 0.6667,
+        "avg_repair_delta_triggered": 0.3937,
+        "quality_drop_vs_nominal": 0.3843,
+        "recovery_rate": 0.683
+      },
+      "Best-Quality": {
+        "n": 3,
+        "avg_nominal_S": 0.8895,
+        "avg_base_S": 0.4892,
+        "avg_repaired_S": 0.6053,
+        "avg_delta_all": 0.1161,
+        "repair_trigger_rate": 0.3333,
+        "avg_repair_delta_triggered": 0.3484,
+        "quality_drop_vs_nominal": 0.4003,
+        "recovery_rate": 0.2901
+      },
+      "Static Workflow": {
+        "n": 3,
+        "avg_nominal_S": 0.802,
+        "avg_base_S": 0.4411,
+        "avg_repaired_S": 0.5845,
+        "avg_delta_all": 0.1434,
+        "repair_trigger_rate": 0.6667,
+        "avg_repair_delta_triggered": 0.2151,
+        "quality_drop_vs_nominal": 0.3609,
+        "recovery_rate": 0.3974
+      }
+    },
+    "context_details": {
+      "computation::hard::Pareto+Q(G;X)::0": {
+        "Pareto+Q(G;X)": {
+          "nominal_S": 0.9964,
+          "base_S": 0.5480200000000001,
+          "repaired_S": 0.5480200000000001,
+          "delta_S": 0.0,
+          "repair_triggered": false,
+          "topo": "executor_verifier_agg",
+          "model": "qwen_14b",
+          "repair_topo": "",
+          "repair_model": ""
+        }
+      },
+      "computation::hard::Best-Quality::0": {
+        "Best-Quality": {
+          "nominal_S": 0.9964,
+          "base_S": 0.5480200000000001,
+          "repaired_S": 0.5480200000000001,
+          "delta_S": 0.0,
+          "repair_triggered": false,
+          "topo": "executor_verifier_agg",
+          "model": "qwen_14b",
+          "repair_topo": "",
+          "repair_model": ""
+        }
+      },
+      "computation::hard::Static Workflow::0": {
+        "Static Workflow": {
+          "nominal_S": 0.8984,
+          "base_S": 0.49412,
+          "repaired_S": 0.5441,
+          "delta_S": 0.049980000000000024,
+          "repair_triggered": true,
+          "topo": "executor_plus_verifier",
+          "model": "qwen_14b",
+          "repair_topo": "executor_verifier_agg",
+          "repair_model": "deepseek_r1"
+        }
+      },
+      "reasoning::hard::Pareto+Q(G;X)::0": {
+        "Pareto+Q(G;X)": {
+          "nominal_S": 0.9763,
+          "base_S": 0.536965,
+          "repaired_S": 0.976,
+          "delta_S": 0.43903499999999995,
+          "repair_triggered": true,
+          "topo": "executor_plus_verifier",
+          "model": "qwen_32b",
+          "repair_topo": "executor_verifier_agg",
+          "repair_model": "deepseek_r1_32b"
+        }
+      },
+      "reasoning::hard::Best-Quality::0": {
+        "Best-Quality": {
+          "nominal_S": 1.0827,
+          "base_S": 0.595485,
+          "repaired_S": 0.595485,
+          "delta_S": 0.0,
+          "repair_triggered": false,
+          "topo": "executor_verifier_agg",
+          "model": "qwen_32b",
+          "repair_topo": "",
+          "repair_model": ""
+        }
+      },
+      "reasoning::hard::Static Workflow::0": {
+        "Static Workflow": {
+          "nominal_S": 0.9763,
+          "base_S": 0.536965,
+          "repaired_S": 0.536965,
+          "delta_S": 0.0,
+          "repair_triggered": false,
+          "topo": "executor_plus_verifier",
+          "model": "qwen_32b",
+          "repair_topo": "",
+          "repair_model": ""
+        }
+      },
+      "verification::hard::Pareto+Q(G;X)::0": {
+        "Pareto+Q(G;X)": {
+          "nominal_S": 0.5893,
+          "base_S": 0.32411500000000004,
+          "repaired_S": 0.6725,
+          "delta_S": 0.34838499999999994,
+          "repair_triggered": true,
+          "topo": "executor_verifier_agg",
+          "model": "kimi_k2_5",
+          "repair_topo": "executor_verifier_agg",
+          "repair_model": "qwen_397b"
+        }
+      },
+      "verification::hard::Best-Quality::0": {
+        "Best-Quality": {
+          "nominal_S": 0.5893,
+          "base_S": 0.32411500000000004,
+          "repaired_S": 0.6725,
+          "delta_S": 0.34838499999999994,
+          "repair_triggered": true,
+          "topo": "executor_verifier_agg",
+          "model": "kimi_k2_5",
+          "repair_topo": "executor_verifier_agg",
+          "repair_model": "qwen_397b"
+        }
+      },
+      "verification::hard::Static Workflow::0": {
+        "Static Workflow": {
+          "nominal_S": 0.5313,
+          "base_S": 0.292215,
+          "repaired_S": 0.6725,
+          "delta_S": 0.380285,
+          "repair_triggered": true,
+          "topo": "executor_plus_verifier",
+          "model": "kimi_k2_5",
+          "repair_topo": "executor_verifier_agg",
+          "repair_model": "qwen_397b"
+        }
+      }
+    },
+    "protocol": {
+      "profile_frozen": true,
+      "test_time_shock_only": true,
+      "predeclared_complex_contexts": true,
+      "repair_selection_uses_profile_estimates": true,
+      "heldout_realized_quality_used_only_after_selection": true
+    }
+  },
+  "Medium-hard verifier local failure": {
+    "factor": 0.58,
+    "shock_scope": "selected_only",
+    "targets": [
+      "aggregation",
+      "verification"
+    ],
+    "difficulties": [
+      "hard",
+      "medium"
+    ],
+    "per_strategy": {
+      "Pareto+Q(G;X)": {
+        "n": 3,
+        "avg_nominal_S": 0.7866,
+        "avg_base_S": 0.4562,
+        "avg_repaired_S": 0.6222,
+        "avg_delta_all": 0.1659,
+        "repair_trigger_rate": 0.6667,
+        "avg_repair_delta_triggered": 0.2489,
+        "quality_drop_vs_nominal": 0.3304,
+        "recovery_rate": 0.5023
+      },
+      "Best-Quality": {
+        "n": 3,
+        "avg_nominal_S": 0.7866,
+        "avg_base_S": 0.4562,
+        "avg_repaired_S": 0.6963,
+        "avg_delta_all": 0.24,
+        "repair_trigger_rate": 1.0,
+        "avg_repair_delta_triggered": 0.24,
+        "quality_drop_vs_nominal": 0.3304,
+        "recovery_rate": 0.7266
+      },
+      "Static Workflow": {
+        "n": 3,
+        "avg_nominal_S": 0.7092,
+        "avg_base_S": 0.4113,
+        "avg_repaired_S": 0.6963,
+        "avg_delta_all": 0.2849,
+        "repair_trigger_rate": 1.0,
+        "avg_repair_delta_triggered": 0.2849,
+        "quality_drop_vs_nominal": 0.2979,
+        "recovery_rate": 0.9566
+      }
+    },
+    "context_details": {
+      "aggregation::medium::Pareto+Q(G;X)::0": {
+        "Pareto+Q(G;X)": {
+          "nominal_S": 0.9455,
+          "base_S": 0.5483899999999999,
+          "repaired_S": 0.5483899999999999,
+          "delta_S": 0.0,
+          "repair_triggered": false,
+          "topo": "executor_verifier_agg",
+          "model": "deepseek_v3_2",
+          "repair_topo": "",
+          "repair_model": ""
+        }
+      },
+      "aggregation::medium::Best-Quality::0": {
+        "Best-Quality": {
+          "nominal_S": 0.9455,
+          "base_S": 0.5483899999999999,
+          "repaired_S": 0.7707,
+          "delta_S": 0.22231000000000012,
+          "repair_triggered": true,
+          "topo": "executor_verifier_agg",
+          "model": "deepseek_v3_2",
+          "repair_topo": "executor_verifier_agg",
+          "repair_model": "qwen_vl_8b"
+        }
+      },
+      "aggregation::medium::Static Workflow::0": {
+        "Static Workflow": {
+          "nominal_S": 0.8525,
+          "base_S": 0.49445,
+          "repaired_S": 0.7707,
+          "delta_S": 0.27625000000000005,
+          "repair_triggered": true,
+          "topo": "executor_plus_verifier",
+          "model": "deepseek_v3_2",
+          "repair_topo": "executor_verifier_agg",
+          "repair_model": "qwen_vl_8b"
+        }
+      },
+      "verification::hard::Pareto+Q(G;X)::0": {
+        "Pareto+Q(G;X)": {
+          "nominal_S": 0.5893,
+          "base_S": 0.341794,
+          "repaired_S": 0.6725,
+          "delta_S": 0.330706,
+          "repair_triggered": true,
+          "topo": "executor_verifier_agg",
+          "model": "kimi_k2_5",
+          "repair_topo": "executor_verifier_agg",
+          "repair_model": "qwen_397b"
+        }
+      },
+      "verification::hard::Best-Quality::0": {
+        "Best-Quality": {
+          "nominal_S": 0.5893,
+          "base_S": 0.341794,
+          "repaired_S": 0.6725,
+          "delta_S": 0.330706,
+          "repair_triggered": true,
+          "topo": "executor_verifier_agg",
+          "model": "kimi_k2_5",
+          "repair_topo": "executor_verifier_agg",
+          "repair_model": "qwen_397b"
+        }
+      },
+      "verification::hard::Static Workflow::0": {
+        "Static Workflow": {
+          "nominal_S": 0.5313,
+          "base_S": 0.308154,
+          "repaired_S": 0.6725,
+          "delta_S": 0.364346,
+          "repair_triggered": true,
+          "topo": "executor_plus_verifier",
+          "model": "kimi_k2_5",
+          "repair_topo": "executor_verifier_agg",
+          "repair_model": "qwen_397b"
+        }
+      },
+      "verification::medium::Pareto+Q(G;X)::0": {
+        "Pareto+Q(G;X)": {
+          "nominal_S": 0.825,
+          "base_S": 0.4784999999999999,
+          "repaired_S": 0.6456,
+          "delta_S": 0.16710000000000003,
+          "repair_triggered": true,
+          "topo": "executor_verifier_agg",
+          "model": "deepseek_v3_2_exp",
+          "repair_topo": "executor_verifier_agg",
+          "repair_model": "step_3_5_flash"
+        }
+      },
+      "verification::medium::Best-Quality::0": {
+        "Best-Quality": {
+          "nominal_S": 0.825,
+          "base_S": 0.4784999999999999,
+          "repaired_S": 0.6456,
+          "delta_S": 0.16710000000000003,
+          "repair_triggered": true,
+          "topo": "executor_verifier_agg",
+          "model": "deepseek_v3_2_exp",
+          "repair_topo": "executor_verifier_agg",
+          "repair_model": "step_3_5_flash"
+        }
+      },
+      "verification::medium::Static Workflow::0": {
+        "Static Workflow": {
+          "nominal_S": 0.7438,
+          "base_S": 0.43140399999999995,
+          "repaired_S": 0.6456,
+          "delta_S": 0.214196,
+          "repair_triggered": true,
+          "topo": "executor_plus_verifier",
+          "model": "deepseek_v3_2_exp",
+          "repair_topo": "executor_verifier_agg",
+          "repair_model": "step_3_5_flash"
+        }
+      }
+    },
+    "protocol": {
+      "profile_frozen": true,
+      "test_time_shock_only": true,
+      "predeclared_complex_contexts": true,
+      "repair_selection_uses_profile_estimates": true,
+      "heldout_realized_quality_used_only_after_selection": true
+    }
+  },
+  "Hard global evidence degradation": {
+    "factor": 0.75,
+    "shock_scope": "context_global",
+    "targets": [
+      "aggregation",
+      "computation",
+      "reasoning",
+      "retrieval",
+      "verification"
+    ],
+    "difficulties": [
+      "hard"
+    ],
+    "per_strategy": {
+      "Pareto+Q(G;X)": {
+        "n": 3,
+        "avg_nominal_S": 0.854,
+        "avg_base_S": 0.6405,
+        "avg_repaired_S": 0.6613,
+        "avg_delta_all": 0.0208,
+        "repair_trigger_rate": 0.3333,
+        "avg_repair_delta_triggered": 0.0624,
+        "quality_drop_vs_nominal": 0.2135,
+        "recovery_rate": 0.0974
+      },
+      "Best-Quality": {
+        "n": 3,
+        "avg_nominal_S": 0.8895,
+        "avg_base_S": 0.6671,
+        "avg_repaired_S": 0.6879,
+        "avg_delta_all": 0.0208,
+        "repair_trigger_rate": 0.3333,
+        "avg_repair_delta_triggered": 0.0624,
+        "quality_drop_vs_nominal": 0.2224,
+        "recovery_rate": 0.0935
+      },
+      "Static Workflow": {
+        "n": 3,
+        "avg_nominal_S": 0.802,
+        "avg_base_S": 0.6015,
+        "avg_repaired_S": 0.6368,
+        "avg_delta_all": 0.0353,
+        "repair_trigger_rate": 0.3333,
+        "avg_repair_delta_triggered": 0.1059,
+        "quality_drop_vs_nominal": 0.2005,
+        "recovery_rate": 0.1761
+      }
+    },
+    "context_details": {
+      "computation::hard::Pareto+Q(G;X)::0": {
+        "Pareto+Q(G;X)": {
+          "nominal_S": 0.9964,
+          "base_S": 0.7473,
+          "repaired_S": 0.7473,
+          "delta_S": 0.0,
+          "repair_triggered": false,
+          "topo": "executor_verifier_agg",
+          "model": "qwen_14b",
+          "repair_topo": "",
+          "repair_model": ""
+        }
+      },
+      "computation::hard::Best-Quality::0": {
+        "Best-Quality": {
+          "nominal_S": 0.9964,
+          "base_S": 0.7473,
+          "repaired_S": 0.7473,
+          "delta_S": 0.0,
+          "repair_triggered": false,
+          "topo": "executor_verifier_agg",
+          "model": "qwen_14b",
+          "repair_topo": "",
+          "repair_model": ""
+        }
+      },
+      "computation::hard::Static Workflow::0": {
+        "Static Workflow": {
+          "nominal_S": 0.8984,
+          "base_S": 0.6738,
+          "repaired_S": 0.6738,
+          "delta_S": 0.0,
+          "repair_triggered": false,
+          "topo": "executor_plus_verifier",
+          "model": "qwen_14b",
+          "repair_topo": "",
+          "repair_model": ""
+        }
+      },
+      "reasoning::hard::Pareto+Q(G;X)::0": {
+        "Pareto+Q(G;X)": {
+          "nominal_S": 0.9763,
+          "base_S": 0.7322249999999999,
+          "repaired_S": 0.7322249999999999,
+          "delta_S": 0.0,
+          "repair_triggered": false,
+          "topo": "executor_plus_verifier",
+          "model": "qwen_32b",
+          "repair_topo": "",
+          "repair_model": ""
+        }
+      },
+      "reasoning::hard::Best-Quality::0": {
+        "Best-Quality": {
+          "nominal_S": 1.0827,
+          "base_S": 0.812025,
+          "repaired_S": 0.812025,
+          "delta_S": 0.0,
+          "repair_triggered": false,
+          "topo": "executor_verifier_agg",
+          "model": "qwen_32b",
+          "repair_topo": "",
+          "repair_model": ""
+        }
+      },
+      "reasoning::hard::Static Workflow::0": {
+        "Static Workflow": {
+          "nominal_S": 0.9763,
+          "base_S": 0.7322249999999999,
+          "repaired_S": 0.7322249999999999,
+          "delta_S": 0.0,
+          "repair_triggered": false,
+          "topo": "executor_plus_verifier",
+          "model": "qwen_32b",
+          "repair_topo": "",
+          "repair_model": ""
+        }
+      },
+      "verification::hard::Pareto+Q(G;X)::0": {
+        "Pareto+Q(G;X)": {
+          "nominal_S": 0.5893,
+          "base_S": 0.441975,
+          "repaired_S": 0.504375,
+          "delta_S": 0.06240000000000001,
+          "repair_triggered": true,
+          "topo": "executor_verifier_agg",
+          "model": "kimi_k2_5",
+          "repair_topo": "executor_verifier_agg",
+          "repair_model": "qwen_397b"
+        }
+      },
+      "verification::hard::Best-Quality::0": {
+        "Best-Quality": {
+          "nominal_S": 0.5893,
+          "base_S": 0.441975,
+          "repaired_S": 0.504375,
+          "delta_S": 0.06240000000000001,
+          "repair_triggered": true,
+          "topo": "executor_verifier_agg",
+          "model": "kimi_k2_5",
+          "repair_topo": "executor_verifier_agg",
+          "repair_model": "qwen_397b"
+        }
+      },
+      "verification::hard::Static Workflow::0": {
+        "Static Workflow": {
+          "nominal_S": 0.5313,
+          "base_S": 0.398475,
+          "repaired_S": 0.504375,
+          "delta_S": 0.1059,
+          "repair_triggered": true,
+          "topo": "executor_plus_verifier",
+          "model": "kimi_k2_5",
+          "repair_topo": "executor_verifier_agg",
+          "repair_model": "qwen_397b"
+        }
+      }
+    },
+    "protocol": {
+      "profile_frozen": true,
+      "test_time_shock_only": true,
+      "predeclared_complex_contexts": true,
+      "repair_selection_uses_profile_estimates": true,
+      "heldout_realized_quality_used_only_after_selection": true
+    }
+  }
+}

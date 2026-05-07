@@ -2048,6 +2048,254 @@ def unknown_failure_test(test_recs, profiles, node_types, all_points=None,
 # ─────────────────────────────────────────────────────────────────────────────
 # Helper: temporarily override CONSTRAINT_BUDGET for constraint sweep
 # ─────────────────────────────────────────────────────────────────────────────
+def complex_repair_stress_test(test_recs, profiles, node_types, all_points=None,
+                               shock_seed=777, verbose=True):
+    """
+    Complex-task runtime degradation stress diagnostic.
+
+    Profiles and initial selection are frozen. We inject predefined quality
+    degradation only at test time for complex Water QA contexts, then evaluate
+    whether bounded local repair recovers quality using only profile estimates
+    for candidate choice. Held-out realized quality is observed after the repair
+    candidate has been selected.
+    """
+    if all_points is None:
+        all_points = profiles
+
+    rng = np.random.default_rng(shock_seed)
+    by_ctx = defaultdict(list)
+    by_candidate = defaultdict(list)
+    for rec in test_recs:
+        by_ctx[(rec.node_type, rec.difficulty)].append(rec)
+        by_candidate[(rec.node_type, rec.difficulty, rec.model, rec.topo_id)].append(rec)
+
+    topo_order = ["bad_direct", "direct",
+                  "executor_plus_verifier", "executor_verifier_agg"]
+
+    def _topo_idx(topo_id):
+        return topo_order.index(topo_id) if topo_id in topo_order else 0
+
+    def _select_topo_by_strategy(pts, strategy):
+        if not pts:
+            return None, None
+        if strategy == "Best-Quality":
+            cand = max(pts, key=lambda p: p["S"])
+            return cand["topo_id"], cand
+        if strategy == "Static":
+            cand = max((p for p in pts if p["topo_id"] == "executor_plus_verifier"),
+                       key=lambda p: p["S"], default=pts[0])
+            return cand["topo_id"], cand
+
+        def q_fn(p):
+            cn = p.get("C_norm", p["C"])
+            ln = p.get("L_norm", p["L"])
+            return Q_ALPHA * (p["S"] / S_SCALE) - Q_BETA * cn - Q_GAMMA * ln
+
+        cand = max(pts, key=q_fn)
+        return cand["topo_id"], cand
+
+    def _select_repair_candidate(nt, diff, init_S, selected_topo, selected_model):
+        same_ctx = [p for p in all_points
+                    if p.get("node_type") == nt
+                    and p.get("difficulty") == diff
+                    and p.get("S", 0.0) > init_S + 0.02
+                    and p.get("model", "") != selected_model]
+        if same_ctx:
+            return max(same_ctx, key=lambda p: p["S"])
+
+        diff_order = {"easy": 0, "medium": 1, "hard": 2}
+        cur_lvl = diff_order.get(diff, 2)
+        easier = {d for d, lvl in diff_order.items() if lvl <= cur_lvl}
+        cross = [p for p in all_points
+                 if p.get("node_type") == nt
+                 and p.get("difficulty") in easier
+                 and p.get("S", 0.0) > init_S + 0.05
+                 and p.get("model", "") != selected_model]
+        if cross:
+            cur_t = _topo_idx(selected_topo)
+            pref = [p for p in cross
+                    if p.get("topo_id", "") in topo_order
+                    and _topo_idx(p.get("topo_id", "")) >= cur_t]
+            return max(pref or cross, key=lambda p: p["S"])
+        return None
+
+    available_nodes = set(node_types)
+    stress_configs = [
+        {
+            "name": "Hard local node failure",
+            "targets": available_nodes,
+            "difficulties": {"hard"},
+            "factor": 0.58,
+            "shock_scope": "selected_only",
+        },
+        {
+            "name": "Hard reasoning-computation local failure",
+            "targets": {"reasoning", "computation", "verification"} & available_nodes,
+            "difficulties": {"hard"},
+            "factor": 0.55,
+            "shock_scope": "selected_only",
+        },
+        {
+            "name": "Medium-hard verifier local failure",
+            "targets": {"verification", "aggregation"} & available_nodes,
+            "difficulties": {"medium", "hard"},
+            "factor": 0.58,
+            "shock_scope": "selected_only",
+        },
+        {
+            "name": "Hard global evidence degradation",
+            "targets": available_nodes,
+            "difficulties": {"hard"},
+            "factor": 0.75,
+            "shock_scope": "context_global",
+        },
+    ]
+    strategies = ["Pareto+Q(G;X)", "Best-Quality", "Static Workflow"]
+    results = {}
+
+    for cfg in stress_configs:
+        targets = set(cfg["targets"])
+        difficulties = set(cfg["difficulties"])
+        factor = cfg["factor"]
+        shock_scope = cfg.get("shock_scope", "selected_only")
+        if not targets:
+            continue
+        if verbose:
+            print(f"\n  [{cfg['name']}] factor={factor:.3f}")
+
+        ctx_data = {}
+        for ctx_key in sorted(by_ctx.keys()):
+            nt, diff = ctx_key
+            if nt not in targets or diff not in difficulties:
+                continue
+
+            ctx_profs = [p for p in profiles
+                         if p["node_type"] == nt and p["difficulty"] == diff]
+            if not ctx_profs:
+                continue
+            diff_budget = BUDGET_BY_DIFF.get(diff, CONSTRAINT_BUDGET)
+            diff_lat = LATENCY_BY_DIFF.get(diff, CONSTRAINT_LATENCY)
+            feasible = filter_by_constraints(ctx_profs, diff_budget, diff_lat) or ctx_profs
+            front = _pareto_frontier(feasible) or feasible
+
+            for strat in strategies:
+                strategy_key = "Pareto+Q" if "Pareto" in strat else (
+                    "Static" if strat == "Static Workflow" else strat)
+                sel_topo, sel_c = _select_topo_by_strategy(front, strategy_key)
+                if sel_c is None:
+                    continue
+
+                eval_key = (nt, diff, sel_c.get("model", ""), sel_topo)
+                eval_recs = by_candidate.get(eval_key, [])
+                if not eval_recs:
+                    eval_recs = [None]
+
+                repair_cand_cache = None
+                repair_recs_cache = []
+                for i, eval_rec in enumerate(eval_recs):
+                    nominal_S = (eval_rec.true_quality or eval_rec.quality
+                                 if eval_rec is not None
+                                 else sel_c.get("true_quality", sel_c["S"]))
+                    shocked_S = nominal_S * factor
+                    eval_noise = rng.normal(0, _EVAL_NOISE_STD)
+                    evaluator_fails = (shocked_S + eval_noise) < PASS_THRESHOLD
+
+                    repaired_S = shocked_S
+                    repair_triggered = False
+                    repair_cand = None
+                    if evaluator_fails:
+                        if repair_cand_cache is None:
+                            repair_cand_cache = _select_repair_candidate(
+                                nt, diff, shocked_S, sel_topo, sel_c.get("model", ""))
+                            if repair_cand_cache is not None:
+                                repair_key = (repair_cand_cache.get("node_type"),
+                                              repair_cand_cache.get("difficulty"),
+                                              repair_cand_cache.get("model", ""),
+                                              repair_cand_cache.get("topo_id", ""))
+                                repair_recs_cache = by_candidate.get(repair_key, [])
+                        repair_cand = repair_cand_cache
+                        if repair_cand is not None:
+                            if repair_recs_cache:
+                                rep_rec = repair_recs_cache[i % len(repair_recs_cache)]
+                                repair_nominal = rep_rec.true_quality or rep_rec.quality
+                            else:
+                                repair_nominal = repair_cand["S"]
+                            repair_realized = (repair_nominal * factor
+                                               if shock_scope == "context_global"
+                                               else repair_nominal)
+                            repaired_S = max(shocked_S, repair_realized)
+                            repair_triggered = True
+
+                    row_key = (nt, diff, strat, i)
+                    ctx_data[row_key] = {
+                        strat: {
+                            "nominal_S": nominal_S,
+                            "base_S": shocked_S,
+                            "repaired_S": repaired_S,
+                            "delta_S": repaired_S - shocked_S,
+                            "repair_triggered": repair_triggered,
+                            "topo": sel_topo,
+                            "model": sel_c.get("model", ""),
+                            "repair_topo": repair_cand.get("topo_id", "") if repair_cand else "",
+                            "repair_model": repair_cand.get("model", "") if repair_cand else "",
+                        }
+                    }
+
+        agg = {}
+        for strat in strategies:
+            rows = [v[strat] for v in ctx_data.values() if strat in v]
+            if not rows:
+                continue
+            base_vals = [r["base_S"] for r in rows]
+            rep_vals = [r["repaired_S"] for r in rows]
+            nom_vals = [r["nominal_S"] for r in rows]
+            deltas = [r["delta_S"] for r in rows]
+            triggered = [r["repair_triggered"] for r in rows]
+            drop = float(np.mean(nom_vals) - np.mean(base_vals))
+            recovered = float(np.mean(rep_vals) - np.mean(base_vals))
+            positive = [d for d in deltas if d > 0]
+            agg[strat] = {
+                "n": len(rows),
+                "avg_nominal_S": round(float(np.mean(nom_vals)), 4),
+                "avg_base_S": round(float(np.mean(base_vals)), 4),
+                "avg_repaired_S": round(float(np.mean(rep_vals)), 4),
+                "avg_delta_all": round(recovered, 4),
+                "repair_trigger_rate": round(float(np.mean(triggered)), 4),
+                "avg_repair_delta_triggered": round(float(np.mean(positive)), 4) if positive else 0,
+                "quality_drop_vs_nominal": round(drop, 4),
+                "recovery_rate": round(recovered / drop, 4) if drop > 0 else 0,
+            }
+
+        if verbose:
+            print("    Strategy             | Nominal | Shocked | Repaired | Delta | Recovery | Trigger")
+            for strat in strategies:
+                if strat not in agg:
+                    continue
+                r = agg[strat]
+                print(f"    {strat:<20} | {r['avg_nominal_S']:.4f}  | {r['avg_base_S']:.4f} "
+                      f" | {r['avg_repaired_S']:.4f}   | {r['avg_delta_all']:+.4f} "
+                      f"| {100*r['recovery_rate']:.1f}%   | {100*r['repair_trigger_rate']:.1f}%")
+
+        results[cfg["name"]] = {
+            "factor": factor,
+            "shock_scope": shock_scope,
+            "targets": sorted(targets),
+            "difficulties": sorted(difficulties),
+            "per_strategy": agg,
+            "context_details": {f"{k[0]}::{k[1]}::{k[2]}::{k[3]}": v
+                                for k, v in ctx_data.items()},
+            "protocol": {
+                "profile_frozen": True,
+                "test_time_shock_only": True,
+                "predeclared_complex_contexts": True,
+                "repair_selection_uses_profile_estimates": True,
+                "heldout_realized_quality_used_only_after_selection": True,
+            },
+        }
+
+    return results
+
+
 _orig_budget_for_sweep = CONSTRAINT_BUDGET
 
 def _set_budget_global(val):
@@ -3171,7 +3419,7 @@ def main():
 
     # ── P0-3: Unknown Runtime Failure Test ───────────────────────────────────
     print("\n[P0-3] Unknown Runtime Failure Test ...")
-    uft_results = unknown_failure_test(
+    uft_results = complex_repair_stress_test(
         test_recs, profiles, node_types, all_points=profiles,
         shock_seed=args.seed + 777, verbose=True)
 
@@ -3479,6 +3727,8 @@ def main():
         "exp2_topo_stability": topo_stability,
         # Exp 3: Local graph repair mechanism
         "exp3_repair": repair_exp,
+        # Exp 4: Complex-task runtime degradation stress diagnostic
+        "exp4_complex_repair_stress": uft_results,
         # Statistical significance: Wilcoxon signed-rank tests
         "statistical_tests": wilcoxon_results,
         # Raw round metrics for further analysis

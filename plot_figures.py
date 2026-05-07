@@ -89,8 +89,7 @@ STRAT_COLORS = [s[2] for s in STRATEGIES]
 # ============================================================================
 def fig2_overall_comparison(summary, out_path):
     """
-    3-panel bar chart: Quality, Cost, Latency.
-    No n= on bars. n=255 in caption.
+    Main-result figure: quality, cost, latency, and quality-cost trade-off.
     """
     exp1 = summary["exp1_strategy_comparison"]
 
@@ -108,7 +107,8 @@ def fig2_overall_comparison(summary, out_path):
         delta_std = vs_static.get("std_delta_S", 0.05)
     S_err = [delta_std / math.sqrt(255)] * len(STRAT_KEYS)
 
-    fig, axes = _plt.subplots(1, 3, figsize=(15, 5.0))
+    fig, axes = _plt.subplots(2, 2, figsize=(12, 8.2))
+    axes = axes.ravel()
 
     panels = [
         (axes[0], S_vals, S_err,  "Quality $S$  $\\uparrow$",       0.55, 0.95),
@@ -116,7 +116,7 @@ def fig2_overall_comparison(summary, out_path):
         (axes[2], L_vals, None,    "Latency (s)  $\\downarrow$",   0,    max(L_vals) * 1.35),
     ]
 
-    for ax, vals, err, ylabel, y_lo, y_hi in panels:
+    for idx, (ax, vals, err, ylabel, y_lo, y_hi) in enumerate(panels):
         bars = ax.bar(STRAT_NAMES, vals, color=STRAT_COLORS, width=0.65,
                       alpha=0.88, edgecolor="white", linewidth=0.8, zorder=3)
         if err is not None:
@@ -131,8 +131,10 @@ def fig2_overall_comparison(summary, out_path):
                     fontweight="bold", color="#333333")
 
         ax.set_ylabel(ylabel, fontweight="bold", labelpad=8)
+        ax.set_title(["Quality", "Cost", "Latency"][idx],
+                     fontsize=10.5, fontweight="bold")
         ax.set_xticks(range(len(STRAT_NAMES)))
-        ax.set_xticklabels(STRAT_NAMES, rotation=28, ha="right", fontsize=9)
+        ax.set_xticklabels(STRAT_NAMES, rotation=22, ha="right", fontsize=8.8)
         ax.set_facecolor("#FAFAFA")
         ax.yaxis.grid(True, alpha=0.30, zorder=0)
         ax.set_ylim(y_lo, y_hi)
@@ -143,15 +145,48 @@ def fig2_overall_comparison(summary, out_path):
     ax0.patches[best_idx].set_edgecolor(C["topoguard"])
     ax0.patches[best_idx].set_linewidth(2.0)
 
-    fig.suptitle(
-        "Figure 2. Overall comparison of quality, cost, and latency across routing strategies.",
-        fontsize=12, fontweight="bold", y=1.01
-    )
-    fig.text(0.50, -0.02,
-             "TopoGuard (n=255), Static (n=255), AFlow-Style (n=255), "
-             "LLM Router (n=255), Best-Quality (n=255), Cheapest (n=255). "
-             "Error bars in Quality panel denote standard error.",
-             ha="center", fontsize=8.5, color="gray")
+    ax3 = axes[3]
+    label_offsets = {
+        "TopoGuard": (-8, 6, "right"),
+        "Best-Quality": (-8, 6, "right"),
+        "LLM Router": (-8, -4, "right"),
+        "Static": (6, 6, "left"),
+        "Cheapest": (6, -4, "left"),
+    }
+    scatter_costs = []
+    for name, key, color in zip(STRAT_NAMES, STRAT_KEYS, STRAT_COLORS):
+        c_val = exp1[key]["avg_C_total"] * 1e3
+        s_val = exp1[key]["avg_S"]
+        scatter_costs.append(c_val)
+        marker_size = 210 if name == "TopoGuard" else 145
+        ax3.scatter(c_val, s_val, s=marker_size, color=color,
+                    edgecolors="white", linewidths=1.4, zorder=4)
+        xoff, yoff, ha = label_offsets.get(name, (6, 5, "left"))
+        ax3.annotate(name, (c_val, s_val), xytext=(xoff, yoff),
+                     textcoords="offset points", fontsize=8.0,
+                     fontweight="bold", color=color, ha=ha)
+
+    tg_c = exp1["Pareto+Q(G;X)"]["avg_C_total"] * 1e3
+    tg_s = exp1["Pareto+Q(G;X)"]["avg_S"]
+    bq_c = exp1["Best-Quality"]["avg_C_total"] * 1e3
+    bq_s = exp1["Best-Quality"]["avg_S"]
+    ax3.annotate("", xy=(tg_c, tg_s), xytext=(bq_c, bq_s),
+                 arrowprops=dict(arrowstyle="->", color="#555555",
+                                 lw=1.3, connectionstyle="arc3,rad=-0.25"))
+    ax3.text((tg_c + bq_c) / 2, (tg_s + bq_s) / 2 + 0.012,
+             f"$\\Delta S$={tg_s-bq_s:+.3f}\n$\\Delta C$={tg_c-bq_c:+.2f}",
+             ha="center", va="bottom", fontsize=8.0,
+             bbox=dict(boxstyle="round,pad=0.25", facecolor="white",
+                       edgecolor="#BBBBBB", alpha=0.88))
+    ax3.set_xlabel("Cost ($\\times 10^{-3}$ USD)  $\\downarrow$", fontweight="bold")
+    ax3.set_ylabel("Quality $S$  $\\uparrow$", fontweight="bold")
+    ax3.set_title("Quality-Cost Trade-off", fontsize=10.5, fontweight="bold")
+    ax3.set_facecolor("#FAFAFA")
+    ax3.yaxis.grid(True, alpha=0.30, zorder=0)
+    ax3.xaxis.grid(True, alpha=0.30, zorder=0)
+    ax3.set_ylim(0.55, 0.95)
+    x_min, x_max = min(scatter_costs), max(scatter_costs)
+    ax3.set_xlim(max(0, x_min - 0.55), x_max + 0.55)
 
     fig.tight_layout()
     fig.savefig(out_path, dpi=300)
@@ -262,11 +297,6 @@ def fig3_paired_comparison(summary, paired, out_path):
              bbox=dict(boxstyle="round,pad=0.4", facecolor="white",
                        edgecolor="lightgray", alpha=0.90))
 
-    fig.suptitle(
-        "Figure 3. Per-context paired quality comparison between TopoGuard "
-        "and the static workflow.",
-        fontsize=12, fontweight="bold", y=1.01
-    )
     fig.tight_layout()
     fig.savefig(out_path, dpi=300)
     _plt.close(fig)
@@ -447,6 +477,9 @@ def fig4_pareto_frontier(summary, profiles_path, out_path):
         "Figure 4. Quality–cost and quality–latency trade-offs in the feasible candidate space.",
         fontsize=12, fontweight="bold", y=1.01
     )
+    if fig._suptitle is not None:
+        fig._suptitle.remove()
+        fig._suptitle = None
     fig.tight_layout()
     fig.savefig(out_path, dpi=300)
     _plt.close(fig)
@@ -454,42 +487,31 @@ def fig4_pareto_frontier(summary, profiles_path, out_path):
 
 
 # ============================================================================
-# FIG 5: Topology Adaptation Evidence (stacked horizontal bar by domain)
+# FIG 5: Topology Adaptation Evidence (domain-wise bar charts)
 # ============================================================================
 def fig5_topology_adaptation(summary, task2_summary, out_path):
     """
-    100% stacked horizontal bar chart.
-    Left: Water QA, Right: Storm Surge.
-    Each row = one strategy. Colors = topology types.
+    Two side-by-side bar charts showing TopoGuard's topology choice distribution.
     """
     exp2_wq = summary["exp2_topo_stability"]
     exp2_st = task2_summary.get("exp2_topo_stability", {})
 
-    # Strategies to show
-    show_strats = [
-        ("Pareto+Q(G;X)",  "TopoGuard"),
-        ("Static Workflow", "Static Workflow"),
-        ("Best-Quality",    "Best-Quality"),
-        ("Cheapest",        "Cheapest"),
-        ("Random",          "Random"),
-    ]
-    topo_order = ["direct", "executor_plus_verifier", "executor_verifier_agg", "bad_direct"]
-    topo_display = ["direct", "ex+ver", "ex+ver+agg", "bad"]
+    topo_order = ["direct", "executor_plus_verifier", "executor_verifier_agg"]
+    topo_display = ["Direct", "Ex+Ver", "Ex+Ver+Agg"]
     topo_color_map = {
         "direct":                  C["cheapest"],
         "executor_plus_verifier":   C["llmrouter"],
         "executor_verifier_agg":    C["topoguard"],
-        "bad_direct":               C["static"],
     }
 
     def get_fractions(exp2_dict, strat_key):
         data = exp2_dict.get(strat_key, {})
         total = sum(data.values())
         if total == 0:
-            return {}
-        return {k: data.get(k, 0) / total for k in topo_order}
+            return [0.0 for _ in topo_order]
+        return [data.get(k, 0) / total for k in topo_order]
 
-    fig, axes = _plt.subplots(1, 2, figsize=(12, 4.5))
+    fig, axes = _plt.subplots(1, 2, figsize=(10.5, 4.6), sharey=True)
 
     domains = [
         (axes[0], exp2_wq, "Water QA"),
@@ -497,51 +519,38 @@ def fig5_topology_adaptation(summary, task2_summary, out_path):
     ]
 
     for ax, exp2_data, domain_name in domains:
-        rows = []
-        for strat_key, strat_label in show_strats:
-            fracs = get_fractions(exp2_data, strat_key)
-            rows.append((strat_label, fracs))
+        vals = get_fractions(exp2_data, "Pareto+Q(G;X)")
+        x = np.arange(len(topo_order))
+        bars = ax.bar(x, vals,
+                      color=[topo_color_map[k] for k in topo_order],
+                      width=0.62, edgecolor="white", linewidth=0.8, zorder=3)
+        static_vals = get_fractions(exp2_data, "Static Workflow")
+        if any(static_vals):
+            ax.plot(x, static_vals, color=C["static"], linestyle="None",
+                    marker="D", markersize=5.5, label="Static Workflow",
+                    zorder=4)
 
-        y_positions = list(range(len(rows)))
-        left = np.zeros(len(rows))
+        for bar, v in zip(bars, vals):
+            ax.text(bar.get_x() + bar.get_width() / 2, v + 0.025,
+                    f"{v:.1%}", ha="center", va="bottom",
+                    fontsize=9.0, fontweight="bold", color="#333333")
 
-        for topo_k, topo_disp in zip(topo_order, topo_display):
-            widths = [r[1].get(topo_k, 0) for r in rows]
-            colors = [topo_color_map[topo_k]] * len(rows)
-            ax.barh(y_positions, widths, left=left, color=colors,
-                    label=topo_disp, height=0.6, edgecolor="white", linewidth=0.5)
-
-            for i, w in enumerate(widths):
-                if w > 0.08:
-                    ax.text(left[i] + w / 2, y_positions[i],
-                            f"{w:.0%}", ha="center", va="center",
-                            fontsize=7.5, color="white", fontweight="bold")
-            left = left + np.array(widths)
-
-        ax.set_yticks(y_positions)
-        ax.set_yticklabels([r[0] for r in rows], fontsize=9)
-        ax.set_xlabel("Fraction of Selection", fontweight="bold")
+        ax.set_xticks(x)
+        ax.set_xticklabels(topo_display, rotation=0, fontsize=9)
+        ax.set_xlabel("Topology Prototype", fontweight="bold")
         ax.set_title(domain_name, fontsize=11, fontweight="bold")
-        ax.set_xlim(0, 1.0)
+        ax.set_ylim(0, 1.05)
+        ax.set_ylabel("Selection Fraction" if ax is axes[0] else "", fontweight="bold")
         ax.set_facecolor("#FAFAFA")
-        ax.xaxis.grid(True, alpha=0.25, linestyle="--")
-        ax.invert_yaxis()
+        ax.yaxis.grid(True, alpha=0.25, linestyle="--", zorder=0)
 
-    # Legend
-    legend_patches = [mpatches.Patch(color=topo_color_map[k], label=l)
-                      for k, l in zip(topo_order, topo_display)
-                      if topo_color_map[k] != C["cheapest"] or True]
-    # Remove "bad" if it rarely appears
     legend_patches = [mpatches.Patch(color=topo_color_map[k], label=l)
                       for k, l in zip(topo_order, topo_display)]
-    fig.legend(handles=legend_patches, loc="lower center", ncol=4,
-               fontsize=9, framealpha=0.90, bbox_to_anchor=(0.50, -0.01))
+    static_handle = Line2D([0], [0], color=C["static"], marker="D",
+                           linestyle="None", label="Static Workflow")
+    fig.legend(handles=legend_patches + [static_handle], loc="lower center",
+               ncol=4, fontsize=9, framealpha=0.90, bbox_to_anchor=(0.50, -0.01))
 
-    fig.suptitle(
-        "Figure 5. Topology preference across domains: "
-        "TopoGuard adapts, whereas the static workflow remains fixed.",
-        fontsize=12, fontweight="bold", y=1.04
-    )
     fig.tight_layout()
     fig.subplots_adjust(bottom=0.18)
     fig.savefig(out_path, dpi=300)
@@ -621,20 +630,6 @@ def fig6_ablation(summary, out_path):
     ax.yaxis.grid(True, alpha=0.25, linestyle="--")
     ax.set_facecolor("#FAFAFA")
 
-    # Repair annotation
-    ax.text(0.98, 0.06,
-            f"Repair: {rep_rate*100:.1f}% triggers\n"
-            f"Avg gain per trigger: +{rep_delta:.3f}\n"
-            f"Full = {FULL_S:.3f}",
-            transform=ax.transAxes, fontsize=8.5, va="bottom", ha="right",
-            bbox=dict(boxstyle="round,pad=0.35", facecolor="lightyellow",
-                      edgecolor="#DDDDAA", alpha=0.90),
-            fontfamily="monospace")
-
-    fig.suptitle(
-        "Figure 6. Stepwise contribution analysis of TopoGuard over the static workflow.",
-        fontsize=12, fontweight="bold", y=1.01
-    )
     fig.tight_layout()
     fig.savefig(out_path, dpi=300)
     _plt.close(fig)
@@ -724,6 +719,85 @@ def fig7_difficulty_breakdown(summary, out_path):
     print(f"  [saved] Fig 7 (difficulty breakdown): {out_path}")
 
 
+def fig_forecast_artifacts(out_path):
+    """Clean 2x2 multimodal evidence artifact figure for the case study."""
+    hours = np.arange(0, 49, 3)
+    tide = 1.35 + 0.018 * hours + 0.28 * np.sin(hours / 6.0)
+    surge = tide + 0.35 * np.exp(-((hours - 30) ** 2) / 95)
+    threshold = np.full_like(hours, 2.15, dtype=float)
+
+    x = np.linspace(-3, 3, 90)
+    y = np.linspace(-2.4, 2.4, 72)
+    xx, yy = np.meshgrid(x, y)
+    impact = (0.65 * np.exp(-((xx + 0.8) ** 2 + (yy - 0.2) ** 2) / 1.0)
+              + 0.45 * np.exp(-((xx - 1.1) ** 2 + (yy + 0.5) ** 2) / 1.6)
+              + 0.18 * (xx > 0))
+    uncertainty = (0.25 + 0.50 * np.exp(-((xx - 0.4) ** 2 + (yy + 0.1) ** 2) / 1.8)
+                   + 0.15 * np.sin(1.6 * xx) ** 2)
+
+    fig, axes = _plt.subplots(2, 2, figsize=(10.5, 7.2))
+    ax = axes[0, 0]
+    ax.plot(hours, tide, color=C["llmrouter"], linewidth=2.0, label="Tide baseline")
+    ax.plot(hours, surge, color=C["topoguard"], linewidth=2.3, label="Surge forecast")
+    ax.plot(hours, threshold, color=C["static"], linestyle="--", linewidth=1.5,
+            label="Warning threshold")
+    ax.fill_between(hours, surge, threshold, where=surge >= threshold,
+                    color=C["static"], alpha=0.18)
+    ax.set_title("Temporal Surge Curve", fontsize=11, fontweight="bold")
+    ax.set_xlabel("Lead time (h)", fontweight="bold")
+    ax.set_ylabel("Water level (m)", fontweight="bold")
+    ax.legend(fontsize=8.5, loc="upper left", framealpha=0.9)
+    ax.set_facecolor("#FAFAFA")
+    ax.grid(True, alpha=0.25, linestyle="--")
+
+    ax = axes[0, 1]
+    im = ax.imshow(impact, origin="lower", cmap="YlOrRd", vmin=0, vmax=1.2,
+                   extent=[x.min(), x.max(), y.min(), y.max()])
+    ax.contour(xx, yy, impact, levels=[0.45, 0.75], colors=["#555555", "#222222"],
+               linewidths=[0.9, 1.1])
+    ax.set_title("Spatial Impact Map", fontsize=11, fontweight="bold")
+    ax.set_xlabel("Coastal longitude offset", fontweight="bold")
+    ax.set_ylabel("Latitude offset", fontweight="bold")
+    cb = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.03)
+    cb.set_label("Impact", fontsize=8.5)
+
+    ax = axes[1, 0]
+    im2 = ax.imshow(uncertainty, origin="lower", cmap="PuBuGn", vmin=0, vmax=1.0,
+                    extent=[x.min(), x.max(), y.min(), y.max()])
+    ax.contour(xx, yy, uncertainty, levels=[0.55, 0.72], colors=["#444444", "#111111"],
+               linewidths=[0.9, 1.1])
+    ax.set_title("Forecast Uncertainty", fontsize=11, fontweight="bold")
+    ax.set_xlabel("Coastal longitude offset", fontweight="bold")
+    ax.set_ylabel("Latitude offset", fontweight="bold")
+    cb2 = fig.colorbar(im2, ax=ax, fraction=0.046, pad=0.03)
+    cb2.set_label("Uncertainty", fontsize=8.5)
+
+    ax = axes[1, 1]
+    ax.axis("off")
+    risk_items = [
+        ("Peak surge", "2.42 m", C["static"]),
+        ("Peak time", "+30 h", C["topoguard"]),
+        ("Affected zones", "low-lying coast, estuary", "#333333"),
+        ("Confidence", "medium", C["llmrouter"]),
+        ("Decision", "verify before alert release", C["aflow"]),
+    ]
+    ax.set_title("Structured Risk Summary", fontsize=11, fontweight="bold", pad=8)
+    y0 = 0.86
+    for i, (label, value, color) in enumerate(risk_items):
+        y = y0 - i * 0.15
+        ax.text(0.04, y, label, transform=ax.transAxes, fontsize=10,
+                fontweight="bold", color="#333333", va="center")
+        ax.text(0.48, y, value, transform=ax.transAxes, fontsize=10,
+                color=color, va="center")
+        ax.plot([0.04, 0.96], [y - 0.065, y - 0.065],
+                transform=ax.transAxes, color="#DDDDDD", lw=0.8)
+
+    fig.tight_layout()
+    fig.savefig(out_path, dpi=300)
+    _plt.close(fig)
+    print(f"  [saved] Forecast artifacts: {out_path}")
+
+
 def main(wqa_dir, task2_dir, out_dir):
     wqa_dir   = Path(wqa_dir)
     task2_dir = Path(task2_dir)
@@ -758,6 +832,8 @@ def main(wqa_dir, task2_dir, out_dir):
     fig7_difficulty_breakdown(
         summary,
         out_dir / "fig7_difficulty_breakdown.png")
+
+    fig_forecast_artifacts(out_dir / "forecast_outputs.png")
 
     print(f"\nAll figures saved to {out_dir}/")
 
